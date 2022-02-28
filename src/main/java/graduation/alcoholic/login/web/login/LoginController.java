@@ -32,6 +32,7 @@ public class LoginController {
 
     private int counter=0;
     private AuthResponse FrontInfo=null;
+
     @GetMapping("/login")
     public @ResponseBody ResponseEntity<AuthResponse> login(HttpServletRequest request, HttpSession session) {
         ++counter;
