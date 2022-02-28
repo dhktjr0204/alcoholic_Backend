@@ -1,12 +1,12 @@
 package graduation.alcoholic.login.web.login;
 
 import graduation.alcoholic.domain.User;
-import graduation.alcoholic.login.domain.member.Member;
+import graduation.alcoholic.login.domain.member.UserDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ClientKakao {
-    public User getUserData(Member userInfo) {
+    public User getUserData(UserDto userInfo) {
         return User.builder()
                 .name(userInfo.getName())
                 .email(userInfo.getEmail())
