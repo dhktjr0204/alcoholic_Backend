@@ -5,12 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Enumerated;
-
 @Getter
 @Setter
-public class Member {
-    private Long id;
+public class UserDto {
     private String name;
     private String email;
     private String sex;
@@ -19,8 +16,7 @@ public class Member {
     private RoleType roletype;
 
     @Builder
-    public Member(Long id, String name, String email, String age_range, String capacity, String sex, RoleType roletype) {
-        this.id = id;
+    public UserDto(String name, String email, String age_range, String capacity, String sex, RoleType roletype) {
         this.name = name;
         this.email = email;
         this.sex = sex;
