@@ -1,3 +1,4 @@
+
 package graduation.alcoholic.domain;
 
 import lombok.Builder;
@@ -35,3 +36,4 @@ public class Bar extends BaseTimeEntity{
         this.image = image;
     }
 }
+
