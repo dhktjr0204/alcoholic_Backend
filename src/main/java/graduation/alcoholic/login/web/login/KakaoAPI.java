@@ -28,7 +28,7 @@ import com.google.gson.JsonParser;
 public class KakaoAPI {
     //토큰 가져오기
     public String getAccessToken (String authorize_code) {
-
+        System.out.println(authorize_code);
         String access_Token = "";
         String refresh_Token = "";
         String reqURL = "https://kauth.kakao.com/oauth/token";
