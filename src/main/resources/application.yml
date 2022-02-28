@@ -12,4 +12,9 @@ spring:
   jpa:
     show-sql: true
 
+#토큰 발급 만료시간 3시간으로 설정
+app:
+  auth:
+    tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
+    tokenExpiry: 10800000
 
