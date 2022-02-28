@@ -13,3 +13,15 @@ spring:
     show-sql: true
 
 
+app:
+  auth:
+    tokenSecret: 9neIoGYVg2leq4V5KBjbE2jt2LiQykAMqJHfjuQKJnfahjKHFWHBjb2hjbfahj37kjncskjnJQKIjrhryg76ejn236t2nBSHTQOPcbjhb
+   # JWT Token을 hash 할 때 사용하는 secret key입니다.
+    tokenExpirationMsec: 864000000
+    # JWT Token의 유효기간을 설정합니다. 유효기간이 만료된 TOKEN으로 접근시 재발급 process를 거치게됩니다.
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
+    #생성된 JWT Token을 response 할 uri를 입력합니다. 저는 localhost:3000으로 실행되는 react App으로 전달하겠습니다. 이곳에 정의된 redirectUri 외에는 JWT Token을 전달 받을 수 없습니다.
+  cors:
+    allowedOrigins: http://localhost:3000

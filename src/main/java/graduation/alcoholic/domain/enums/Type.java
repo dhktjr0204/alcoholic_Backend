@@ -1,8 +1,8 @@
 package graduation.alcoholic.domain.enums;
 
 public enum Type {
-    WINE,
-    SOJU,
-    TAKJU,
-    CHUNGJU
+    과실주,
+    증류주,
+    탁주,
+    청주
 }

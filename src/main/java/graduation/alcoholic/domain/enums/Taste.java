@@ -1,8 +1,8 @@
 package graduation.alcoholic.domain.enums;
 
 public enum Taste {
-    NONE,
-    WEAK,
-    NORMAL,
-    STRONG
+    없음,
+    약함,
+    보통,
+    강함
 }
