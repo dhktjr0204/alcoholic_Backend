@@ -63,6 +63,7 @@ public class LoginController {
 
     @GetMapping(value = "/logout")
     public @ResponseBody String logout(HttpSession session) {
+        counter=0;
         kakao.kakaoLogout((String)session.getAttribute("access_Token"));
         session.removeAttribute("access_Token");
         session.removeAttribute("email");

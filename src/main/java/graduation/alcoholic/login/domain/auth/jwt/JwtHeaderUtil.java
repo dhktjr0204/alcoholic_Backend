@@ -15,7 +15,6 @@ public class JwtHeaderUtil {
         }
 
         if (headerValue.startsWith(TOKEN_PREFIX)) {
-            System.out.println("베리어 뗀거"+headerValue.substring(TOKEN_PREFIX.length()));
             return headerValue.substring(TOKEN_PREFIX.length());
         }
 
