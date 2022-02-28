@@ -1,0 +1,11 @@
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google :
+            client-id : "116543839497-0aciam3t5tbpbuoe8j21449vuq97jok8.apps.googleusercontent.com"
+            client-secret : "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"
+            redirectUri: "localhost:3000/login/oauth2/code/google"
+            scope : email, profile

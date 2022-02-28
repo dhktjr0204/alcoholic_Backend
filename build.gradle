@@ -25,12 +25,28 @@ war {
 
 
 dependencies {
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	implementation 'com.google.code.gson:gson:2.8.6'
 	implementation group: 'org.json', name: 'json', version: '20090211'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' //jpa
+
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' //타임리프
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'//security+oauth
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'//lombok
+
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -47,6 +63,14 @@ dependencies {
 	providedCompile group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
 	annotationProcessor('org.projectlombok:lombok')
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'//jwt
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+
 }
 
 tasks.named('test') {
