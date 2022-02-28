@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @SpringBootApplication
 public class AlcoholicApplication {
+	public static final String APPLICATION_LOCATIONS = "spring.config.location="
+			+ "classpath:application.yml";
 	public static void main(String[] args) {
-		SpringApplication.run(AlcoholicApplication.class, args);
+		new SpringApplicationBuilder(AlcoholicApplication.class)
+				.properties(APPLICATION_LOCATIONS)
+				.run(args);
 	}
 }
 

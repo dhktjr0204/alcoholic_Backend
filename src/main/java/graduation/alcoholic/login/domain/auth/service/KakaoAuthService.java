@@ -27,7 +27,7 @@ public class KakaoAuthService {
     public AuthResponse loginToken(String token) {
         //client 정보 가져오기
         Member userInfo = kakaoAPI.getUserInfo(token);
-        User kakaoMember=clientKakao.setUserData(userInfo);
+        User kakaoMember=clientKakao.getUserData(userInfo);
         String email = kakaoMember.getEmail();
         User member = userRepository.findByEmail(email);
 

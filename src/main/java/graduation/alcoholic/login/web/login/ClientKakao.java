@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ClientKakao {
-    public User setUserData(Member userInfo) {
+    public User getUserData(Member userInfo) {
         return User.builder()
                 .name(userInfo.getName())
                 .email(userInfo.getEmail())
