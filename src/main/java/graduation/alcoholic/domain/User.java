@@ -1,6 +1,6 @@
 package graduation.alcoholic.domain;
 
-import graduation.alcoholic.domain.enums.Sex;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +23,7 @@ public class User {
 
     private String email;
 
-    @Enumerated(value = EnumType.STRING)
-    private Sex sex;
+    private String sex;
 
     private String age_range;
 
@@ -37,7 +36,7 @@ public class User {
     private List<Zzim> zzims = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, Sex sex, String age_range, BigDecimal capacity) {
+    public User(String name, String email, String sex, String age_range, BigDecimal capacity) {
         this.name = name;
         this.email = email;
         this.sex = sex;

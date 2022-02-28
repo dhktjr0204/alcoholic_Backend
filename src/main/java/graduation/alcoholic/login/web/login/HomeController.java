@@ -10,7 +10,7 @@ import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
 import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
 import graduation.alcoholic.login.domain.auth.service.AuthService;
 import graduation.alcoholic.login.domain.auth.service.KakaoAuthService;
-import graduation.alcoholic.login.domain.member.User;
+import graduation.alcoholic.login.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
@@ -35,7 +35,7 @@ public class HomeController {
         String code=request.getParameter("code");
         System.out.println("Code 받았어~~"+code);
         String access_Token = kakao.getAccessToken(code);
-        User userInfo = kakao.getUserInfo(access_Token);
+        Member userInfo = kakao.getUserInfo(access_Token);
         System.out.println("login Controller : " + userInfo);
         AuthResponse jwtToken=kakaoAuthService.loginToken(access_Token);
         //JWT 토큰 만듬

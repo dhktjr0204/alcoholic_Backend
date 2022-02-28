@@ -1,9 +1,9 @@
 package graduation.alcoholic.login.domain.auth.service;
 
+import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.dto.AuthResponse;
 import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
 import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
-import graduation.alcoholic.login.domain.member.User;
 import graduation.alcoholic.login.domain.member.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;

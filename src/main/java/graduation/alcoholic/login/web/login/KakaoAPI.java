@@ -9,8 +9,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
+import graduation.alcoholic.domain.User;
+import graduation.alcoholic.login.domain.auth.enumerate.RoleType;
 import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
-import graduation.alcoholic.login.domain.member.User;
+import graduation.alcoholic.login.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,9 +83,9 @@ public class KakaoAPI {
     }
 
     //사용자 정보 가져오기
-    public User getUserInfo (String access_Token) {
+    public Member getUserInfo (String access_Token) {
+        Member userInfo = null;
         //	요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
-        User userInfo = new User();
         String reqURL = "https://kapi.kakao.com/v2/user/me";
         try {
             URL url = new URL(reqURL);
@@ -118,16 +120,24 @@ public class KakaoAPI {
             String email = kakao_account.getAsJsonObject().get("email").getAsString();
             String age_range = kakao_account.getAsJsonObject().get("age_range").getAsString();
             String sex = kakao_account.getAsJsonObject().get("gender").getAsString();
-            String role="ROLE_USER";
+//
+//            userInfo.setU_id(null);
+//            userInfo.setUsername(username);
+//            userInfo.setEmail(email);
+//            userInfo.setAge_range(age_range);
+//            userInfo.setSex(sex);
+//            userInfo.setCapacity(null);
+//            userInfo.setRoletype(RoleType.ROLE_USER);
+            userInfo = Member.builder()
+                    .id(null)
+                    .name(username)
+                    .email(email)
+                    .sex(sex)
+                    .age_range(age_range)
+                    .roletype(RoleType.ROLE_USER)
+                    .build();
 
 
-            userInfo.setU_id(null);
-            userInfo.setUsername(username);
-            userInfo.setEmail(email);
-            userInfo.setAge_range(age_range);
-            userInfo.setSex(sex);
-            userInfo.setCapacity(null);
-            userInfo.setRoletype(role);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
