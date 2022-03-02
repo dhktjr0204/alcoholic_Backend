@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -38,6 +37,13 @@ public class Bar extends BaseTimeEntity{
         this.content = content;
         this.location = location;
         this.image = image;
+    }
+
+    public void update(String title, String content, String location, String image){
+        this.title=title;
+        this.content=content;
+        this.location=location;
+        this.image=image;
     }
 }
 

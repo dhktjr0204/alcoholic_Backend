@@ -6,12 +6,13 @@ import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.member.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -36,39 +37,35 @@ public class BarService {
         return barRepository.save(barInfo);
     }
 
-    public List<Bar> listAllBars(){
-        return barRepository.findAll();
-    }
-
-    public Optional<Bar> getBarDetail(Long id) {
-        return barRepository.findById(id);
-    }
-
-
-    public ResponseEntity<Bar> updateBar(Long id, BarDTO barDetails){
-        Bar bar = barRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Bar not exist with id :" + id));
-
-        User user= userRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("해당 아이디가 없습니다"+"\n"));
-
-        Bar barInfo= bar.builder()
-                .user(user)
-                .title(barDetails.getTitle())
-                .location(barDetails.getLocation())
-                .content(barDetails.getContent())
-                .image(barDetails.getImage())
-                .build();
-
-
-        Bar updatedBoard = barRepository.save(barInfo);
-        return ResponseEntity.ok(updatedBoard);
+    public Optional<List<Bar>> listAllBars(Pageable pageable){
+        Page<Bar> entities = barRepository.findAll(pageable);
+        return Optional.of(entities.getContent());
+//        return barRepository.findAll();
     }
 
 
-    public ResponseEntity<Map<String, Boolean>> deleteBar(@PathVariable Long id) {
-        Bar bar = barRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Board not exist with id :" + id));
+    public Optional<Bar> getBarDetail(Long barId) {
+        return barRepository.findById(barId);
+    }
+
+
+
+    @Transactional
+    public ResponseEntity<Map<String,String>> updateBar(Long barId, BarUpdateDTO barDetails){
+        Bar bar = barRepository.findById(barId)
+                .orElseThrow(() -> new ResourceNotFoundException("Board not exist with id :" + barId));
+
+        bar.update(barDetails.getTitle(),barDetails.getContent(),barDetails.getLocation(),barDetails.getImage());
+        barRepository.save(bar);
+        Map<String, String> response = new HashMap<>();
+        response.put("update", "수정완료");
+        return ResponseEntity.ok(response);
+    }
+
+
+    public ResponseEntity<Map<String, Boolean>> deleteBar(@PathVariable Long barId) {
+        Bar bar = barRepository.findById(barId)
+                .orElseThrow(() -> new ResourceNotFoundException("Board not exist with id :" + barId));
 
         barRepository.delete(bar);
         Map<String, Boolean> response = new HashMap<>();
