@@ -5,12 +5,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 
+@EnableJpaAuditing
 @SpringBootApplication
 @EnableConfigurationProperties()
 public class AlcoholicApplication {
