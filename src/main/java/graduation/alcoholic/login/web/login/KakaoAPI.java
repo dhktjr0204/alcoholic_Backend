@@ -125,6 +125,11 @@ public class KakaoAPI {
                     .age_range(age_range)
                     .roletype(RoleType.ROLE_USER)
                     .build();
+//            userInfo.setName(username);
+//            userInfo.setEmail(email);
+//            userInfo.setSex(sex);
+//            userInfo.setAge_range(age_range);
+//            userInfo.setRoletype(RoleType.ROLE_USER);
 
         } catch (IOException e) {
             // TODO Auto-generated catch block

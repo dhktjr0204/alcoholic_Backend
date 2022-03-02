@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -18,12 +19,16 @@ public class Bar extends BaseTimeEntity{
     @ManyToOne
     private User user;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "content")
     private String content;
 
+    @Column(name = "location")
     private String location;
 
+    @Column(name = "image")
     private String image;
 
     @Builder
