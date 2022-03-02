@@ -4,7 +4,10 @@ import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.dto.AuthResponse;
 import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
 import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
+import graduation.alcoholic.login.domain.member.UserDto;
 import graduation.alcoholic.login.domain.member.UserRepository;
+import graduation.alcoholic.login.web.login.ClientKakao;
+import graduation.alcoholic.login.web.login.KakaoAPI;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +30,16 @@ public class AuthService {
         }
 
         String socialId = claims.getSubject();
-
         AuthToken newAppToken = authTokenProvider.createUserAppToken(socialId);
+        User UserInfo = userRepository.findByEmail(socialId);
 
         return AuthResponse.builder()
+                .name(UserInfo.getName())
+                .email(UserInfo.getEmail())
+                .sex(UserInfo.getSex())
+                .age_range(UserInfo.getAge_range())
                 .JwtToken(newAppToken.getToken())
+                .isNewMember(Boolean.FALSE)
                 .build();
     }
 

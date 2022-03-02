@@ -47,7 +47,6 @@ public class AuthTokenProvider {
     //String to jwtToken
     public AuthToken convertAuthToken(String token) {
         AuthToken call=new AuthToken(token, key);
-        System.out.println("convertAuthToken확인용" + call.getToken());
         return call;
     }
 

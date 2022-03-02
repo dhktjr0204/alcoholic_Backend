@@ -31,6 +31,7 @@ public class LoginController {
     private KakaoAPI kakao;
 
     private int counter=0;
+    private AuthResponse FrontInfo=null;
 
     @GetMapping("/login")
     public @ResponseBody ResponseEntity<AuthResponse> login(HttpServletRequest request, HttpSession session) {
@@ -44,23 +45,25 @@ public class LoginController {
             UserDto userInfo = kakao.getUserInfo(access_Token);
             System.out.println("login Controller : " + userInfo.getName() + "  " + userInfo.getEmail() + "  " + userInfo.getSex() + "  " + userInfo.getAge_range());
             //db에 저장/return할 정보 정제
-            AuthResponse FrontInfo = kakaoAuthService.loginToken(access_Token);
-            //JWT 토큰 만듬
-            ResponseEntity<AuthResponse> responseEntity = ApiResponse.success(FrontInfo);
-            System.out.println("JWT토큰 만듬->" + FrontInfo.getJwtToken());
+            FrontInfo = kakaoAuthService.loginToken(access_Token);
             //	클라이언트의 이메일이 존재하면 세션에 해당 이메일과 토큰 등록
             if (repository.findByEmail(userInfo.getEmail()) != null) {
                 session.setAttribute("email", userInfo.getEmail());
                 session.setAttribute("access_Token", access_Token);
             }
+            //JWT 토큰 만듬
+            }
+            ResponseEntity<AuthResponse> responseEntity = ApiResponse.success(FrontInfo);
+            System.out.println("JWT토큰 만듬->" + FrontInfo.getJwtToken());
+
+
             //JWT토큰 헤더에 담아 전달
             return responseEntity;
-        }
-        return null;
     }
 
     @GetMapping(value = "/logout")
     public @ResponseBody String logout(HttpSession session) {
+        counter=0;
         kakao.kakaoLogout((String)session.getAttribute("access_Token"));
         session.removeAttribute("access_Token");
         session.removeAttribute("email");
