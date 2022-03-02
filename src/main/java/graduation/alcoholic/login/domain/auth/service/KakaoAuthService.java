@@ -40,20 +40,12 @@ public class KakaoAuthService {
             //토큰 발급
             return AuthResponse.builder()
                     .JwtToken(appToken.getToken())
-                    .name(kakaoMember.getName())
-                    .email(kakaoMember.getEmail())
-                    .age_range(kakaoMember.getAge_range())
-                    .sex(kakaoMember.getSex())
                     .isNewMember(Boolean.TRUE)
                     .build();
         }
         //기존 유저 or 만료시간 완료된 유저라면 새로 토큰 발급
         return AuthResponse.builder()
                 .JwtToken(appToken.getToken())
-                .name(kakaoMember.getName())
-                .email(kakaoMember.getEmail())
-                .age_range(kakaoMember.getAge_range())
-                .sex(kakaoMember.getSex())
                 .isNewMember(Boolean.FALSE)
                 .build();
     }
