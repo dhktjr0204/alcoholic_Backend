@@ -18,12 +18,16 @@ public class Bar extends BaseTimeEntity{
     @ManyToOne
     private User user;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "content")
     private String content;
 
+    @Column(name = "location")
     private String location;
 
+    @Column(name = "image")
     private String image;
 
     @Builder
@@ -33,6 +37,13 @@ public class Bar extends BaseTimeEntity{
         this.content = content;
         this.location = location;
         this.image = image;
+    }
+
+    public void update(String title, String content, String location, String image){
+        this.title=title;
+        this.content=content;
+        this.location=location;
+        this.image=image;
     }
 }
 

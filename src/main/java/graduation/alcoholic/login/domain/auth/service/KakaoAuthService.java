@@ -4,7 +4,7 @@ import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.dto.AuthResponse;
 import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
 import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
-import graduation.alcoholic.login.domain.member.Member;
+import graduation.alcoholic.login.domain.member.UserDto;
 import graduation.alcoholic.login.domain.member.UserRepository;
 import graduation.alcoholic.login.web.login.ClientKakao;
 import graduation.alcoholic.login.web.login.KakaoAPI;
@@ -26,7 +26,7 @@ public class KakaoAuthService {
     @Transactional
     public AuthResponse loginToken(String token) {
         //client 정보 가져오기
-        Member userInfo = kakaoAPI.getUserInfo(token);
+        UserDto userInfo = kakaoAPI.getUserInfo(token);
         User kakaoMember=clientKakao.getUserData(userInfo);
         String email = kakaoMember.getEmail();
         User member = userRepository.findByEmail(email);

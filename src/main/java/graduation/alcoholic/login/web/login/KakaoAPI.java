@@ -9,13 +9,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.enumerate.RoleType;
-import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
-import graduation.alcoholic.login.domain.member.Member;
+import graduation.alcoholic.login.domain.member.UserDto;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonElement;
@@ -28,7 +25,7 @@ import com.google.gson.JsonParser;
 public class KakaoAPI {
     //토큰 가져오기
     public String getAccessToken (String authorize_code) {
-
+        System.out.println(authorize_code);
         String access_Token = "";
         String refresh_Token = "";
         String reqURL = "https://kauth.kakao.com/oauth/token";
@@ -83,8 +80,8 @@ public class KakaoAPI {
     }
 
     //사용자 정보 가져오기
-    public Member getUserInfo (String access_Token) {
-        Member userInfo = null;
+    public UserDto getUserInfo (String access_Token) {
+        UserDto userInfo = null;
         //	요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
         String reqURL = "https://kapi.kakao.com/v2/user/me";
         try {
@@ -120,23 +117,19 @@ public class KakaoAPI {
             String email = kakao_account.getAsJsonObject().get("email").getAsString();
             String age_range = kakao_account.getAsJsonObject().get("age_range").getAsString();
             String sex = kakao_account.getAsJsonObject().get("gender").getAsString();
-//
-//            userInfo.setU_id(null);
-//            userInfo.setUsername(username);
-//            userInfo.setEmail(email);
-//            userInfo.setAge_range(age_range);
-//            userInfo.setSex(sex);
-//            userInfo.setCapacity(null);
-//            userInfo.setRoletype(RoleType.ROLE_USER);
-            userInfo = Member.builder()
-                    .id(null)
+
+            userInfo = UserDto.builder()
                     .name(username)
                     .email(email)
                     .sex(sex)
                     .age_range(age_range)
                     .roletype(RoleType.ROLE_USER)
                     .build();
-
+//            userInfo.setName(username);
+//            userInfo.setEmail(email);
+//            userInfo.setSex(sex);
+//            userInfo.setAge_range(age_range);
+//            userInfo.setRoletype(RoleType.ROLE_USER);
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
