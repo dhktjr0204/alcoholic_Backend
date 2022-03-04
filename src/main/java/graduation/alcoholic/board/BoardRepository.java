@@ -1,11 +1,13 @@
 package graduation.alcoholic.board;
 
 import graduation.alcoholic.domain.Alcohol;
+import graduation.alcoholic.domain.enums.Type;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Alcohol, Long> {
@@ -17,25 +19,26 @@ public interface BoardRepository extends JpaRepository<Alcohol, Long> {
 
     //도수 30도 이상 선택했을때
     List<Alcohol> findByTypeAndPriceGreaterThanAndPriceLessThanAndDegreeGreaterThan(
-            String type, Long fromP, Long toP,
+            Type type, Integer fromP, Integer toP,
             Double fromD, Pageable pageable
     );
 
     //가격 10만원 이상 선택했을때
     List<Alcohol> findByTypeAndDegreeGreaterThanAndDegreeLessThanAndPriceGreaterThan(
-            String type, Long fromP,
-            Double fromD, Double toD, Pageable pageable
+            Type type,Double fromD, Double toD, Integer fromP,
+             Pageable pageable
     );
 
     //가격 10만원 이상, 도수 30도 이상 선택했을때
     List<Alcohol> findByTypeAndDegreeGreaterThanAndPriceGreaterThan(
-            String type, Long fromP,
-            Double fromD, Pageable pageable
+            Type type, Double fromD,
+            Integer fromP,
+             Pageable pageable
     );
 
     //그 외의 경우
     List<Alcohol> findByTypeAndPriceGreaterThanAndPriceLessThanAndDegreeGreaterThanAndDegreeLessThan
-    (String type, Long fromP, Long toP,
+    (Type type, Integer fromP, Integer toP,
      Double fromD, Double toD,
      Pageable pageable);
 
