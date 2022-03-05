@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -26,6 +27,7 @@ public class BarService {
     public Bar createBar(Long id, BarDTO bar){
         User user= userRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("해당 아이디가 없습니다"+"\n"));
+
         Bar barInfo= Bar.builder()
                 .user(user)
                 .title(bar.getTitle())
@@ -40,7 +42,6 @@ public class BarService {
     public Optional<List<Bar>> listAllBars(Pageable pageable){
         Page<Bar> entities = barRepository.findAll(pageable);
         return Optional.of(entities.getContent());
-//        return barRepository.findAll();
     }
 
 
