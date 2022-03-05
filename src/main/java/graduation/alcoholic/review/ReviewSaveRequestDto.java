@@ -43,6 +43,10 @@ public class ReviewSaveRequestDto {
         this.taste_5 = taste_5;
     }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public Review toEntity() {
         return Review.builder()
                 .user(user)
