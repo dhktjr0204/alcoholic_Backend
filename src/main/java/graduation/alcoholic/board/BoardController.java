@@ -1,6 +1,7 @@
 package graduation.alcoholic.board;
 
 import graduation.alcoholic.domain.Alcohol;
+import graduation.alcoholic.domain.User;
 import graduation.alcoholic.domain.enums.Type;
 import lombok.RequiredArgsConstructor;
 
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,20 +28,18 @@ public class BoardController {
     @GetMapping("/board")
     public Optional<List<Alcohol>> getBoard (@RequestParam(required = false) String type,
                                              @RequestParam(required = false) Double degreeFrom, @RequestParam(required = false) Double degreeTo,
-                                             @RequestParam(required = false) Integer priceFrom, @RequestParam(required = false) Integer priceTo,
-                                             @PageableDefault(size = 12) Pageable pageable) {
-
+                                             @RequestParam(required = false) Integer priceFrom, @RequestParam(required = false) Integer priceTo
+                                             ) {
 
 
         if (type.equals("전체")) {
-          return Optional.ofNullable(boardService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo, pageable));
+          return Optional.ofNullable(boardService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo));
         }
 
         //주종, 가격대, 도수에 의한 검색
         else {
             return Optional.ofNullable(boardService.findByTypeAndPriceAndDegree(
-                    type, priceFrom, priceTo, degreeFrom, degreeTo, pageable));
-
+                    type, priceFrom, priceTo, degreeFrom, degreeTo));
         }
     }
 
@@ -67,7 +67,13 @@ public class BoardController {
     }
 
     @PostMapping("/board/{id}") //찜하기 기능
-    public void addZzim (@PathVariable Long a_id) {
+    public void addZzim (@PathVariable Long a_id, @AuthenticationPrincipal User user) {
+        if (user==null) {
+            //로그인페이지로 이동
+        }
+        else {
+            boardService.addZzim(user, a_id);
+        }
 
     }
 }

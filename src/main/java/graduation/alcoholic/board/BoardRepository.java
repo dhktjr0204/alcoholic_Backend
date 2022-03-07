@@ -20,27 +20,24 @@ public interface BoardRepository extends JpaRepository<Alcohol, Long> {
     //도수 30도 이상 선택했을때
     List<Alcohol> findByTypeAndPriceGreaterThanAndPriceLessThanAndDegreeGreaterThan(
             Type type, Integer fromP, Integer toP,
-            Double fromD, Pageable pageable
+            Double fromD
     );
 
     //가격 10만원 이상 선택했을때
     List<Alcohol> findByTypeAndDegreeGreaterThanAndDegreeLessThanAndPriceGreaterThan(
-            Type type,Double fromD, Double toD, Integer fromP,
-             Pageable pageable
+            Type type,Double fromD, Double toD, Integer fromP
     );
 
     //가격 10만원 이상, 도수 30도 이상 선택했을때
     List<Alcohol> findByTypeAndDegreeGreaterThanAndPriceGreaterThan(
             Type type, Double fromD,
-            Integer fromP,
-             Pageable pageable
+            Integer fromP
     );
 
     //그 외의 경우
     List<Alcohol> findByTypeAndPriceGreaterThanAndPriceLessThanAndDegreeGreaterThanAndDegreeLessThan
     (Type type, Integer fromP, Integer toP,
-     Double fromD, Double toD,
-     Pageable pageable);
+     Double fromD, Double toD);
 
 
 }
