@@ -8,6 +8,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -22,7 +23,7 @@ public class BarController {
     //모든 정보 가져오기
     @ResponseBody
     @GetMapping("/board")
-    public Optional<List<Bar>> listAllBar(@PageableDefault(size = 12) Pageable pageable){
+    public List<BarResponseDTO> listAllBar(@PageableDefault(size = 20) Pageable pageable){
         return barService.listAllBars(pageable);
     }
 
@@ -30,30 +31,28 @@ public class BarController {
     //추가하기
     @ResponseBody
     @PostMapping("/add")
-    public Bar addBarInfo(@RequestParam("id") Long userId,@RequestBody BarDTO barDTO){
-        return barService.createBar(userId, barDTO);
+    public ResponseEntity<Map<String,Long>> addBarInfo(@RequestPart("barSaveDto") BarSaveDTO barSaveDTO,@RequestPart(value = "fileList", required = false) List<MultipartFile> fileList){
+        return barService.createBar(barSaveDTO, fileList);
     }
 
 
     //상세페이지
     @ResponseBody
     @GetMapping("/{id}")
-    public Map<String,Object> getBarDetail (@PathVariable Long id) {
-        Optional<Bar> barDetail = barService.getBarDetail(id);
-        Map<String, Object> res = new HashMap<>();
-        res.put("barDetail", barDetail);
-        return res;
+    public List<BarResponseDTO> getBarDetail (@PathVariable Long id) {
+        return barService.getBarDetail(id);
     }
 
-
+    //업데이트
     @ResponseBody
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String,String>> updateBar(@PathVariable Long id, @RequestBody BarUpdateDTO barDetail){
-        return barService.updateBar(id, barDetail);
+    public ResponseEntity<Map<String, Boolean>> updateBar(@PathVariable Long id, @RequestPart("barUpdateDto") BarUpdateDTO requestDto, @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList){
+        return barService.updateBar(id, requestDto, fileList);
     }
 
+    //삭제하기
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String,Boolean>> deleteBar(@PathVariable Long id){
+    public ResponseEntity<Map<String, Boolean>>  deleteBar(@PathVariable Long id){
         return barService.deleteBar(id);
     }
 

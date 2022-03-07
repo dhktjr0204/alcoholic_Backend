@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseTimeEntity {
-
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 }
