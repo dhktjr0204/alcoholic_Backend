@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/alcoholic
-    username: root
-    password: root
+    url: jdbc:mariadb://alcoholic.chboqrpgjou8.us-east-1.rds.amazonaws.com:3306/alcoholic
+    username: admin
+    password: alcoholic
 
   #JPA 설정
   jpa:

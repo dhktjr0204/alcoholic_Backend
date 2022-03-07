@@ -57,7 +57,7 @@ public class Review extends BaseTimeEntity{
 
     }
 
-    public void modify (String content, String image, Integer star, Taste taste_1, Taste taste_2, Taste taste_3, Taste taste_4, Taste taste_5) {
+    public void update (String content, String image, Integer star, Taste taste_1, Taste taste_2, Taste taste_3, Taste taste_4, Taste taste_5) {
         this.content = content;
         this.image = image;
         this.star = star;
@@ -67,4 +67,5 @@ public class Review extends BaseTimeEntity{
         this.taste_4 = taste_4;
         this.taste_5 = taste_5;
     }
+
 }

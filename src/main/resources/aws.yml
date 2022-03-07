@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAR2X6AYH6ZPIRVE72
+      secretKey: 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
+    s3:
+      bucket: alcoholic-review
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
