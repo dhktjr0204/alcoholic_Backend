@@ -1,15 +1,19 @@
 package graduation.alcoholic.board;
 
+import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import graduation.alcoholic.domain.Alcohol;
-import graduation.alcoholic.domain.User;
 import graduation.alcoholic.domain.enums.Type;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +23,7 @@ import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
+@Log4j
 public class BoardController {
 
     private final BoardRepository boardRepository;
@@ -66,14 +71,18 @@ public class BoardController {
         return res;
     }
 
-    @PostMapping("/board/{id}") //찜하기 기능
-    public void addZzim (@PathVariable Long a_id, @AuthenticationPrincipal User user) {
+    @ResponseBody
+    @PostMapping("/board/{a_id}") //찜하기 기능
+    public String addZzim (@PathVariable Long a_id, @AuthenticationPrincipal CustomUserDetails user) {
+
+        System.out.println();
         if (user==null) {
             //로그인페이지로 이동
         }
         else {
-            boardService.addZzim(user, a_id);
+         //   boardService.addZzim(user, a_id);
+            System.out.println("찜이되엇습니다");
         }
-
+        return "찜";
     }
 }

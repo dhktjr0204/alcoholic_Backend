@@ -4,6 +4,7 @@ import graduation.alcoholic.Zzim.ZzimRepository;
 import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.domain.Zzim;
+import graduation.alcoholic.domain.ZzimId;
 import graduation.alcoholic.domain.enums.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -68,7 +69,8 @@ public class BoardService {
     }
 
     public void addZzim (User user, Long a_id) {
-      //  zzimRepository.save(Zzim.builder(user, boardRepository.getById(a_id)));
+        Alcohol alcohol = boardRepository.findById(a_id).get();
+        zzimRepository.save(new Zzim(user,alcohol,new ZzimId()));
     }
 
 
