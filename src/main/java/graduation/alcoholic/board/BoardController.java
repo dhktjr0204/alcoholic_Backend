@@ -1,6 +1,7 @@
 package graduation.alcoholic.board;
 
 import graduation.alcoholic.domain.Alcohol;
+import graduation.alcoholic.domain.enums.Type;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Controller
@@ -24,13 +26,13 @@ public class BoardController {
     @GetMapping("/board")
     public Optional<List<Alcohol>> getBoard (@RequestParam(required = false) String type,
                                              @RequestParam(required = false) Double degreeFrom, @RequestParam(required = false) Double degreeTo,
-                                             @RequestParam(required = false) Long priceFrom, @RequestParam(required = false) Long priceTo,
+                                             @RequestParam(required = false) Integer priceFrom, @RequestParam(required = false) Integer priceTo,
                                              @PageableDefault(size = 12) Pageable pageable) {
 
-        //그냥 처음들어왔을때 , 검색 X일때
-        if (type == null && degreeFrom == null && priceFrom == null && degreeTo == null && priceTo == null) {
-            Page<Alcohol> entities = boardRepository.findAll(pageable);
-            return Optional.of(entities.getContent());
+
+
+        if (type.equals("전체")) {
+          return Optional.ofNullable(boardService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo, pageable));
         }
 
         //주종, 가격대, 도수에 의한 검색
