@@ -2,6 +2,7 @@ package graduation.alcoholic.board;
 
 import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import graduation.alcoholic.domain.Alcohol;
+import graduation.alcoholic.domain.User;
 import graduation.alcoholic.domain.enums.Type;
 import lombok.RequiredArgsConstructor;
 
@@ -11,19 +12,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
-@Log4j
 public class BoardController {
 
     private final BoardRepository boardRepository;
@@ -31,27 +33,27 @@ public class BoardController {
 
     @ResponseBody
     @GetMapping("/board")
-    public Optional<List<Alcohol>> getBoard (@RequestParam(required = false) String type,
+    public Optional<Page<Alcohol>> getBoard (@RequestParam(required = false) String type,
                                              @RequestParam(required = false) Double degreeFrom, @RequestParam(required = false) Double degreeTo,
-                                             @RequestParam(required = false) Integer priceFrom, @RequestParam(required = false) Integer priceTo
+                                             @RequestParam(required = false) Integer priceFrom, @RequestParam(required = false) Integer priceTo,
+                                             @PageableDefault(size = 12) Pageable pageable
                                              ) {
 
-
         if (type.equals("전체")) {
-          return Optional.ofNullable(boardService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo));
+          return Optional.ofNullable(boardService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo,pageable));
         }
 
         //주종, 가격대, 도수에 의한 검색
         else {
             return Optional.ofNullable(boardService.findByTypeAndPriceAndDegree(
-                    type, priceFrom, priceTo, degreeFrom, degreeTo));
+                    type, priceFrom, priceTo, degreeFrom, degreeTo,pageable));
         }
     }
 
     @ResponseBody
     @GetMapping("/board/search")
-    public Optional<List<Alcohol>> searchByName (@RequestParam String name, Pageable pageable) {
-        List<Alcohol> res = boardRepository.findByNameContains(name);
+    public Optional<Page<Alcohol>> searchByName (@RequestParam String name, Pageable pageable) {
+        Page<Alcohol> res = boardRepository.findByNameContains(name, pageable);
         return Optional.of(res);
     }
 
@@ -73,16 +75,20 @@ public class BoardController {
 
     @ResponseBody
     @PostMapping("/board/{a_id}") //찜하기 기능
-    public String addZzim (@PathVariable Long a_id, @AuthenticationPrincipal CustomUserDetails user) {
+    public String addZzim (@PathVariable Long a_id, HttpSession session) {
+        System.out.println(session.getId());
+       // System.out.println(principal.getName());
+//        if (principal==null) {
+//            //로그인페이지로 이동
+//            System.out.println("유저가 없음");
+//        }
 
-        System.out.println();
-        if (user==null) {
-            //로그인페이지로 이동
-        }
-        else {
-         //   boardService.addZzim(user, a_id);
+            User user = new User("정", "dhktjr0204@naver.com", "female", "20~29", null);
+            boardService.addZzim(user, a_id);
             System.out.println("찜이되엇습니다");
-        }
+
         return "찜";
     }
+
+
 }

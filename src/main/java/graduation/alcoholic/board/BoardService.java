@@ -7,6 +7,7 @@ import graduation.alcoholic.domain.Zzim;
 import graduation.alcoholic.domain.ZzimId;
 import graduation.alcoholic.domain.enums.Type;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,51 +27,64 @@ public class BoardService {
     }
 
 
-    public  List<Alcohol> findByPriceAndDegree (
+    public  Page<Alcohol> findByPriceAndDegree (
             Integer priceFrom, Integer priceTo,
-            Double degreeFrom, Double degreeTo
+            Double degreeFrom, Double degreeTo, Pageable pageable
     ) {
-        List<Alcohol> res = new ArrayList<>();
-        res.addAll(findByTypeAndPriceAndDegree(Type.청주.toString(), priceFrom, priceTo, degreeFrom, degreeTo));
-        res.addAll(findByTypeAndPriceAndDegree(Type.증류주.toString(), priceFrom, priceTo, degreeFrom, degreeTo));
-        res.addAll(findByTypeAndPriceAndDegree(Type.탁주.toString(), priceFrom, priceTo, degreeFrom, degreeTo));
-        res.addAll(findByTypeAndPriceAndDegree(Type.과실주.toString(), priceFrom, priceTo, degreeFrom, degreeTo));
-
-        return res;
+        if (degreeTo == 30 && priceTo == 100000) {
+            //30도 이상, 10만원이상 선택시
+            return boardRepository.findByDegreeGreaterThanAndPriceGreaterThan(degreeFrom, priceFrom, pageable);
+        } else if (degreeTo == 30) {
+            //30도 이상만 선택시
+            return boardRepository.findByPriceGreaterThanAndPriceLessThanAndDegreeGreaterThan(priceFrom, priceTo, degreeFrom, pageable);
+        } else if (priceTo == 100000) {
+            //10만원 이상만 선택시
+            return boardRepository.findByDegreeGreaterThanAndDegreeLessThanAndPriceGreaterThan(degreeFrom, degreeTo, priceFrom, pageable);
+        } else {
+            //그외
+            return boardRepository.findByPriceGreaterThanAndPriceLessThanAndDegreeGreaterThanAndDegreeLessThan(
+                    priceFrom, priceTo,
+                    degreeFrom, degreeTo, pageable
+            );
+        }
     }
 
-    public List<Alcohol> findByTypeAndPriceAndDegree (
+    public Page<Alcohol> findByTypeAndPriceAndDegree (
             String type, Integer priceFrom, Integer priceTo,
-            Double degreeFrom, Double degreeTo
+            Double degreeFrom, Double degreeTo, Pageable pageable
             ) {
 
         Type enumType = Type.valueOf(type);
 
         if (degreeTo==30 && priceTo== 100000) {
             //30도 이상, 10만원이상 선택시
-            return boardRepository.findByTypeAndDegreeGreaterThanAndPriceGreaterThan(enumType,degreeFrom, priceFrom);
+            return boardRepository.findByTypeAndDegreeGreaterThanAndPriceGreaterThan(enumType,degreeFrom, priceFrom, pageable);
         }
         else if (degreeTo==30) {
             //30도 이상만 선택시
-            return boardRepository.findByTypeAndPriceGreaterThanAndPriceLessThanAndDegreeGreaterThan(enumType, priceFrom, priceTo, degreeFrom);
+            return boardRepository.findByTypeAndPriceGreaterThanAndPriceLessThanAndDegreeGreaterThan(enumType, priceFrom, priceTo, degreeFrom, pageable);
         }
         else if (priceTo==100000) {
             //10만원 이상만 선택시
 
-            return boardRepository.findByTypeAndDegreeGreaterThanAndDegreeLessThanAndPriceGreaterThan(enumType, degreeFrom, degreeTo, priceFrom );
+            return boardRepository.findByTypeAndDegreeGreaterThanAndDegreeLessThanAndPriceGreaterThan(enumType, degreeFrom, degreeTo, priceFrom,pageable);
         }
         else {
             //그외
             return boardRepository.findByTypeAndPriceGreaterThanAndPriceLessThanAndDegreeGreaterThanAndDegreeLessThan(
                     enumType, priceFrom, priceTo,
-                    degreeFrom, degreeTo
+                    degreeFrom, degreeTo, pageable
             );
         }
     }
 
     public void addZzim (User user, Long a_id) {
         Alcohol alcohol = boardRepository.findById(a_id).get();
-        zzimRepository.save(new Zzim(user,alcohol,new ZzimId()));
+        ZzimId zzimId = new ZzimId();
+        zzimId.setAlcohol_id(alcohol.getId());
+        zzimId.setUser_id(user.getId());
+        //Zzim zzim = new Zzim(user, alcohol, zzimId);
+       // zzimRepository.save(zzim);
     }
 
 
