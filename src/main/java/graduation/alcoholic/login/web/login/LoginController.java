@@ -3,6 +3,7 @@ package graduation.alcoholic.login.web.login;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.dto.ApiResponse;
 import graduation.alcoholic.login.domain.auth.dto.AuthResponse;
 import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
@@ -18,6 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -58,7 +62,6 @@ public class LoginController {
             ResponseEntity<AuthResponse> responseEntity = ApiResponse.success(FrontInfo);
             System.out.println("JWT토큰 만듬->" + FrontInfo.getJwtToken());
 
-
             //JWT토큰 헤더에 담아 전달
             return responseEntity;
     }
@@ -70,6 +73,18 @@ public class LoginController {
         session.removeAttribute("access_Token");
         session.removeAttribute("email");
         return "logout 완료";
+    }
+
+    @GetMapping(value = "/delete")
+    public @ResponseBody String delete(HttpSession session) {
+        counter=0;
+        kakao.kakaoDelete((String)session.getAttribute("access_Token"));
+        User userInfo=repository.findByEmail((String) session.getAttribute("email"));
+        repository.delete(userInfo);
+
+        session.removeAttribute("access_Token");
+        session.removeAttribute("email");
+        return "탈퇴 완료";
     }
 
 
@@ -89,5 +104,15 @@ public class LoginController {
             return ApiResponse.forbidden(null);
         }
         return ApiResponse.success(authResponse);
+    }
+
+    @GetMapping("/test")
+    public @ResponseBody Map<String,String> testcode(HttpServletRequest request){
+        String jwtToken=JwtHeaderUtil.getAccessToken(request);
+        AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
+        Map<String,String> res=new HashMap<>();
+        String UserInfo=authToken.findTokentoEmail();
+        res.put("이메일", authToken.findTokentoEmail());
+        return res;
     }
 }

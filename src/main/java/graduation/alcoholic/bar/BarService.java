@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class BarService {
-    @Autowired
+
     private final BarRepository barRepository;
     private final S3Service s3Service;
 
@@ -49,11 +50,22 @@ public class BarService {
 
 
     @Transactional
-    public List<BarResponseDTO> listAllBars(Pageable pageable){
-        return  barRepository.findAll(pageable).stream()
-                .map(BarResponseDTO::new)
-                .collect(Collectors.toList());
+    public Page<BarResponseDTO> listAllBars(Pageable pageable){
+        Page<Bar> page=barRepository.findAll(pageable);
+        int totalElements=(int) page.getTotalElements();
+        return  new PageImpl<BarResponseDTO>(page.getContent()
+                .stream()
+                .map(bar -> new BarResponseDTO(
+                        bar.getId(),
+                        bar.getUser().getId(),
+                        bar.getTitle(),
+                        bar.getContent(),
+                        bar.getLocation(),
+                        bar.getImage(),
+                        bar.getModifiedDate()))
+                .collect(Collectors.toList()),pageable,totalElements);
     }
+
 
     @Transactional
     public List<BarResponseDTO> getBarDetail(Long barId) {
@@ -109,6 +121,40 @@ public class BarService {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
+    }
+
+    @Transactional
+    public Page<BarResponseDTO> searchBar(String title, Pageable pageable){
+        Page<Bar> page=barRepository.findByTitleContains(title,pageable);
+        int totalElements=(int) page.getTotalElements();
+        return  new PageImpl<BarResponseDTO>(page.getContent()
+                .stream()
+                .map(bar -> new BarResponseDTO(
+                        bar.getId(),
+                        bar.getUser().getId(),
+                        bar.getTitle(),
+                        bar.getContent(),
+                        bar.getLocation(),
+                        bar.getImage(),
+                        bar.getModifiedDate()))
+                .collect(Collectors.toList()),pageable,totalElements);
+    }
+
+    @Transactional
+    public Page<BarResponseDTO> localBar(String location, Pageable pageable){
+        Page<Bar> page=barRepository.findByLocationContains(location, pageable);
+        int totalElements=(int) page.getTotalElements();
+        return  new PageImpl<BarResponseDTO>(page.getContent()
+                .stream()
+                .map(bar -> new BarResponseDTO(
+                        bar.getId(),
+                        bar.getUser().getId(),
+                        bar.getTitle(),
+                        bar.getContent(),
+                        bar.getLocation(),
+                        bar.getImage(),
+                        bar.getModifiedDate()))
+                .collect(Collectors.toList()),pageable,totalElements);
     }
 
 }
