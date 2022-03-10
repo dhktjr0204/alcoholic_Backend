@@ -38,7 +38,6 @@ public class ReviewService {
         checkReviewDuplication(requestDto);
 
         if (fileList != null) {
-
             List<String> fileNameList = s3Service.uploadImage(fileList);
             String fileNameString  = fileNameListToString(fileNameList);
             requestDto.setImage(fileNameString);

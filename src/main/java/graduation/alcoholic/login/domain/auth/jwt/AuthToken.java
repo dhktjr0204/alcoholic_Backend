@@ -59,4 +59,12 @@ public class AuthToken {
         }
         return null;
     }
+
+    public String findTokentoEmail(){
+        return Jwts.parserBuilder()
+                .setSigningKey(key)//set key
+                .build()
+                .parseClaimsJws(token)//파싱 및 검증, 실패 시 에러
+                .getBody().getSubject();
+    }
 }

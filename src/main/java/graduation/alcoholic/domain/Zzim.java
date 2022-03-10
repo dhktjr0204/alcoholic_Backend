@@ -3,17 +3,20 @@ package graduation.alcoholic.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class Zzim{
 
     @MapsId("user_id")
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @MapsId("alcohol_id")
@@ -25,9 +28,9 @@ public class Zzim{
 
 
     @Builder
-    public Zzim(User user, Alcohol alcohol, ZzimId id) {
+    public Zzim(User user, Alcohol alcohol) {
         this.user = user;
         this.alcohol = alcohol;
-        this.id = new ZzimId();
+        this.id = new ZzimId(user.getId(), alcohol.getId());
     }
 }

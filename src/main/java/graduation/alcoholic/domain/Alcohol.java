@@ -25,7 +25,7 @@ public class Alcohol {
 
     private String name;
 
-    private BigDecimal degree;
+    private Double degree;
 
     private Integer capacity;
 
@@ -55,7 +55,7 @@ public class Alcohol {
 
 
     @Builder
-    public Alcohol(Type type, String name, Integer price, String image, String manufacturer, String content, BigDecimal degree, Integer capacity,
+    public Alcohol(Type type, String name, Integer price, String image, String manufacturer, String content, Double degree, Integer capacity,
                    Taste taste_1, Taste taste_2, Taste taste_3, Taste taste_4, Taste taste_5) {
         this.type = type;
         this.name = name;

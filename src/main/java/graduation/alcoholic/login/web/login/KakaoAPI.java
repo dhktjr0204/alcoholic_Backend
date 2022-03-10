@@ -13,6 +13,7 @@ import graduation.alcoholic.login.domain.auth.enumerate.RoleType;
 import graduation.alcoholic.login.domain.member.UserDto;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonElement;
@@ -23,6 +24,8 @@ import com.google.gson.JsonParser;
 @RequiredArgsConstructor
 @Service
 public class KakaoAPI {
+    @Value("${kakao.login.client_id}")
+    private String client_id;
     //토큰 가져오기
     public String getAccessToken (String authorize_code) {
         System.out.println(authorize_code);
@@ -42,7 +45,7 @@ public class KakaoAPI {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id=a17cc515ea9ec5c1ef5046107cbbcca2");
+            sb.append("&client_id="+client_id);
             sb.append("&redirect_uri=http://localhost:3000/auth/login");
             sb.append("&code=" + authorize_code);
             bw.write(sb.toString());
@@ -140,6 +143,33 @@ public class KakaoAPI {
 
     public void kakaoLogout(String access_Token) {
         String reqURL = "https://kapi.kakao.com/v1/user/logout";
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String result = "";
+            String line = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println(result);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+
+    public void kakaoDelete(String access_Token) {
+        String reqURL = "https://kapi.kakao.com/v1/user/unlink";
         try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

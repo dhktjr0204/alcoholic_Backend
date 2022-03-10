@@ -19,7 +19,6 @@ public class AlcoholicApplication {
 
 	public static final String APPLICATION_LOCATIONS = "spring.config.location="
 			+ "classpath:application.yml,"
-			+ "classpath:application-oauth.yml,"
 			+ "classpath:aws.yml";
 
 

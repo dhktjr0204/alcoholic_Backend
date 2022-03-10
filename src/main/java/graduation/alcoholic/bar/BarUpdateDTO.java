@@ -4,9 +4,11 @@ import graduation.alcoholic.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 @Getter
+@Setter
 @NoArgsConstructor
 public class BarUpdateDTO {
     @Column(name = "title")
@@ -26,6 +28,9 @@ public class BarUpdateDTO {
         this.title = title;
         this.content = content;
         this.location = location;
+        this.image = image;
+    }
+    public void setImage(String image) {
         this.image = image;
     }
 }
