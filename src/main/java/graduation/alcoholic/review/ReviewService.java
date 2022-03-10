@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static graduation.alcoholic.domain.enums.Taste.*;
@@ -98,7 +95,7 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReviewResponseDto> findByAlcohol(Long alcohol_id, Pageable pageable) {
+    public Map<ReviewTotalResponseDto, List<ReviewResponseDto>> findByAlcohol(Long alcohol_id, Pageable pageable) {
 
         Alcohol alcohol = alcoholRepository.findById(alcohol_id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 술이 없습니다. alcohol_id=" + alcohol_id));
@@ -107,41 +104,20 @@ public class ReviewService {
                 .map(ReviewResponseDto::new)
                 .collect(Collectors.toList());
 
-        Double total_star = getStarAverage(reviewResponseDtoList);
-        Taste[] tastes = getTopTaste(reviewResponseDtoList);
-        Taste top_taste_1 = tastes[0];
-        Taste top_taste_2 = tastes[1];
-        Taste top_taste_3 = tastes[2];
-        Taste top_taste_4 = tastes[3];
-        Taste top_taste_5 = tastes[4];
+        ReviewTotalResponseDto reviewTotalResponseDto = this.getTotal(reviewResponseDtoList);
 
-        reviewResponseDtoList.add(new ReviewResponseDto.ReviewResponseDtoBuilder()
-                .total_star(total_star)
-                .taste_1(top_taste_1)
-                .taste_2(top_taste_2)
-                .taste_3(top_taste_3)
-                .taste_4(top_taste_4)
-                .taste_5(top_taste_5)
-                .build());
 
-        return reviewResponseDtoList;
+        Map<ReviewTotalResponseDto, List<ReviewResponseDto>> res = new HashMap<>();
+        res.put(reviewTotalResponseDto, reviewResponseDtoList);
+
+        return res;
 
     }
 
 
     @Transactional(readOnly = true)
-    public ReviewTotalResponseDto getTotal(Long alcohol_id) {
+    public ReviewTotalResponseDto getTotal(List<ReviewResponseDto> reviewResponseDtoList) {
 
-        if (!reviewResponseDtoList.isEmpty()) {
-            if (reviewResponseDtoList.get(0).getId() != alcohol_id) {
-                Alcohol alcohol = alcoholRepository.findById(alcohol_id)
-                        .orElseThrow(() -> new IllegalArgumentException("해당 술이 없습니다. alcohol_id=" + alcohol_id));
-
-                reviewResponseDtoList =  reviewRepository.findByAlcohol(alcohol).stream()
-                        .map(ReviewResponseDto::new)
-                        .collect(Collectors.toList());
-            }
-        }
 
         Double total_star = getStarAverage(reviewResponseDtoList);
         Taste[] tastes = getTopTaste(reviewResponseDtoList);

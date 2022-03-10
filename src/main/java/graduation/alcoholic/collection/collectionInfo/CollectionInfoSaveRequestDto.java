@@ -24,6 +24,11 @@ public class CollectionInfoSaveRequestDto {
     }
 
     public CollectionInfo toEntity() {
+        return CollectionInfo.builder()
+                .user(user)
+                .title(title)
+                .description(description)
+                .build();
 
     }
 }

@@ -1,17 +1,13 @@
 package graduation.alcoholic.review;
 
-import graduation.alcoholic.domain.enums.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -35,8 +31,13 @@ public class ReviewApiController{
     }
 
     //정렬하기, 에러처리
-    @GetMapping("/review/alcohol/{alcohol_id}")
-    public List<ReviewResponseDto> findByAlcohol(@PathVariable Long alcohol_id, @PageableDefault(size = 5)Pageable pageable) {
+//    @GetMapping("/review/alcohol/{alcohol_id}")
+//    public List<ReviewResponseDto> findByAlcohol(@PathVariable Long alcohol_id, @PageableDefault(size = 5)Pageable pageable) {
+//        return reviewService.findByAlcohol(alcohol_id, pageable);
+//    }
+
+    @GetMapping("/review/alcohol/{alcohol_id")
+    public Map<ReviewTotalResponseDto, List<ReviewResponseDto>> findByAlcohol(@PathVariable Long alcohol_id, @PageableDefault(size = 5)Pageable pageable) {
         return reviewService.findByAlcohol(alcohol_id, pageable);
     }
 
@@ -45,13 +46,6 @@ public class ReviewApiController{
     @GetMapping("/review/user/{user_id}")
     public List<ReviewResponseDto> findByUser(@PathVariable Long user_id, @PageableDefault(size = 5)Pageable pageable) {
         return reviewService.findByUser(user_id, pageable);
-    }
-
-
-
-    @GetMapping("/review/star/{alcohol_id}")
-    public ReviewTotalResponseDto getTotal(@PathVariable Long alcohol_id) {
-        return reviewService.getTotal(alcohol_id);
     }
 
 

@@ -20,7 +20,6 @@ public class ReviewResponseDto {
     private String image;
 
     private Integer star;
-    private Double total_star;
 
     private Taste taste_1;
     private Taste taste_2;
@@ -47,8 +46,7 @@ public class ReviewResponseDto {
     }
 
     @Builder
-    public ReviewResponseDto(Double total_star, Taste taste_1, Taste taste_2, Taste taste_3, Taste taste_4, Taste taste_5) {
-        this.total_star = total_star;
+    public ReviewResponseDto(Taste taste_1, Taste taste_2, Taste taste_3, Taste taste_4, Taste taste_5) {
         this.taste_1 = taste_1;
         this.taste_2 = taste_2;
         this.taste_3 = taste_3;

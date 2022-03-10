@@ -34,4 +34,9 @@ public class CollectionInfo {
         this.title = title;
         this.description = description;
     }
+
+    public void update(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }
