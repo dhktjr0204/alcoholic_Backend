@@ -1,27 +1,29 @@
 package graduation.alcoholic.board;
 
-import com.nimbusds.openid.connect.sdk.claims.UserInfo;
+import graduation.alcoholic.Mypage.Zzim.ZzimService;
 import graduation.alcoholic.domain.Alcohol;
+import graduation.alcoholic.domain.Review;
 import graduation.alcoholic.domain.User;
-import graduation.alcoholic.domain.enums.Type;
+import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
+import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
+import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
+import graduation.alcoholic.login.domain.member.UserRepository;
+import graduation.alcoholic.review.ReviewRepository;
+import graduation.alcoholic.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 
-import lombok.extern.java.Log;
-import lombok.extern.log4j.Log4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
-import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -30,14 +32,19 @@ public class BoardController {
 
     private final BoardRepository boardRepository;
     private final BoardService boardService;
+    private final UserRepository userRepository;
+    private final ReviewService reviewService;
+    private final ZzimService zzimService;
+    private final AuthTokenProvider authTokenProvider;
 
     @ResponseBody
     @GetMapping("/board")
-    public Optional<Page<Alcohol>> getBoard (@RequestParam(required = false) String type,
-                                             @RequestParam(required = false) Double degreeFrom, @RequestParam(required = false) Double degreeTo,
-                                             @RequestParam(required = false) Integer priceFrom, @RequestParam(required = false) Integer priceTo,
-                                             @PageableDefault(size = 12) Pageable pageable
+    public Optional<Page<Alcohol>> getBoard (String type,
+                                             Double degreeFrom,Double degreeTo,
+                                              Integer priceFrom,  Integer priceTo,
+                                             @PageableDefault(size = 12) Pageable p
                                              ) {
+        Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name"));
 
         if (type.equals("전체")) {
           return Optional.ofNullable(boardService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo,pageable));
@@ -52,42 +59,67 @@ public class BoardController {
 
     @ResponseBody
     @GetMapping("/board/search")
-    public Optional<Page<Alcohol>> searchByName (@RequestParam String name, Pageable pageable) {
+    public Optional<Page<Alcohol>> searchByName (@RequestParam String name, Pageable p) {
+        Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name"));
         Page<Alcohol> res = boardRepository.findByNameContains(name, pageable);
         return Optional.of(res);
     }
 
     //상세페이지
     @ResponseBody
-    @GetMapping("/board/{id}")
-    public Map<String,Object> getBoardDetail (@PathVariable Long id) {
-        Optional<Alcohol> alcoholDetail = boardService.getAlcoholDetail(id);//술 객체 가져오기
-        // 리뷰 가져오기
-        // 통계 가져오기
-
+    @GetMapping("/board/{a_id}")
+    public Map<String,Object> getBoardDetail (@PathVariable Long a_id, HttpServletRequest request, Pageable pageable) {
         Map<String, Object> res = new HashMap<>();
+
+        // 통계 가져오기
+        //detail.put();
+
+        Optional<Alcohol> alcoholDetail = boardService.getAlcoholDetail(a_id);//술 객체 가져오기
         res.put("alcoholDetail", alcoholDetail);
-        //detail.put();
-        //detail.put();
+
+        String jwtToken = JwtHeaderUtil.getAccessToken(request);
+        boolean isZzimed = false;
+        if (jwtToken!= null) {
+            AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
+            String userEmail = authToken.findTokentoEmail();
+            Long u_id = userRepository.findByEmail(userEmail).getId();
+
+            isZzimed = zzimService.findZzim(u_id, a_id);
+        }
+
+        res.put("zzim",isZzimed ); //사용자의 찜여부
 
         return res;
     }
 
     @ResponseBody
     @PostMapping("/board/{a_id}") //찜하기 기능
-    public String addZzim (@PathVariable Long a_id, HttpSession session) {
-        System.out.println(session.getId());
-       // System.out.println(principal.getName());
-//        if (principal==null) {
-//            //로그인페이지로 이동
-//            System.out.println("유저가 없음");
-//        }
+    public HttpStatus addZzim (@PathVariable Long a_id, HttpServletRequest request) {
+        String jwtToken = JwtHeaderUtil.getAccessToken(request);
+        System.out.println("Jwt token:"+jwtToken);
+        AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
+        String userEmail =authToken.findTokentoEmail();
+        //현재 로그인한 유저의 이메일
 
-            User user = new User("정", "dhktjr0204@naver.com", "female", "20~29", null);
-            boardService.addZzim(user, a_id);
-            System.out.println("찜이되엇습니다");
+        User user = userRepository.findByEmail(userEmail);
+        HttpStatus httpStatus = zzimService.addZzim(user, a_id);
 
-        return "찜";
+        return httpStatus; // OK or ALREADY_REPORTED
+    }
+
+    @ResponseBody
+    @DeleteMapping("/board/{a_id}") //찜삭제
+    public HttpStatus deleteZzim (@PathVariable Long a_id, HttpServletRequest request) {
+        String jwtToken = JwtHeaderUtil.getAccessToken(request);
+        System.out.println("Jwt token:"+jwtToken);
+        AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
+        String userEmail =authToken.findTokentoEmail();
+        //현재 로그인한 유저의 이메일
+
+        Long u_id = userRepository.findByEmail(userEmail).getId();
+
+        return zzimService.deleteMyZzim(u_id,a_id);
+
     }
 
 

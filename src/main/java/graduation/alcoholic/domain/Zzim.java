@@ -16,7 +16,6 @@ public class Zzim{
 
     @MapsId("user_id")
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
     @MapsId("alcohol_id")

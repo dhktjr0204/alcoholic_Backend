@@ -1,4 +1,4 @@
-package graduation.alcoholic.login.domain.member;
+package graduation.alcoholic.Mypage.MyInfo;
 
 import graduation.alcoholic.login.domain.auth.enumerate.RoleType;
 import lombok.Builder;
@@ -9,23 +9,19 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class UserDto {
+public class MyInfoResponseDto {
     private String name;
-    private String nickname;
     private String email;
     private String sex;
     private String age_range;
     private BigDecimal capacity;
-    private RoleType roletype;
 
     @Builder
-    public UserDto(String name, String nickname, String email, String age_range, BigDecimal capacity, String sex, RoleType roletype) {
+    public MyInfoResponseDto(String name, String email, String age_range, BigDecimal capacity, String sex) {
         this.name = name;
-        this.nickname=nickname;
         this.email = email;
         this.sex = sex;
         this.age_range = age_range;
         this.capacity = capacity;
-        this.roletype = roletype;
     }
 }

@@ -16,13 +16,7 @@ import java.util.Objects;
 @NoArgsConstructor
 public class ZzimId implements Serializable {
 
-//    private Long user_id;
-//    private Long alcohol_id;
-
-    @Column(name="user_id")
     private Long user_id;
-
-    @Column(name ="alcohol_id")
     private Long alcohol_id;
 
     @Override

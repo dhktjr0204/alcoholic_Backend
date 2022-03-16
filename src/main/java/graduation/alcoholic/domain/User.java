@@ -51,7 +51,11 @@ public class User {
 
     public void setNickname(String nickname){this.nickname=nickname;}
 
-    public void delete_id(String del_cd){
-        this.del_cd=del_cd;
+    public void delete_id(String del_cd) {
+        this.del_cd = del_cd;
+    }
+
+    public void update(BigDecimal capacity) {
+        this.capacity= capacity;
     }
 }
