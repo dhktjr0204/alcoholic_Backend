@@ -123,6 +123,7 @@ public class KakaoAPI {
 
             userInfo = UserDto.builder()
                     .name(username)
+                    .nickname(username)
                     .email(email)
                     .sex(sex)
                     .age_range(age_range)

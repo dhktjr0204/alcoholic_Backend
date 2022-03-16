@@ -52,8 +52,14 @@ public class LoginController {
             System.out.println("login Controller : " + userInfo.getName() + "  " + userInfo.getEmail() + "  " + userInfo.getSex() + "  " + userInfo.getAge_range());
             //db에 저장/return할 정보 정제
             FrontInfo = kakaoAuthService.loginToken(access_Token);
+            User user=repository.findByEmail(userInfo.getEmail());
             //	클라이언트의 이메일이 존재하면 세션에 해당 이메일과 토큰 등록
-            if (repository.findByEmail(userInfo.getEmail()) != null) {
+            if (user != null) {
+                //만약 탈퇴한 회원이였다면 D를 없앰
+                if(user.getDel_cd()=="D"){
+                    user.delete_id(null);
+                    user.setNickname(user.getNickname());
+                }
                 session.setAttribute("email", userInfo.getEmail());
                 session.setAttribute("access_Token", access_Token);
             }
@@ -80,7 +86,9 @@ public class LoginController {
         counter=0;
         kakao.kakaoDelete((String)session.getAttribute("access_Token"));
         User userInfo=repository.findByEmail((String) session.getAttribute("email"));
-        repository.delete(userInfo);
+        String del_cd="D";
+        userInfo.delete_id(del_cd);
+        userInfo.setNickname("탈퇴한 회원입니다.");
 
         session.removeAttribute("access_Token");
         session.removeAttribute("email");

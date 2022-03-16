@@ -1,8 +1,6 @@
 package graduation.alcoholic.bar;
 
 import graduation.alcoholic.domain.Bar;
-import graduation.alcoholic.domain.Review;
-import graduation.alcoholic.domain.enums.Taste;
 import lombok.Getter;
 import java.time.LocalDateTime;
 
@@ -10,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 public class BarResponseDTO {
     private Long id;
-    private Long user_id;
+    private String nickname;
     private String title;
     private String content;
     private String location;
@@ -20,7 +18,7 @@ public class BarResponseDTO {
 
     public BarResponseDTO(Bar entity) {
         this.id = entity.getId();
-        this.user_id = entity.getUser().getId();
+        this.nickname = entity.getUser().getNickname();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.location = entity.getLocation();
@@ -28,9 +26,9 @@ public class BarResponseDTO {
         this.modified_date = entity.getModifiedDate();
     }
 
-    public BarResponseDTO(Long id, Long user_id, String title, String content, String location, String image, LocalDateTime modified_date) {
+    public BarResponseDTO(Long id, String nickname, String title, String content, String location, String image, LocalDateTime modified_date) {
         this.id = id;
-        this.user_id = user_id;
+        this.nickname = nickname;
         this.title = title;
         this.content = content;
         this.location = location;

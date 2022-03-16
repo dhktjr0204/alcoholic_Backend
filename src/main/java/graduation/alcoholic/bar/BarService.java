@@ -2,6 +2,8 @@ package graduation.alcoholic.bar;
 
 
 import graduation.alcoholic.domain.Bar;
+import graduation.alcoholic.domain.User;
+import graduation.alcoholic.login.domain.member.UserRepository;
 import graduation.alcoholic.review.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +25,7 @@ public class BarService {
 
     private final BarRepository barRepository;
     private final S3Service s3Service;
+
 
     @Transactional
     public ResponseEntity<Map<String,Long>> createBar(BarSaveDTO requestDto, List<MultipartFile> fileList){
@@ -52,12 +55,14 @@ public class BarService {
     @Transactional
     public Page<BarResponseDTO> listAllBars(Pageable pageable){
         Page<Bar> page=barRepository.findAll(pageable);
+
         int totalElements=(int) page.getTotalElements();
+
         return  new PageImpl<BarResponseDTO>(page.getContent()
                 .stream()
                 .map(bar -> new BarResponseDTO(
                         bar.getId(),
-                        bar.getUser().getId(),
+                        bar.getUser().getNickname(),
                         bar.getTitle(),
                         bar.getContent(),
                         bar.getLocation(),
@@ -69,7 +74,8 @@ public class BarService {
 
     @Transactional
     public List<BarResponseDTO> getBarDetail(Long barId) {
-        barRepository.findById(barId);
+        Bar bar = barRepository.findById(barId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다. id" +barId));
         return  barRepository.findById(barId).stream()
                 .map(BarResponseDTO::new)
                 .collect(Collectors.toList());
@@ -131,7 +137,7 @@ public class BarService {
                 .stream()
                 .map(bar -> new BarResponseDTO(
                         bar.getId(),
-                        bar.getUser().getId(),
+                        bar.getUser().getNickname(),
                         bar.getTitle(),
                         bar.getContent(),
                         bar.getLocation(),
@@ -148,7 +154,7 @@ public class BarService {
                 .stream()
                 .map(bar -> new BarResponseDTO(
                         bar.getId(),
-                        bar.getUser().getId(),
+                        bar.getUser().getNickname(),
                         bar.getTitle(),
                         bar.getContent(),
                         bar.getLocation(),

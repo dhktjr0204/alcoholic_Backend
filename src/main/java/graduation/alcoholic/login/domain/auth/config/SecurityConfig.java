@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**","/webjars/**","/bar/**","/auth/login",
-                "/board/search/**", "/board/**");
+                "/board/search/**", "/board/**","/recommend/**");
         //swagger로 요청이 들어 올 땐 헤더에 access token이 없으므로 jwt filter를 타지 않도록 처리함
     }
 

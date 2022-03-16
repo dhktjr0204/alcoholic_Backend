@@ -21,6 +21,8 @@ public class User {
 
     private String name;
 
+    private String nickname;
+
     private String email;
 
     private String sex;
@@ -29,18 +31,27 @@ public class User {
 
     private BigDecimal capacity;
 
-    @OneToMany(mappedBy = "user")
-    private List<Review> reviews = new ArrayList<Review>();
+    private String del_cd;
 
-    @OneToMany(mappedBy = "id.user_id")
-    private List<Zzim> zzims = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    private List<Review> reviews = new ArrayList<Review>();
+//
+//    @OneToMany(mappedBy = "id.user_id")
+//    private List<Zzim> zzims = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String sex, String age_range, BigDecimal capacity) {
+    public User(String name,String nickname, String email, String sex, String age_range, BigDecimal capacity) {
         this.name = name;
+        this.nickname=nickname;
         this.email = email;
         this.sex = sex;
         this.age_range = age_range;
         this.capacity = capacity;
+    }
+
+    public void setNickname(String nickname){this.nickname=nickname;}
+
+    public void delete_id(String del_cd){
+        this.del_cd=del_cd;
     }
 }
