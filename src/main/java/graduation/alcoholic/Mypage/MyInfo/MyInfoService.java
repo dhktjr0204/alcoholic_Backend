@@ -15,15 +15,15 @@ public class MyInfoService {
     public MyInfoResponseDto getUserInfo(String email){
         User entity = userRepository.findByEmail(email);
         return new MyInfoResponseDto(entity.getName(),entity.getEmail(),entity.getAge_range()
-                ,entity.getCapacity(), entity.getSex()) ;
+                ,entity.getCapacity(), entity.getSex(), entity.getNickname()) ;
     }
 
     public MyInfoResponseDto updateCapacity (String email, BigDecimal capacity) {
         User entity = userRepository.findByEmail(email);
-        entity.update(capacity);
+        entity.setCapacity(capacity);
         userRepository.save(entity);
         return new MyInfoResponseDto(entity.getName(),entity.getEmail(),entity.getAge_range()
-                ,entity.getCapacity(), entity.getSex()) ;
+                ,entity.getCapacity(), entity.getSex(), entity.getNickname()) ;
     }
 
 }
