@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class MyInfoController {
 
+
     private final AuthTokenProvider authTokenProvider;
     private final MyInfoService myInfoService;
 
