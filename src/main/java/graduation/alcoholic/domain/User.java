@@ -43,4 +43,8 @@ public class User {
         this.age_range = age_range;
         this.capacity = capacity;
     }
+
+    public void update (BigDecimal capacity) {
+        this.capacity= capacity;
+    }
 }
