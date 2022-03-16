@@ -24,9 +24,6 @@ public class CollectionInfo {
 
     private String description;
 
-    @OneToMany(mappedBy = "id.collection_id")
-    private List<CollectionContent> collectionContents = new ArrayList<>();
-
 
     @Builder
     public CollectionInfo(User user, String title, String description) {

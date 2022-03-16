@@ -33,11 +33,6 @@ public class User {
 
     private String del_cd;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Review> reviews = new ArrayList<Review>();
-//
-//    @OneToMany(mappedBy = "id.user_id")
-//    private List<Zzim> zzims = new ArrayList<>();
 
     @Builder
     public User(String name,String nickname, String email, String sex, String age_range, BigDecimal capacity) {

@@ -32,14 +32,14 @@ public class CollectionInfoService {
         return id;
     }
 
-    @Transactional(readOnly = true)
-    public List<CollectionInfoResponseDto> findByUser(Long user_id) {
-
-        User user = userRepository.findBy(user_id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. user_id: " + user_id));
-
-        return collectionInfoRepository.findByUser(user);
-    }
+//    @Transactional(readOnly = true)
+//    public List<CollectionInfoResponseDto> findByUser(Long user_id) {
+//
+//        User user = userRepository.findBy(user_id)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. user_id: " + user_id));
+//
+//        return collectionInfoRepository.findByUser(user);
+//    }
 
     @Transactional
     public void delete(Long id) {
