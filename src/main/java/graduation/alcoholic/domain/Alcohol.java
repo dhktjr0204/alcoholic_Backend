@@ -48,10 +48,10 @@ public class Alcohol {
     @Enumerated(value = EnumType.STRING)
     private Taste taste_5;
 
-    @OneToMany(mappedBy = "alcohol")
-    private List<Review> reviews = new ArrayList<Review>();
-//    @Formula("(select count(*) from review r where r.a_id = a_id)")
-//    private int reviewCount;
+//    @OneToMany(mappedBy = "alcohol")
+//    private List<Review> reviews = new ArrayList<Review>();
+////    @Formula("(select count(*) from review r where r.a_id = a_id)")
+////    private int reviewCount;
 
 
     @Builder

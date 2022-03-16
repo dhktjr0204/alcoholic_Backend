@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static graduation.alcoholic.domain.enums.Taste.*;
@@ -98,7 +95,7 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReviewResponseDto> findByAlcohol(Long alcohol_id, Pageable pageable) {
+    public ReviewTotalResponseDto findByAlcohol(Long alcohol_id, Pageable pageable) {
 
         Alcohol alcohol = alcoholRepository.findById(alcohol_id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 술이 없습니다. alcohol_id=" + alcohol_id));
@@ -107,160 +104,163 @@ public class ReviewService {
                 .map(ReviewResponseDto::new)
                 .collect(Collectors.toList());
 
-        Double total_star = getStarAverage(reviewResponseDtoList);
-        Taste[] tastes = getTopTaste(reviewResponseDtoList);
-        Taste top_taste_1 = tastes[0];
-        Taste top_taste_2 = tastes[1];
-        Taste top_taste_3 = tastes[2];
-        Taste top_taste_4 = tastes[3];
-        Taste top_taste_5 = tastes[4];
-
-        reviewResponseDtoList.add(new ReviewResponseDto.ReviewResponseDtoBuilder()
-                .total_star(total_star)
-                .taste_1(top_taste_1)
-                .taste_2(top_taste_2)
-                .taste_3(top_taste_3)
-                .taste_4(top_taste_4)
-                .taste_5(top_taste_5)
-                .build());
-
-        return reviewResponseDtoList;
+        return getTotal(reviewResponseDtoList);
 
     }
 
+//    @Transactional(readOnly = true)
+//    public ReviewTotalResponseDto findByAlcohol(Long alcohol_id) {
+//
+//        Alcohol alcohol = alcoholRepository.findById(alcohol_id)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 술이 없습니다. alcohol_id=" + alcohol_id));
+//
+//        reviewResponseDtoList = reviewRepository.findByAlcohol(alcohol).stream()
+//                .map(ReviewResponseDto::new)
+//                .collect(Collectors.toList());
+//
+//        return getTotal(reviewResponseDtoList);
+//    }
+
 
     @Transactional(readOnly = true)
-    public ReviewTotalResponseDto getTotal(Long alcohol_id) {
-
-        if (!reviewResponseDtoList.isEmpty()) {
-            if (reviewResponseDtoList.get(0).getId() != alcohol_id) {
-                Alcohol alcohol = alcoholRepository.findById(alcohol_id)
-                        .orElseThrow(() -> new IllegalArgumentException("해당 술이 없습니다. alcohol_id=" + alcohol_id));
-
-                reviewResponseDtoList =  reviewRepository.findByAlcohol(alcohol).stream()
-                        .map(ReviewResponseDto::new)
-                        .collect(Collectors.toList());
-            }
-        }
+    public ReviewTotalResponseDto getTotal(List<ReviewResponseDto> reviewResponseDtoList) {
 
         Double total_star = getStarAverage(reviewResponseDtoList);
         Taste[] tastes = getTopTaste(reviewResponseDtoList);
+
         Taste top_taste_1 = tastes[0];
         Taste top_taste_2 = tastes[1];
         Taste top_taste_3 = tastes[2];
         Taste top_taste_4 = tastes[3];
         Taste top_taste_5 = tastes[4];
 
-        return new ReviewTotalResponseDto.ReviewTotalResponseDtoBuilder()
-                .total_star(total_star)
-                .top_taste_1(top_taste_1)
-                .top_taste_2(top_taste_2)
-                .top_taste_3(top_taste_3)
-                .top_taste_4(top_taste_4)
-                .top_taste_5(top_taste_5)
-                .build();
+        if (reviewResponseDtoList == null) {
+            return new ReviewTotalResponseDto.ReviewTotalResponseDtoBuilder()
+                    .total_star((double) 0)
+                    .top_taste_1(없음)
+                    .top_taste_2(없음)
+                    .top_taste_3(없음)
+                    .top_taste_4(없음)
+                    .top_taste_5(없음)
+                    .build();
+        }
+        else {
+            return new ReviewTotalResponseDto.ReviewTotalResponseDtoBuilder()
+                    .total_star(total_star)
+                    .top_taste_1(top_taste_1)
+                    .top_taste_2(top_taste_2)
+                    .top_taste_3(top_taste_3)
+                    .top_taste_4(top_taste_4)
+                    .top_taste_5(top_taste_5)
+                    .reviewResponseDtoList(reviewResponseDtoList)
+                    .build();
+        }
+
     }
 
     public double getStarAverage(List<ReviewResponseDto> reviewResponseDtoList) {
 
-        int stars = 0;
+        double stars = 0;
         for(int i=0; i<reviewResponseDtoList.size(); i++) {
             stars += reviewResponseDtoList.get(i).getStar();
         }
 
-        return Math.round(stars/reviewResponseDtoList.size()*10)/10;
+        return Math.round(stars/reviewResponseDtoList.size()*10)/10.0;
 
     }
 
     public Taste[] getTopTaste(List<ReviewResponseDto> reviewResponseDtoList) {
 
-        int[][] counts = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
-
-        for (int i=0; i<reviewResponseDtoList.size(); i++) {
 
 
-            switch (reviewResponseDtoList.get(i).getTaste_1()) {
-                case 없음:
-                    counts[0][0]++;
-                    break;
-                case 약함:
-                    counts[0][1]++;
-                    break;
-                case 보통:
-                    counts[0][2]++;
-                    break;
-                case 강함:
-                    counts[0][3]++;
-                    break;
-            }
+        List<Integer>[] counts = new ArrayList[5];
 
-            switch (reviewResponseDtoList.get(i).getTaste_2()) {
-                case 없음:
-                    counts[1][0]++;
-                    break;
-                case 약함:
-                    counts[1][1]++;
-                    break;
-                case 보통:
-                    counts[1][2]++;
-                    break;
-                case 강함:
-                    counts[1][3]++;
-                    break;
-            }
-
-            switch (reviewResponseDtoList.get(i).getTaste_3()) {
-                case 없음:
-                    counts[2][0]++;
-                    break;
-                case 약함:
-                    counts[2][1]++;
-                    break;
-                case 보통:
-                    counts[2][2]++;
-                    break;
-                case 강함:
-                    counts[2][3]++;
-                    break;
-            }
-
-            switch (reviewResponseDtoList.get(i).getTaste_4()) {
-                case 없음:
-                    counts[3][0]++;
-                    break;
-                case 약함:
-                    counts[3][1]++;
-                    break;
-                case 보통:
-                    counts[3][2]++;
-                    break;
-                case 강함:
-                    counts[3][3]++;
-                    break;
-            }
-
-            switch (reviewResponseDtoList.get(i).getTaste_5()) {
-                case 없음:
-                    counts[4][0]++;
-                    break;
-                case 약함:
-                    counts[4][1]++;
-                    break;
-                case 보통:
-                    counts[4][2]++;
-                    break;
-                case 강함:
-                    counts[4][3]++;
-                    break;
+        for (int i=0; i<5; i++) {
+            counts[i] = new ArrayList<>();
+            for (int j=0; j<4; j++) {
+                counts[i].add(0);
             }
         }
 
 
-        Taste[] tastes = {};
+        for (int i = 0; i < reviewResponseDtoList.size(); i++) {
+
+            switch (reviewResponseDtoList.get(i).getTaste_1()) {
+                case 없음:
+                    counts[0].set(0, counts[0].get(0) + 1);
+                    break;
+                case 약함:
+                    counts[0].set(1, counts[0].get(1) + 1);
+                    break;
+                case 보통:
+                    counts[0].set(2, counts[0].get(2) + 1);
+                    break;
+                case 강함:
+                    counts[0].set(3, counts[0].get(3) + 1);
+                    break;
+            }
+            switch (reviewResponseDtoList.get(i).getTaste_2()) {
+                case 없음:
+                    counts[1].set(0, counts[1].get(0) + 1);
+                    break;
+                case 약함:
+                    counts[1].set(1, counts[1].get(1) + 1);
+                    break;
+                case 보통:
+                    counts[1].set(2, counts[1].get(2) + 1);
+                    break;
+                case 강함:
+                    counts[1].set(3, counts[1].get(3) + 1);
+                    break;
+            }
+            switch (reviewResponseDtoList.get(i).getTaste_3()) {
+                case 없음:
+                    counts[2].set(0, counts[2].get(0) + 1);
+                    break;
+                case 약함:
+                    counts[2].set(1, counts[2].get(1) + 1);
+                    break;
+                case 보통:
+                    counts[2].set(2, counts[2].get(2) + 1);
+                    break;
+                case 강함:
+                    counts[2].set(3, counts[2].get(3) + 1);
+                    break;
+            }
+            switch (reviewResponseDtoList.get(i).getTaste_4()) {
+                case 없음:
+                    counts[3].set(0, counts[3].get(0) + 1);
+                    break;
+                case 약함:
+                    counts[3].set(1, counts[3].get(1) + 1);
+                    break;
+                case 보통:
+                    counts[3].set(2, counts[3].get(2) + 1);
+                    break;
+                case 강함:
+                    counts[3].set(3, counts[3].get(3) + 1);
+                    break;
+            }
+            switch (reviewResponseDtoList.get(i).getTaste_5()) {
+                case 없음:
+                    counts[4].set(0, counts[4].get(0) + 1);
+                    break;
+                case 약함:
+                    counts[4].set(1, counts[4].get(1) + 1);
+                    break;
+                case 보통:
+                    counts[4].set(2, counts[4].get(2) + 1);
+                    break;
+                case 강함:
+                    counts[4].set(3, counts[4].get(3) + 1);
+                    break;
+            }
+        }
+
+        Taste[] tastes = new Taste[5];
 
         for (int i=0; i<5; i++) {
-
-            switch (Arrays.asList(counts[i]).indexOf(Arrays.stream(counts[i]).max())) {
+            switch (counts[i].indexOf(Collections.max(counts[i]))) {
                 case 0:
                     tastes[i] = 없음;
                     break;
@@ -275,21 +275,22 @@ public class ReviewService {
                     break;
             }
         }
+
         return tastes;
     }
 
 
-    @Transactional(readOnly = true)
-    public List<ReviewResponseDto> findByAlcohol(Long alcohol_id) {
-
-        Alcohol alcohol = alcoholRepository.findById(alcohol_id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 술이 없습니다. alcohol_id=" + alcohol_id));
-
-        return reviewRepository.findByAlcohol(alcohol).stream()
-                .map(ReviewResponseDto::new)
-                .collect(Collectors.toList());
-
-    }
+//    @Transactional(readOnly = true)
+//    public List<ReviewResponseDto> findByAlcohol(Long alcohol_id) {
+//
+//        Alcohol alcohol = alcoholRepository.findById(alcohol_id)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 술이 없습니다. alcohol_id=" + alcohol_id));
+//
+//        return reviewRepository.findByAlcohol(alcohol).stream()
+//                .map(ReviewResponseDto::new)
+//                .collect(Collectors.toList());
+//
+//    }
 
     @Transactional(readOnly = true)
     public List<ReviewResponseDto> findByUser (Long user_id, Pageable pageable) {

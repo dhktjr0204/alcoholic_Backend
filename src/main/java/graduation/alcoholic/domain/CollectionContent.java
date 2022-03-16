@@ -23,7 +23,7 @@ public class CollectionContent {
     private CollectionContentId id;
 
     @Builder
-    public CollectionContent(CollectionInfo collection, Alcohol alcohol, CollectionContentId id) {
+    public CollectionContent(CollectionInfo collection, Alcohol alcohol) {
         this.collection = collection;
         this.alcohol = alcohol;
         this.id = new CollectionContentId();
