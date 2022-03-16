@@ -1,9 +1,12 @@
 package graduation.alcoholic.collection.collectionInfo;
 
-
+import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
+import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
+import graduation.alcoholic.login.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -11,9 +14,12 @@ import java.util.List;
 public class CollectionInfoApiController {
 
     private final CollectionInfoService collectionInfoService;
+    private final AuthService authService;
 
     @PostMapping("/collectioninfo")
     public Long save(CollectionInfoSaveRequestDto collectionInfoSaveRequestDto) {
+
+
         return collectionInfoService.save(collectionInfoSaveRequestDto);
     }
 
@@ -22,12 +28,12 @@ public class CollectionInfoApiController {
         return collectionInfoService.update(id, collectionInfoUpdateRequestDto);
     }
 
-//    @GetMapping("/collectioninfo/{id}")
 
+    @GetMapping("/collectioninfo/user")
+    public List<CollectionInfoResponseDto> findByUser(HttpServletRequest httpRequest) {
 
-    @GetMapping("/collectioninfo/user/{user_id}")
-    public List<CollectionInfoResponseDto> findByUser(@PathVariable Long user_id) {
-        return collectionInfoService.findByUser(user_id);
+        String jwtToken= JwtHeaderUtil.getAccessToken(httpRequest);
+        return collectionInfoService.findByUser(authService.getMemberId(jwtToken););
     }
 
     @DeleteMapping("/collectioninfo/{id}")

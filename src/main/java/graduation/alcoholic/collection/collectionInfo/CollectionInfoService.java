@@ -35,7 +35,7 @@ public class CollectionInfoService {
     @Transactional(readOnly = true)
     public List<CollectionInfoResponseDto> findByUser(Long user_id) {
 
-        User user = userRepository.findById(user_id)
+        User user = userRepository.findBy(user_id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. user_id: " + user_id));
 
         return collectionInfoRepository.findByUser(user);

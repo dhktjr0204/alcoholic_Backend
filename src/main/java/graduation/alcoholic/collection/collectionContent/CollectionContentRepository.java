@@ -1,6 +1,5 @@
 package graduation.alcoholic.collection.collectionContent;
 
-import graduation.alcoholic.collection.collectionInfo.CollectionInfoResponseDto;
 import graduation.alcoholic.domain.CollectionContent;
 import graduation.alcoholic.domain.CollectionContentId;
 import graduation.alcoholic.domain.CollectionInfo;
