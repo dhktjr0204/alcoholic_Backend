@@ -50,7 +50,7 @@ public class User {
         this.del_cd = del_cd;
     }
 
-    public void update(BigDecimal capacity) {
+    public void setCapacity(BigDecimal capacity) {
         this.capacity= capacity;
     }
 }
