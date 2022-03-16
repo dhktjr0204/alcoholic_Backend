@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,16 +31,21 @@ public class myZzimController {
 
 
     @GetMapping("/myZzim")
-    public List<Alcohol> getMyZzimList (HttpServletRequest request) {
+    public List<ZzimResponseDto> getMyZzimList (HttpServletRequest request) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
-        Map<String,String> res=new HashMap<>();
         String userEmail =authToken.findTokentoEmail();
         //현재 로그인한 유저의 이메일
 
         Long u_id =  userRepository.findByEmail(userEmail).getId();
 
-        return zzimService.getMyZzim(u_id);
+        List<Alcohol> myZzim = zzimService.getMyZzim(u_id);
+        List<ZzimResponseDto> res = new ArrayList<>();
+
+        for (Alcohol a : myZzim) {
+            res.add(new ZzimResponseDto(a.getId(),a.getImage(),a.getName()));
+        }
+        return res;
     }
 
 
