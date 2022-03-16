@@ -53,4 +53,9 @@ public class User {
     public void update(BigDecimal capacity) {
         this.capacity= capacity;
     }
+
+    public void update(String nickname,String del_cd){
+        this.nickname=nickname;
+        this.del_cd=del_cd;
+    }
 }

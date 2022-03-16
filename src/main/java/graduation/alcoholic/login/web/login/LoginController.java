@@ -59,6 +59,8 @@ public class LoginController {
                 if(user.getDel_cd()=="D"){
                     user.delete_id(null);
                     user.setNickname(user.getNickname());
+
+                    user.update(userInfo.getNickname(),user.getDel_cd());
                 }
                 session.setAttribute("email", userInfo.getEmail());
                 session.setAttribute("access_Token", access_Token);
@@ -89,6 +91,8 @@ public class LoginController {
         String del_cd="D";
         userInfo.delete_id(del_cd);
         userInfo.setNickname("탈퇴한 회원입니다.");
+
+        userInfo.update(userInfo.getNickname(),userInfo.getDel_cd());
 
         session.removeAttribute("access_Token");
         session.removeAttribute("email");
