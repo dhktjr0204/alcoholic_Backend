@@ -8,8 +8,6 @@ import graduation.alcoholic.domain.enums.Taste;
 import graduation.alcoholic.login.domain.member.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +25,7 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final AlcoholRepository alcoholRepository;
     private final S3Service s3Service;
+
 
     @Transactional
     public Long save(String email, ReviewSaveRequestDto requestDto, List<MultipartFile> fileList) {
@@ -107,11 +106,11 @@ public class ReviewService {
     }
 
 
+
     @Transactional(readOnly = true)
     public List<ReviewResponseDto> findByUser (String email) {
 
         User user = userRepository.findByEmail(email);
-
         return reviewRepository.findByUserOrderByModifiedDateDesc(user).stream()
                 .map(ReviewResponseDto::new)
                 .collect(Collectors.toList());
@@ -134,11 +133,13 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
+
     @Transactional(readOnly = true)
     public ReviewTotalResponseDto getTotal(List<ReviewResponseDto> reviewResponseDtoList) {
 
         Double total_star = getStarAverage(reviewResponseDtoList);
         ReviewTopTaste reviewTopTaste = getTopTaste(reviewResponseDtoList);
+
 
         if (reviewResponseDtoList == null) {
             return new ReviewTotalResponseDto.ReviewTotalResponseDtoBuilder()
@@ -168,6 +169,7 @@ public class ReviewService {
                     .top_taste_3_percent(reviewTopTaste.getTop_taste_3_percent())
                     .top_taste_4_percent(reviewTopTaste.getTop_taste_4_percent())
                     .top_taste_5_percent(reviewTopTaste.getTop_taste_5_percent())
+
                     .reviewResponseDtoList(reviewResponseDtoList)
                     .build();
         }
@@ -184,6 +186,7 @@ public class ReviewService {
         return Math.round(stars/reviewResponseDtoList.size()*10)/10.0;
 
     }
+
 
     public ReviewTopTaste getTopTaste(List<ReviewResponseDto> reviewResponseDtoList) {
 
@@ -314,5 +317,7 @@ public class ReviewService {
                 .top_taste_4_percent(percent[3])
                 .top_taste_5_percent(percent[4])
                 .build();
+
     }
+
 }

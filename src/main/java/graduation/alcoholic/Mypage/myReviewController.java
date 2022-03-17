@@ -17,10 +17,12 @@ public class myReviewController {
 
     private final ReviewService reviewService;
 
+
 //    @GetMapping("/myReview")
 //    public List<ReviewResponseDto> getMyReviewList (Pageable pageable) {
 //        return reviewService.findByUser(1L,pageable); //예시
 //    }
+
 
     @DeleteMapping("/myReview/{r_id}")
     public void deleteMyReview (@PathVariable Long r_id) {

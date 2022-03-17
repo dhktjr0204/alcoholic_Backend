@@ -35,6 +35,7 @@ public class CollectionInfoApiController {
         return collectionInfoService.findByUser(authService.getMemberId(jwtToken));
     }
 
+
     @DeleteMapping("/collectioninfo/{id}")
     public void delete(@PathVariable Long id) {
         collectionInfoService.delete(id);

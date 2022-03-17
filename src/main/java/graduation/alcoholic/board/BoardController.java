@@ -62,7 +62,7 @@ public class BoardController {
     public Optional<Page<Alcohol>> searchByName (@RequestParam String name, Pageable p) {
         Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name"));
         Page<Alcohol> res = boardRepository.findByNameContains(name, pageable);
-        
+
         return Optional.of(res);
     }
 

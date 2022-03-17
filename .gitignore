@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### aws.yml ###
+resources/aws.yml
+src/main/resources/aws.yml

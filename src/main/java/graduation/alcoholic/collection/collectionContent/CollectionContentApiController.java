@@ -1,7 +1,5 @@
 package graduation.alcoholic.collection.collectionContent;
 
-
-import graduation.alcoholic.domain.CollectionContent;
 import graduation.alcoholic.domain.CollectionContentId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +24,6 @@ public class CollectionContentApiController {
 
     @DeleteMapping("/collectioncontent/{id}")
     public void delete(@PathVariable CollectionContentId id) {
-
         collectionContentService.delete(id);
     }
 }

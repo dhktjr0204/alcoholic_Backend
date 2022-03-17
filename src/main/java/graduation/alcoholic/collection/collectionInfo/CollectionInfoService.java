@@ -1,17 +1,17 @@
 package graduation.alcoholic.collection.collectionInfo;
 
 import graduation.alcoholic.domain.CollectionInfo;
-import graduation.alcoholic.domain.Review;
+
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.member.UserRepository;
-import graduation.alcoholic.review.ReviewSaveRequestDto;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Service
@@ -59,7 +59,6 @@ public class CollectionInfoService {
         User user = userRepository.findByEmail(email);
         return collectionInfoRepository.findByUser(user);
     }
-
 
     @Transactional
     public void delete(Long id) {
