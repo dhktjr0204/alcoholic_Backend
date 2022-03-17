@@ -20,7 +20,6 @@ public class ReviewTopTaste {
     private int top_taste_5_percent;
 
     @Builder
-
     public ReviewTopTaste(Taste top_taste_1, Taste top_taste_2, Taste top_taste_3, Taste top_taste_4, Taste top_taste_5,
                           int top_taste_1_percent, int top_taste_2_percent, int top_taste_3_percent, int top_taste_4_percent, int top_taste_5_percent) {
         this.top_taste_1 = top_taste_1;
