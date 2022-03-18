@@ -2,6 +2,7 @@ package graduation.alcoholic.login.web.login;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.dto.ApiResponse;
@@ -13,6 +14,7 @@ import graduation.alcoholic.login.domain.auth.service.AuthService;
 import graduation.alcoholic.login.domain.auth.service.KakaoAuthService;
 import graduation.alcoholic.login.domain.member.UserDto;
 import graduation.alcoholic.login.domain.member.UserRepository;
+import graduation.alcoholic.login.domain.member.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -53,18 +55,13 @@ public class LoginController {
             //db에 저장/return할 정보 정제
             FrontInfo = kakaoAuthService.loginToken(access_Token);
             User user=repository.findByEmail(userInfo.getEmail());
-            //	클라이언트의 이메일이 존재하면 세션에 해당 이메일과 토큰 등록
-            if (user != null) {
-                //만약 탈퇴한 회원이였다면 D를 없앰
-                if(user.getDel_cd()=="D"){
-                    user.delete_id(null);
-                    user.setNickname(user.getNickname());
+            //만약 탈퇴한 회원이였다면 D를 없앰
+            kakao.recover(user);
 
-                    user.update(userInfo.getNickname(),user.getDel_cd());
-                }
-                session.setAttribute("email", userInfo.getEmail());
-                session.setAttribute("access_Token", access_Token);
-            }
+            session.setAttribute("email", userInfo.getEmail());
+            session.setAttribute("access_Token", access_Token);
+
+            System.out.println("세션 확인용~~"+session.getAttribute("email")+","+ session.getAttribute("access_Token"));
             //JWT 토큰 만듬
             }
             ResponseEntity<AuthResponse> responseEntity = ApiResponse.success(FrontInfo);
@@ -83,20 +80,23 @@ public class LoginController {
         return "logout 완료";
     }
 
-    @GetMapping(value = "/delete")
+    @PutMapping(value = "/delete")
     public @ResponseBody String delete(HttpSession session) {
         counter=0;
         kakao.kakaoDelete((String)session.getAttribute("access_Token"));
         User userInfo=repository.findByEmail((String) session.getAttribute("email"));
-        String del_cd="D";
-        userInfo.delete_id(del_cd);
-        userInfo.setNickname("탈퇴한 회원입니다.");
-
-        userInfo.update(userInfo.getNickname(),userInfo.getDel_cd());
-
+        kakao.delete(userInfo);
         session.removeAttribute("access_Token");
         session.removeAttribute("email");
         return "탈퇴 완료";
+    }
+
+
+    @PutMapping("/rename")
+    public @ResponseBody String rename(@RequestPart("userUpdateDto")UserUpdateDto userUpdateDto,HttpSession httpSession){
+        User userInfo=repository.findByEmail((String) httpSession.getAttribute("email"));
+        kakao.update_Nickname(userInfo,userUpdateDto);
+        return "닉네임 생성 완료";
     }
 
 

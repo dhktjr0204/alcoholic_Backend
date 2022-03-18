@@ -9,8 +9,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
+import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.enumerate.RoleType;
 import graduation.alcoholic.login.domain.member.UserDto;
+import graduation.alcoholic.login.domain.member.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Service;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import javax.transaction.Transactional;
 
 
 @RequiredArgsConstructor
@@ -193,5 +197,26 @@ public class KakaoAPI {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    @Transactional
+    public void delete(User userInfo) {
+        String del_cd="D";
+        userInfo.setDelete("탈퇴한 회원입니다.",del_cd);
+
+        System.out.println(userInfo.getNickname()+","+userInfo.getDel_cd());
+    }
+
+    @Transactional
+    public void recover(User userInfo){
+        if(userInfo.getDel_cd()!=null) {
+            userInfo.setDelete(userInfo.getName(), null);
+            System.out.println(userInfo.getNickname() + "," + userInfo.getDel_cd());
+        }
+    }
+
+    @Transactional
+    public void update_Nickname(User userInfo, UserUpdateDto userUpdateDto){
+        userInfo.signInUpdate(userUpdateDto.getNickname(),userUpdateDto.getCapacity());
     }
 }
