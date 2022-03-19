@@ -34,4 +34,4 @@ kakao:
 #      - http://localhost:3000/oauth2/redirect
 #    #생성된 JWT Token을 response 할 uri를 입력합니다. 저는 localhost:3000으로 실행되는 react App으로 전달하겠습니다. 이곳에 정의된 redirectUri 외에는 JWT Token을 전달 받을 수 없습니다.
 #  cors:
-#    allowedOrigins: http://localhost:3000
+#    allowedOrigins: http://localhost:3000x

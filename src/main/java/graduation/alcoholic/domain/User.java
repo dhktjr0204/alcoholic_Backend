@@ -44,18 +44,17 @@ public class User {
         this.capacity = capacity;
     }
 
-    public void setNickname(String nickname){this.nickname=nickname;}
-
-    public void delete_id(String del_cd) {
-        this.del_cd = del_cd;
-    }
-
     public void setCapacity(BigDecimal capacity) {
         this.capacity= capacity;
     }
 
-    public void update(String nickname,String del_cd){
+    public void setDelete(String nickname,String del_cd){
         this.nickname=nickname;
         this.del_cd=del_cd;
+    }
+
+    public void signInUpdate(String nickname,BigDecimal capacity){
+        this.nickname=nickname;
+        this.capacity=capacity;
     }
 }
