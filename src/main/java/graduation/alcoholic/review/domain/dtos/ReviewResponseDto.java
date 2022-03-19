@@ -48,7 +48,11 @@ public class ReviewResponseDto {
 
     public List<String> StringTofileNameList(String fileNameString) {
 
-        return new ArrayList<String>(Arrays.asList(fileNameString.split(",")));
+        if (fileNameString == "") {
+            return new ArrayList<String>();
+        }
+        else
+            return new ArrayList<String>(Arrays.asList(fileNameString.split(",")));
     }
 
 
