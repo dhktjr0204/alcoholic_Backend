@@ -1,11 +1,15 @@
 package graduation.alcoholic.review;
 
-
+import graduation.alcoholic.S3.S3Service;
 import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.Review;
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.domain.enums.Taste;
 import graduation.alcoholic.login.domain.member.UserRepository;
+import graduation.alcoholic.review.domain.*;
+import graduation.alcoholic.review.domain.dtos.ReviewResponseDto;
+import graduation.alcoholic.review.domain.dtos.ReviewSaveRequestDto;
+import graduation.alcoholic.review.domain.dtos.ReviewUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,8 @@ public class ReviewService {
     private final S3Service s3Service;
 
 
+
+
     @Transactional
     public Long save(String email, ReviewSaveRequestDto requestDto, List<MultipartFile> fileList) {
 
@@ -44,26 +50,6 @@ public class ReviewService {
         return reviewRepository.save(requestDto.toEntity()).getId();
     }
 
-
-    @Transactional(readOnly = true)
-    public void checkReviewDuplication(ReviewSaveRequestDto requestDto) {
-
-        Optional<Review> review = reviewRepository.findByUserAndAlcohol(requestDto.getUser(), requestDto.getAlcohol());
-
-        if (review.isPresent()) {
-            throw new IllegalStateException("중복된 리뷰입니다.");
-        }
-    }
-
-    public String fileNameListToString(List<String> fileNameList) {
-
-        return StringUtils.join(fileNameList, ",");
-    }
-
-    public List<String> StringTofileNameList(String fileNameString) {
-
-        return new ArrayList<String>(Arrays.asList(fileNameString.split(",")));
-    }
 
     @Transactional
     public Long update(Long id, ReviewUpdateRequestDto requestDto, List<MultipartFile> fileList) {
@@ -131,6 +117,27 @@ public class ReviewService {
         }
 
         reviewRepository.delete(review);
+    }
+
+
+    @Transactional(readOnly = true)
+    public void checkReviewDuplication(ReviewSaveRequestDto requestDto) {
+
+        Optional<Review> review = reviewRepository.findByUserAndAlcohol(requestDto.getUser(), requestDto.getAlcohol());
+
+        if (review.isPresent()) {
+            throw new IllegalStateException("중복된 리뷰입니다.");
+        }
+    }
+
+    public String fileNameListToString(List<String> fileNameList) {
+
+        return StringUtils.join(fileNameList, ",");
+    }
+
+    public List<String> StringTofileNameList(String fileNameString) {
+
+        return new ArrayList<String>(Arrays.asList(fileNameString.split(",")));
     }
 
 

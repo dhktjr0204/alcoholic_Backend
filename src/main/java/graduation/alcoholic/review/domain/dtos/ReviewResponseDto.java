@@ -1,10 +1,13 @@
-package graduation.alcoholic.review;
+package graduation.alcoholic.review.domain.dtos;
 
 import graduation.alcoholic.domain.Review;
 
 import graduation.alcoholic.domain.enums.Taste;
 import lombok.Getter;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 public class ReviewResponseDto {
@@ -15,7 +18,7 @@ public class ReviewResponseDto {
     private Long alcohol_id;
 
     private String content;
-    private String image;
+    private List<String> image;
 
     private Integer star;
 
@@ -33,7 +36,7 @@ public class ReviewResponseDto {
         this.user_id = entity.getUser().getId();
         this.alcohol_id = entity.getAlcohol().getId();
         this.content = entity.getContent();
-        this.image = entity.getImage();
+        this.image = StringTofileNameList(entity.getImage());
         this.star = entity.getStar();
         this.taste_1 = entity.getTaste_1();
         this.taste_2 = entity.getTaste_2();
@@ -42,5 +45,11 @@ public class ReviewResponseDto {
         this.taste_5 = entity.getTaste_5();
         this.modified_date = entity.getModifiedDate();
     }
+
+    public List<String> StringTofileNameList(String fileNameString) {
+
+        return new ArrayList<String>(Arrays.asList(fileNameString.split(",")));
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package graduation.alcoholic.review;
+package graduation.alcoholic.S3;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

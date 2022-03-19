@@ -1,6 +1,7 @@
 package graduation.alcoholic.review;
 
 import graduation.alcoholic.domain.enums.Taste;
+import graduation.alcoholic.review.domain.dtos.ReviewResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

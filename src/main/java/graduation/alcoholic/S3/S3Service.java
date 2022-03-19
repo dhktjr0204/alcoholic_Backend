@@ -1,4 +1,4 @@
-package graduation.alcoholic.review;
+package graduation.alcoholic.S3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;

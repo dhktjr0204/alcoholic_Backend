@@ -1,4 +1,4 @@
-package graduation.alcoholic.review;
+package graduation.alcoholic.review.domain.dtos;
 
 import graduation.alcoholic.domain.enums.Taste;
 import lombok.Builder;

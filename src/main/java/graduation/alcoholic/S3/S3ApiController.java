@@ -1,4 +1,4 @@
-package graduation.alcoholic.review;
+package graduation.alcoholic.S3;
 
 import graduation.alcoholic.login.domain.auth.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;

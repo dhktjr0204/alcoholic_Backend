@@ -2,13 +2,11 @@ package graduation.alcoholic.board;
 
 import graduation.alcoholic.Mypage.Zzim.ZzimService;
 import graduation.alcoholic.domain.Alcohol;
-import graduation.alcoholic.domain.Review;
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
 import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
 import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
 import graduation.alcoholic.login.domain.member.UserRepository;
-import graduation.alcoholic.review.ReviewRepository;
 import graduation.alcoholic.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller

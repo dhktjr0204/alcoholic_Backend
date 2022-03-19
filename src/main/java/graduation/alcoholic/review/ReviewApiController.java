@@ -1,7 +1,12 @@
 package graduation.alcoholic.review;
 
+import graduation.alcoholic.domain.Review;
+import graduation.alcoholic.domain.enums.Taste;
 import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
 import graduation.alcoholic.login.domain.auth.service.AuthService;
+import graduation.alcoholic.review.domain.dtos.ReviewResponseDto;
+import graduation.alcoholic.review.domain.dtos.ReviewSaveRequestDto;
+import graduation.alcoholic.review.domain.dtos.ReviewUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +22,7 @@ public class ReviewApiController{
 
     private final AuthService authService;
 
+
     @PostMapping(value = "/review")
     public Long save(HttpServletRequest httpRequest,
                      @RequestPart("requestDto") ReviewSaveRequestDto requestDto, @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList) {
@@ -27,7 +33,7 @@ public class ReviewApiController{
     }
 
     @PutMapping("/review/{id}")
-    public Long update(@PathVariable Long id, @RequestPart("requestDto") ReviewUpdateRequestDto requestDto,  @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList) {
+    public Long update(@PathVariable Long id, @RequestPart("requestDto") ReviewUpdateRequestDto requestDto, @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList) {
 
         return reviewService.update(id, requestDto, fileList);
     }

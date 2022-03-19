@@ -2,12 +2,9 @@ package graduation.alcoholic.bar;
 
 
 import graduation.alcoholic.domain.Bar;
-import graduation.alcoholic.domain.User;
-import graduation.alcoholic.login.domain.member.UserRepository;
-import graduation.alcoholic.review.S3Service;
+import graduation.alcoholic.S3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

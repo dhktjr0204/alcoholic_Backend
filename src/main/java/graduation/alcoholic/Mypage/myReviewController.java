@@ -1,15 +1,12 @@
 package graduation.alcoholic.Mypage;
 
-import graduation.alcoholic.review.ReviewResponseDto;
 import graduation.alcoholic.review.ReviewService;
-import graduation.alcoholic.review.ReviewUpdateRequestDto;
+import graduation.alcoholic.review.domain.dtos.ReviewUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
