@@ -13,7 +13,7 @@ public class AlcoholResponseDto {
     private String name;
     private String image;
     private Integer price;
-    private List<Review> review;
+    private Integer review;
 
     @Builder
     public AlcoholResponseDto(Alcohol a) {
@@ -21,7 +21,7 @@ public class AlcoholResponseDto {
         this.name=a.getName();
         this.image=a.getImage();
         this.price=a.getPrice();
-        this.review=a.getReviews();
+        this.review=a.getReviews().size();
 
     }
 }
