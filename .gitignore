@@ -40,3 +40,7 @@ out/
 ### aws.yml ###
 resources/aws.yml
 src/main/resources/aws.yml
+
+
+/logs/**
+.log
