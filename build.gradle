@@ -41,7 +41,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'//security+oauth
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'//security+oauth
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'//lombok

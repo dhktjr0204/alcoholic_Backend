@@ -1,6 +1,8 @@
 package graduation.alcoholic.board;
 
 import graduation.alcoholic.Mypage.Zzim.ZzimService;
+import graduation.alcoholic.board.Visit.VisitAnalysisService;
+import graduation.alcoholic.board.Visit.VisitDto;
 import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.Review;
 import graduation.alcoholic.domain.User;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,18 +31,19 @@ import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
+
 public class BoardController {
 
-    private final BoardRepository boardRepository;
+
     private final BoardService boardService;
     private final UserRepository userRepository;
-    private final ReviewService reviewService;
     private final ZzimService zzimService;
     private final AuthTokenProvider authTokenProvider;
+    private final VisitAnalysisService visitService;
 
     @ResponseBody
     @GetMapping("/board")
-    public Optional<Page<Alcohol>> getBoard (String type,
+    public Page<BoardResponseDto> getBoard (String type,
                                              Double degreeFrom,Double degreeTo,
                                               Integer priceFrom,  Integer priceTo,
                                              @PageableDefault(size = 12) Pageable p
@@ -47,22 +51,22 @@ public class BoardController {
         Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name"));
 
         if (type.equals("전체")) {
-          return Optional.ofNullable(boardService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo,pageable));
+          return boardService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo,pageable);
         }
 
         //주종, 가격대, 도수에 의한 검색
         else {
-            return Optional.ofNullable(boardService.findByTypeAndPriceAndDegree(
-                    type, priceFrom, priceTo, degreeFrom, degreeTo,pageable));
+            return boardService.findByTypeAndPriceAndDegree(
+                    type, priceFrom, priceTo, degreeFrom, degreeTo,pageable);
         }
     }
 
     @ResponseBody
     @GetMapping("/board/search")
-    public Optional<Page<Alcohol>> searchByName (@RequestParam String name, Pageable p) {
+    public Page<BoardResponseDto> searchByName (@RequestParam String name, Pageable p) {
         Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name"));
-        Page<Alcohol> res = boardRepository.findByNameContains(name, pageable);
-        return Optional.of(res);
+        return  boardService.searchByName(name, pageable);
+
     }
 
     //상세페이지
@@ -70,12 +74,6 @@ public class BoardController {
     @GetMapping("/board/{a_id}")
     public Map<String,Object> getBoardDetail (@PathVariable Long a_id, HttpServletRequest request, Pageable pageable) {
         Map<String, Object> res = new HashMap<>();
-
-        // 통계 가져오기
-        //detail.put();
-
-        Optional<Alcohol> alcoholDetail = boardService.getAlcoholDetail(a_id);//술 객체 가져오기
-        res.put("alcoholDetail", alcoholDetail);
 
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
         boolean isZzimed = false;
@@ -85,9 +83,16 @@ public class BoardController {
             Long u_id = userRepository.findByEmail(userEmail).getId();
 
             isZzimed = zzimService.findZzim(u_id, a_id);
+
+            boardService.printLog(u_id, a_id);
+
         }
 
+        VisitDto visitInfo = visitService.getVisitInfo(a_id);
+        BoardDetailResponseDto alcoholDetail = boardService.getAlcoholDetail(a_id);//술 객체 가져오기
+        res.put("alcoholDetail", alcoholDetail);
         res.put("zzim",isZzimed ); //사용자의 찜여부
+        res.put("visit",visitInfo);
 
         return res;
     }

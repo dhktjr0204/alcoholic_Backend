@@ -1,5 +1,7 @@
 package graduation.alcoholic.domain;
 
+import graduation.alcoholic.board.BoardDetailResponseDto;
+import graduation.alcoholic.board.BoardResponseDto;
 import graduation.alcoholic.domain.enums.Taste;
 import graduation.alcoholic.domain.enums.Type;
 import lombok.Builder;
@@ -7,9 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -47,6 +46,9 @@ public class Alcohol {
     private Taste taste_4;
     @Enumerated(value = EnumType.STRING)
     private Taste taste_5;
+//
+//    @OneToOne
+//    private Visit visit;
 
 ////    @Formula("(select count(*) from review r where r.a_id = a_id)")
 ////    private int reviewCount;
@@ -68,5 +70,13 @@ public class Alcohol {
         this.taste_3 = taste_3;
         this.taste_4 = taste_4;
         this.taste_5 = taste_5;
+    }
+
+    public static BoardResponseDto toBoardResponseDto(Alcohol a) {
+        return new BoardResponseDto(a);
+    }
+
+    public BoardDetailResponseDto toBoardDetailResponseDto (Alcohol a) {
+        return new BoardDetailResponseDto(a);
     }
 }
