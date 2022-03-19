@@ -1,7 +1,7 @@
 package graduation.alcoholic.domain;
 
-import graduation.alcoholic.board.BoardDetailResponseDto;
-import graduation.alcoholic.board.BoardResponseDto;
+import graduation.alcoholic.alcohol.AlcoholDetailResponseDto;
+import graduation.alcoholic.alcohol.AlcoholResponseDto;
 import graduation.alcoholic.domain.enums.Taste;
 import graduation.alcoholic.domain.enums.Type;
 import lombok.Builder;
@@ -74,11 +74,11 @@ public class Alcohol {
         this.taste5 = taste5;
     }
 
-    public static BoardResponseDto toBoardResponseDto(Alcohol a) {
-        return new BoardResponseDto(a);
+    public static AlcoholResponseDto toBoardResponseDto(Alcohol a) {
+        return new AlcoholResponseDto(a);
     }
 
-    public BoardDetailResponseDto toBoardDetailResponseDto (Alcohol a) {
-        return new BoardDetailResponseDto(a);
+    public AlcoholDetailResponseDto toBoardDetailResponseDto (Alcohol a) {
+        return new AlcoholDetailResponseDto(a);
     }
 }

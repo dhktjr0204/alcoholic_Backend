@@ -1,4 +1,4 @@
-package graduation.alcoholic.board;
+package graduation.alcoholic.alcohol;
 
 import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.Visit;
@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class BoardDetailResponseDto {
+public class AlcoholDetailResponseDto {
     private Long id;
 
     private Type type;
@@ -41,7 +41,7 @@ public class BoardDetailResponseDto {
 
 
     @Builder
-    public BoardDetailResponseDto(Alcohol a) {
+    public AlcoholDetailResponseDto(Alcohol a) {
         this.id=a.getId();
         this.name=a.getName();
         this.type=a.getType();
@@ -51,10 +51,10 @@ public class BoardDetailResponseDto {
         this.price=a.getPrice();
         this.image=a.getImage();
         this.content=a.getContent();
-        this.taste_1=a.getTaste_1();
-        this.taste_2=a.getTaste_2();
-        this.taste_3=a.getTaste_3();
-        this.taste_4=a.getTaste_4();
-        this.taste_5=a.getTaste_5();
+        this.taste_1=a.getTaste1();
+        this.taste_2=a.getTaste2();
+        this.taste_3=a.getTaste3();
+        this.taste_4=a.getTaste4();
+        this.taste_5=a.getTaste5();
     }
 }

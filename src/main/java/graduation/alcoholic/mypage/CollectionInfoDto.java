@@ -1,4 +1,4 @@
-package graduation.alcoholic.Mypage;
+package graduation.alcoholic.mypage;
 
 import lombok.Data;
 

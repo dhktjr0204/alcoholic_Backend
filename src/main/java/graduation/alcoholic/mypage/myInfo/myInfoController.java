@@ -1,4 +1,4 @@
-package graduation.alcoholic.Mypage.MyInfo;
+package graduation.alcoholic.mypage.myInfo;
 
 
 import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
@@ -7,7 +7,6 @@ import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;

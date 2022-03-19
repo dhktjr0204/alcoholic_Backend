@@ -1,4 +1,4 @@
-package graduation.alcoholic.Mypage;
+package graduation.alcoholic.mypage;
 
 import graduation.alcoholic.review.ReviewService;
 import graduation.alcoholic.review.domain.dtos.ReviewUpdateRequestDto;

@@ -1,15 +1,13 @@
-package graduation.alcoholic.board;
+package graduation.alcoholic.alcohol;
 
-import graduation.alcoholic.Mypage.Zzim.ZzimService;
-import graduation.alcoholic.board.Visit.VisitAnalysisService;
-import graduation.alcoholic.board.Visit.VisitDto;
-import graduation.alcoholic.domain.Alcohol;
+import graduation.alcoholic.mypage.zzim.ZzimService;
+import graduation.alcoholic.alcohol.Visit.VisitAnalysisService;
+import graduation.alcoholic.alcohol.Visit.VisitDto;
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
 import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
 import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
 import graduation.alcoholic.login.domain.member.UserRepository;
-import graduation.alcoholic.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -18,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +26,10 @@ import java.util.*;
 @Controller
 @RequiredArgsConstructor
 
-public class BoardController {
+public class AlcoholController {
 
 
-    private final BoardService boardService;
+    private final AlcoholService alcoholService;
     private final UserRepository userRepository;
     private final ZzimService zzimService;
     private final AuthTokenProvider authTokenProvider;
@@ -40,30 +37,30 @@ public class BoardController {
 
     @ResponseBody
     @GetMapping("/board")
-    public Page<BoardResponseDto> getBoard (String type,
-                                             Double degreeFrom,Double degreeTo,
-                                              Integer priceFrom,  Integer priceTo,
-                                             @PageableDefault(size = 12) Pageable p
+    public Page<AlcoholResponseDto> getBoard (String type,
+                                              Double degreeFrom, Double degreeTo,
+                                              Integer priceFrom, Integer priceTo,
+                                              @PageableDefault(size = 12) Pageable p
                                              ) {
         Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name"));
 
         if (type.equals("전체")) {
-          return boardService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo,pageable);
+          return alcoholService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo,pageable);
         }
 
         //주종, 가격대, 도수에 의한 검색
         else {
-            return boardService.findByTypeAndPriceAndDegree(
+            return alcoholService.findByTypeAndPriceAndDegree(
                     type, priceFrom, priceTo, degreeFrom, degreeTo,pageable);
         }
     }
 
     @ResponseBody
     @GetMapping("/board/search")
-    public Page<BoardResponseDto> searchByName (@RequestParam String name, Pageable p) {
+    public Page<AlcoholResponseDto> searchByName (@RequestParam String name, Pageable p) {
         Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name"));
 
-        return  boardService.searchByName(name, pageable);
+        return  alcoholService.searchByName(name, pageable);
 
     }
 
@@ -82,12 +79,12 @@ public class BoardController {
 
             isZzimed = zzimService.findZzim(u_id, a_id);
 
-            boardService.printLog(u_id, a_id);
+            alcoholService.printLog(u_id, a_id);
 
         }
 
         VisitDto visitInfo = visitService.getVisitInfo(a_id);
-        BoardDetailResponseDto alcoholDetail = boardService.getAlcoholDetail(a_id);//술 객체 가져오기
+        AlcoholDetailResponseDto alcoholDetail = alcoholService.getAlcoholDetail(a_id);//술 객체 가져오기
         res.put("alcoholDetail", alcoholDetail);
         res.put("zzim",isZzimed ); //사용자의 찜여부
         res.put("visit",visitInfo);

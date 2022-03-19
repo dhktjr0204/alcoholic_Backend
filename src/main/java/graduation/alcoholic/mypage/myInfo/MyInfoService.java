@@ -1,4 +1,4 @@
-package graduation.alcoholic.Mypage.MyInfo;
+package graduation.alcoholic.mypage.myInfo;
 
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.member.UserRepository;

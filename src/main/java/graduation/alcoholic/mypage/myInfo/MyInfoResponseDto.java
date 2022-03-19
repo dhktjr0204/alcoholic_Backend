@@ -1,6 +1,5 @@
-package graduation.alcoholic.Mypage.MyInfo;
+package graduation.alcoholic.mypage.myInfo;
 
-import graduation.alcoholic.login.domain.auth.enumerate.RoleType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
