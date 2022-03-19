@@ -43,10 +43,10 @@ public class AlcoholResponseDto {
         this.image = entity.getImage();
         this.manufacturer = entity.getManufacturer();
         this.content = entity.getContent();
-        this.taste_1 = entity.getTaste_1();
-        this.taste_2 = entity.getTaste_2();
-        this.taste_3 = entity.getTaste_3();
-        this.taste_4 = entity.getTaste_4();
-        this.taste_5 = entity.getTaste_5();
+        this.taste_1 = entity.getTaste1();
+        this.taste_2 = entity.getTaste2();
+        this.taste_3 = entity.getTaste3();
+        this.taste_4 = entity.getTaste4();
+        this.taste_5 = entity.getTaste5();
     }
 }

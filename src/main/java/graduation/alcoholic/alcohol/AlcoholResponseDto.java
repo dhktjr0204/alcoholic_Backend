@@ -1,17 +1,17 @@
-package graduation.alcoholic.board;
+package graduation.alcoholic.alcohol;
 
 import graduation.alcoholic.domain.Alcohol;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class BoardResponseDto {
+public class AlcoholResponseDto {
     private Long id;
     private String name;
     private String image;
 
     @Builder
-    public BoardResponseDto(Alcohol a) {
+    public AlcoholResponseDto(Alcohol a) {
         this.id=a.getId();
         this.name=a.getName();
         this.image=a.getImage();

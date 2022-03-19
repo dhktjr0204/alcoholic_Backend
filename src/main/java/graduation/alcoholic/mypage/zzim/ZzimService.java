@@ -1,6 +1,6 @@
-package graduation.alcoholic.Mypage.Zzim;
+package graduation.alcoholic.mypage.zzim;
 
-import graduation.alcoholic.board.BoardRepository;
+import graduation.alcoholic.alcohol.AlcoholRepository;
 import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.domain.Zzim;
@@ -11,16 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ZzimService {
-    private final BoardRepository boardRepository;
+    private final AlcoholRepository alcoholRepository;
     private final ZzimRepository zzimRepository;
 
     public HttpStatus addZzim (User user, Long a_id) {
-        Alcohol alcohol = boardRepository.findById(a_id).get();
+        Alcohol alcohol = alcoholRepository.findById(a_id).get();
         boolean isRepeated = zzimRepository.findByUserIdAndAlcoholId(user.getId(), a_id).isEmpty();
         if(!isRepeated) {
             return HttpStatus.ALREADY_REPORTED;

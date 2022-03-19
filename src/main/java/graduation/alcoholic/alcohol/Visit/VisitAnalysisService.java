@@ -1,6 +1,6 @@
-package graduation.alcoholic.board.Visit;
+package graduation.alcoholic.alcohol.Visit;
 
-import graduation.alcoholic.board.BoardRepository;
+import graduation.alcoholic.alcohol.AlcoholRepository;
 import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.domain.Visit;
@@ -23,7 +23,7 @@ public class VisitAnalysisService {
     private final UserRepository userRepository;
     private final String basePath = "./logs/logback-";
     private final VisitRepository visitRepository;
-    private final BoardRepository boardRepository;
+    private final AlcoholRepository alcoholRepository;
 
 
    // @Scheduled(cron = "0 0/5 * * * *") //5분마다 실행
@@ -81,7 +81,7 @@ public class VisitAnalysisService {
 
     public void save (Long a_id, String ageRange, String sex) {
         //VisitSaveDto saveDto = new VisitSaveDto(a_id);
-        Alcohol a = boardRepository.findById(a_id).orElseThrow();
+        Alcohol a = alcoholRepository.findById(a_id).orElseThrow();
         Visit visitEntity = visitRepository.findById(a_id).orElse(new Visit(a,0L,0L,0L,0L,0L,0L));
 
         if (sex.equals("female")) {

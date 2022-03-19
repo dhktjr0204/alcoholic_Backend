@@ -65,7 +65,7 @@
         <appender-ref ref="STDOUT" />
     </root>
 
-    <logger name="graduation.alcoholic.board" level="INFO">
+    <logger name="graduation.alcoholic.alcohol" level="INFO">
         <appender-ref ref="ROLLING" />
     </logger>
 

@@ -1,7 +1,6 @@
-package graduation.alcoholic.Mypage.Zzim;
+package graduation.alcoholic.mypage.zzim;
 
 import graduation.alcoholic.domain.Alcohol;
-import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
 import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
 import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;

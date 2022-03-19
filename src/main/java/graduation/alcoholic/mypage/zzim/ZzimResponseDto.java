@@ -1,4 +1,4 @@
-package graduation.alcoholic.Mypage.Zzim;
+package graduation.alcoholic.mypage.zzim;
 
 import lombok.Builder;
 import lombok.Getter;
