@@ -2,7 +2,6 @@ package graduation.alcoholic.login.web.login;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.login.domain.auth.dto.ApiResponse;
@@ -22,9 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -32,9 +28,9 @@ public class LoginController {
     private final KakaoAuthService kakaoAuthService;
     private final AuthTokenProvider authTokenProvider;
     private final AuthService authService;
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     @Autowired
-    private KakaoAPI kakao;
+    private KakaoAPI kakaoService;
 
     private int counter=0;
     private AuthResponse FrontInfo=null;
@@ -46,22 +42,25 @@ public class LoginController {
         ++counter;
         if(counter==1) {
             String code = request.getParameter("code");
-            System.out.println("Code 받았어~~" + code);
             //카카오 토큰 얻기
-            String access_Token = kakao.getAccessToken(code);
+            String access_Token = kakaoService.getAccessToken(code);
             //카카오 토큰으로 정보 얻어서 dto에 저장
-            UserDto userInfo = kakao.getUserInfo(access_Token);
+            UserDto userInfo = kakaoService.getUserInfo(access_Token);
             System.out.println("login Controller : " + userInfo.getName() + "  " + userInfo.getEmail() + "  " + userInfo.getSex() + "  " + userInfo.getAge_range());
             //db에 저장/return할 정보 정제
             FrontInfo = kakaoAuthService.loginToken(access_Token);
-            User user=repository.findByEmail(userInfo.getEmail());
+            //db에 저장된 유저가져오기
+            User user= userRepository.findByEmail(userInfo.getEmail());
             //만약 탈퇴한 회원이였다면 D를 없앰
-            kakao.recover(user);
+            kakaoService.recover(user);
+
+            if(user.getAge_range()!=userInfo.getAge_range()){
+                System.out.println("유저 나이대 변경");
+                kakaoService.update_UserInfo(user, userInfo);
+            }
 
             session.setAttribute("email", userInfo.getEmail());
             session.setAttribute("access_Token", access_Token);
-
-            System.out.println("세션 확인용~~"+session.getAttribute("email")+","+ session.getAttribute("access_Token"));
             //JWT 토큰 만듬
             }
             ResponseEntity<AuthResponse> responseEntity = ApiResponse.success(FrontInfo);
@@ -74,7 +73,7 @@ public class LoginController {
     @GetMapping(value = "/logout")
     public @ResponseBody String logout(HttpSession session) {
         counter=0;
-        kakao.kakaoLogout((String)session.getAttribute("access_Token"));
+        kakaoService.kakaoLogout((String)session.getAttribute("access_Token"));
         session.removeAttribute("access_Token");
         session.removeAttribute("email");
         return "logout 완료";
@@ -83,9 +82,9 @@ public class LoginController {
     @PutMapping(value = "/delete")
     public @ResponseBody String delete(HttpSession session) {
         counter=0;
-        kakao.kakaoDelete((String)session.getAttribute("access_Token"));
-        User userInfo=repository.findByEmail((String) session.getAttribute("email"));
-        kakao.delete(userInfo);
+        kakaoService.kakaoDelete((String)session.getAttribute("access_Token"));
+        User userInfo= userRepository.findByEmail((String) session.getAttribute("email"));
+        kakaoService.delete(userInfo);
         session.removeAttribute("access_Token");
         session.removeAttribute("email");
         return "탈퇴 완료";
@@ -94,8 +93,8 @@ public class LoginController {
 
     @PutMapping("/rename")
     public @ResponseBody String rename(@RequestPart("userUpdateDto")UserUpdateDto userUpdateDto,HttpSession httpSession){
-        User userInfo=repository.findByEmail((String) httpSession.getAttribute("email"));
-        kakao.update_Nickname(userInfo,userUpdateDto);
+        User userInfo= userRepository.findByEmail((String) httpSession.getAttribute("email"));
+        kakaoService.update_Nickname(userInfo,userUpdateDto);
         return "닉네임 생성 완료";
     }
 
@@ -116,15 +115,5 @@ public class LoginController {
             return ApiResponse.forbidden(null);
         }
         return ApiResponse.success(authResponse);
-    }
-
-    @GetMapping("/test")
-    public @ResponseBody Map<String,String> testcode(HttpServletRequest request){
-        String jwtToken=JwtHeaderUtil.getAccessToken(request);
-        AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
-        Map<String,String> res=new HashMap<>();
-        String UserInfo=authToken.findTokentoEmail();
-        res.put("이메일", authToken.findTokentoEmail());
-        return res;
     }
 }
