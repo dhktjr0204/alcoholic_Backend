@@ -47,6 +47,9 @@ public class ReviewService {
             String fileNameString  = fileNameListToString(fileNameList);
             requestDto.setImage(fileNameString);
         }
+        else {
+            requestDto.setImage("");
+        }
 
         return reviewRepository.save(requestDto.toEntity()).getId();
     }
