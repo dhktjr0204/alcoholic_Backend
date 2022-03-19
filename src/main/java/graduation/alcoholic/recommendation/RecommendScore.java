@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class RecommendScore implements Comparable<RecommendScore>{
+public class RecommendScore{
 
     private Long id;
 
