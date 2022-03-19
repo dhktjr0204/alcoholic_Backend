@@ -37,9 +37,4 @@ public class RecommendScore implements Comparable<RecommendScore>{
         return std;
     }
 
-    @Override
-    public int compareTo(RecommendScore r) {
-
-
-    }
 }
