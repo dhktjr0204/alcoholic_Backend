@@ -57,4 +57,8 @@ public class User {
         this.nickname=nickname;
         this.capacity=capacity;
     }
+
+    public void updateUserInfo(String age_range){
+        this.age_range=age_range;
+    }
 }
