@@ -51,8 +51,13 @@ public class ReviewResponseDto {
         if (fileNameString == "") {
             return new ArrayList<String>();
         }
-        else
-            return new ArrayList<String>(Arrays.asList(fileNameString.split(",")));
+        else {
+            List<String> nameList = Arrays.asList(fileNameString.split(","));
+            for (int i = 0; i < nameList.size(); i++) {
+                nameList.set(i, "https://alcoholic-review.s3.ap-northeast-2.amazonaws.com/" + nameList.get(i));
+            }
+            return nameList;
+        }
     }
 
 
