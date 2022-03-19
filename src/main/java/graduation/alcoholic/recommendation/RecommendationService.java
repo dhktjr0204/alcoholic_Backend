@@ -1,8 +1,7 @@
 package graduation.alcoholic.recommendation;
 
+import graduation.alcoholic.alcohol.AlcoholRepository;
 import graduation.alcoholic.domain.enums.Taste;
-import graduation.alcoholic.domain.enums.Type;
-import graduation.alcoholic.review.domain.AlcoholRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

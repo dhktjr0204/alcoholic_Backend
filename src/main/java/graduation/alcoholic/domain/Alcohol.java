@@ -52,9 +52,12 @@ public class Alcohol {
     @Column(name = "taste_5")
     private Taste taste5;
 
+<<<<<<< HEAD
 ////    @Formula("(select count(*) from review r where r.a_id = a_id)")
 ////    private int reviewCount;
 
+=======
+>>>>>>> bbffd286d0d5336d3736580a47a25dead496f185
 
     @Builder
     public Alcohol(Long id, Type type, String name, Double degree, Integer capacity, Integer price, String image, String manufacturer, String content, Taste taste1, Taste taste2, Taste taste3, Taste taste4, Taste taste5) {

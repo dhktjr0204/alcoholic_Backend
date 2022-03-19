@@ -1,6 +1,7 @@
 package graduation.alcoholic.review;
 
 import graduation.alcoholic.S3.S3Service;
+import graduation.alcoholic.alcohol.AlcoholRepository;
 import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.Review;
 import graduation.alcoholic.domain.User;
