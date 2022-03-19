@@ -40,9 +40,6 @@ public class RecommendScore implements Comparable<RecommendScore>{
     @Override
     public int compareTo(RecommendScore r) {
 
-        if(((r.getTotal_score() - this.total_score) == 1) & (r.getStd() > this.getStd()))
-            return 1;
-        else
-            return -1;
+
     }
 }
