@@ -6,6 +6,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -14,6 +15,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @EnableJpaAuditing
 @SpringBootApplication
+@EnableScheduling
 @EnableConfigurationProperties()
 public class AlcoholicApplication {
 
