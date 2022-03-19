@@ -11,6 +11,7 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	google()
 }
 
 
@@ -42,11 +43,13 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'//security+oauth
 
+	providedCompile group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'//lombok
+
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'//security+oauth
 
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -62,8 +65,7 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
-	providedCompile group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
-	annotationProcessor('org.projectlombok:lombok')
+
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'

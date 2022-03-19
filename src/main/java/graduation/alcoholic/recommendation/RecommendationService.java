@@ -90,7 +90,7 @@ public class RecommendationService {
 
         List<RecommendScore> recommendScoreList = getScore(requestDto, alcoholTasteList);
         recommendScoreList.sort(Comparator.comparing(RecommendScore::getTotal_score).thenComparing(RecommendScore::getStd));
-
+        Collections.sort(recommendScoreList);
 
         return recommendScoreList;
 
