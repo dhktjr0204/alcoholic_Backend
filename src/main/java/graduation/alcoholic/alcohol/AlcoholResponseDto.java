@@ -5,13 +5,15 @@ import graduation.alcoholic.domain.Review;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class AlcoholResponseDto {
     private Long id;
     private String name;
     private String image;
     private Integer price;
-    private Review review;
+    private List<Review> review;
 
     @Builder
     public AlcoholResponseDto(Alcohol a) {
@@ -19,6 +21,7 @@ public class AlcoholResponseDto {
         this.name=a.getName();
         this.image=a.getImage();
         this.price=a.getPrice();
+        this.review=a.getReviews();
 
     }
 }
