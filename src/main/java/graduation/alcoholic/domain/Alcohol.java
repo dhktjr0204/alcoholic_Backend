@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -52,6 +54,8 @@ public class Alcohol {
     @Column(name = "taste_5")
     private Taste taste5;
 
+    @OneToMany(mappedBy = "alcohol")
+    private List<Review> reviews = new ArrayList<Review>();
 
     @Builder
     public Alcohol(Long id, Type type, String name, Double degree, Integer capacity, Integer price, String image, String manufacturer, String content, Taste taste1, Taste taste2, Taste taste3, Taste taste4, Taste taste5) {
