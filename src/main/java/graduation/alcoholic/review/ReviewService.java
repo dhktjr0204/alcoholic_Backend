@@ -72,7 +72,7 @@ public class ReviewService {
         }
 
         review.update(requestDto.getContent(), requestDto.getImage(), requestDto.getStar(),
-                requestDto.getTaste_1(), requestDto.getTaste_2(), requestDto.getTaste_3(), requestDto.getTaste_4(), requestDto.getTaste_5());
+                requestDto.getTaste1(), requestDto.getTaste2(), requestDto.getTaste3(), requestDto.getTaste4(), requestDto.getTaste5());
 
         return id;
     }
@@ -151,31 +151,31 @@ public class ReviewService {
         if (reviewResponseDtoList == null) {
             return new ReviewTotalResponseDto.ReviewTotalResponseDtoBuilder()
                     .total_star((double) 0)
-                    .top_taste_1(없음)
-                    .top_taste_2(없음)
-                    .top_taste_3(없음)
-                    .top_taste_4(없음)
-                    .top_taste_5(없음)
-                    .top_taste_1_percent(0)
-                    .top_taste_2_percent(0)
-                    .top_taste_3_percent(0)
-                    .top_taste_4_percent(0)
-                    .top_taste_5_percent(0)
+                    .top_taste1(없음)
+                    .top_taste2(없음)
+                    .top_taste3(없음)
+                    .top_taste4(없음)
+                    .top_taste5(없음)
+                    .top_taste1_percent(0)
+                    .top_taste2_percent(0)
+                    .top_taste3_percent(0)
+                    .top_taste4_percent(0)
+                    .top_taste5_percent(0)
                     .build();
         }
         else {
             return new ReviewTotalResponseDto.ReviewTotalResponseDtoBuilder()
                     .total_star(total_star)
-                    .top_taste_1(reviewTopTaste.getTop_taste_1())
-                    .top_taste_2(reviewTopTaste.getTop_taste_2())
-                    .top_taste_3(reviewTopTaste.getTop_taste_3())
-                    .top_taste_4(reviewTopTaste.getTop_taste_4())
-                    .top_taste_5(reviewTopTaste.getTop_taste_5())
-                    .top_taste_1_percent(reviewTopTaste.getTop_taste_1_percent())
-                    .top_taste_2_percent(reviewTopTaste.getTop_taste_2_percent())
-                    .top_taste_3_percent(reviewTopTaste.getTop_taste_3_percent())
-                    .top_taste_4_percent(reviewTopTaste.getTop_taste_4_percent())
-                    .top_taste_5_percent(reviewTopTaste.getTop_taste_5_percent())
+                    .top_taste1(reviewTopTaste.getTop_taste1())
+                    .top_taste2(reviewTopTaste.getTop_taste2())
+                    .top_taste3(reviewTopTaste.getTop_taste3())
+                    .top_taste4(reviewTopTaste.getTop_taste4())
+                    .top_taste5(reviewTopTaste.getTop_taste5())
+                    .top_taste1_percent(reviewTopTaste.getTop_taste1_percent())
+                    .top_taste2_percent(reviewTopTaste.getTop_taste2_percent())
+                    .top_taste3_percent(reviewTopTaste.getTop_taste3_percent())
+                    .top_taste4_percent(reviewTopTaste.getTop_taste4_percent())
+                    .top_taste5_percent(reviewTopTaste.getTop_taste5_percent())
 
                     .reviewResponseDtoList(reviewResponseDtoList)
                     .build();
@@ -210,7 +210,7 @@ public class ReviewService {
 
         for (int i = 0; i < reviewResponseDtoList.size(); i++) {
 
-            switch (reviewResponseDtoList.get(i).getTaste_1()) {
+            switch (reviewResponseDtoList.get(i).getTaste1()) {
                 case 없음:
                     counts[0].set(0, counts[0].get(0) + 1);
                     break;
@@ -224,7 +224,7 @@ public class ReviewService {
                     counts[0].set(3, counts[0].get(3) + 1);
                     break;
             }
-            switch (reviewResponseDtoList.get(i).getTaste_2()) {
+            switch (reviewResponseDtoList.get(i).getTaste2()) {
                 case 없음:
                     counts[1].set(0, counts[1].get(0) + 1);
                     break;
@@ -238,7 +238,7 @@ public class ReviewService {
                     counts[1].set(3, counts[1].get(3) + 1);
                     break;
             }
-            switch (reviewResponseDtoList.get(i).getTaste_3()) {
+            switch (reviewResponseDtoList.get(i).getTaste3()) {
                 case 없음:
                     counts[2].set(0, counts[2].get(0) + 1);
                     break;
@@ -252,7 +252,7 @@ public class ReviewService {
                     counts[2].set(3, counts[2].get(3) + 1);
                     break;
             }
-            switch (reviewResponseDtoList.get(i).getTaste_4()) {
+            switch (reviewResponseDtoList.get(i).getTaste4()) {
                 case 없음:
                     counts[3].set(0, counts[3].get(0) + 1);
                     break;
@@ -266,7 +266,7 @@ public class ReviewService {
                     counts[3].set(3, counts[3].get(3) + 1);
                     break;
             }
-            switch (reviewResponseDtoList.get(i).getTaste_5()) {
+            switch (reviewResponseDtoList.get(i).getTaste5()) {
                 case 없음:
                     counts[4].set(0, counts[4].get(0) + 1);
                     break;
@@ -313,16 +313,16 @@ public class ReviewService {
         }
 
         return new ReviewTopTaste.ReviewTopTasteBuilder()
-                .top_taste_1(tastes[0])
-                .top_taste_2(tastes[1])
-                .top_taste_3(tastes[2])
-                .top_taste_4(tastes[3])
-                .top_taste_5(tastes[4])
-                .top_taste_1_percent(percent[0])
-                .top_taste_2_percent(percent[1])
-                .top_taste_3_percent(percent[2])
-                .top_taste_4_percent(percent[3])
-                .top_taste_5_percent(percent[4])
+                .top_taste1(tastes[0])
+                .top_taste2(tastes[1])
+                .top_taste3(tastes[2])
+                .top_taste4(tastes[3])
+                .top_taste5(tastes[4])
+                .top_taste1_percent(percent[0])
+                .top_taste2_percent(percent[1])
+                .top_taste3_percent(percent[2])
+                .top_taste4_percent(percent[3])
+                .top_taste5_percent(percent[4])
                 .build();
 
     }

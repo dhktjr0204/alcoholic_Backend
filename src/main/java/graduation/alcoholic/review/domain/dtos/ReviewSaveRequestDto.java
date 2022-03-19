@@ -22,25 +22,25 @@ public class ReviewSaveRequestDto {
 
     private Integer star;
 
-    private Taste taste_1;
-    private Taste taste_2;
-    private Taste taste_3;
-    private Taste taste_4;
-    private Taste taste_5;
+    private Taste taste1;
+    private Taste taste2;
+    private Taste taste3;
+    private Taste taste4;
+    private Taste taste5;
 
     @Builder
     public ReviewSaveRequestDto(User user, Alcohol alcohol, String content, String image, Integer star,
-                                Taste taste_1, Taste taste_2, Taste taste_3, Taste taste_4, Taste taste_5) {
+                                Taste taste1, Taste taste2, Taste taste3, Taste taste4, Taste taste5) {
         this.user = user;
         this.alcohol = alcohol;
         this.content = content;
         this.image = image;
         this.star = star;
-        this.taste_1 = taste_1;
-        this.taste_2 = taste_2;
-        this.taste_3 = taste_3;
-        this.taste_4 = taste_4;
-        this.taste_5 = taste_5;
+        this.taste1 = taste1;
+        this.taste2 = taste2;
+        this.taste3 = taste3;
+        this.taste4 = taste4;
+        this.taste5 = taste5;
     }
 
     public void setImage(String image) {
@@ -56,11 +56,11 @@ public class ReviewSaveRequestDto {
                 .content(content)
                 .image(image)
                 .star(star)
-                .taste_1(taste_1)
-                .taste_2(taste_2)
-                .taste_3(taste_3)
-                .taste_4(taste_4)
-                .taste_5(taste_5)
+                .taste1(taste1)
+                .taste2(taste2)
+                .taste3(taste3)
+                .taste4(taste4)
+                .taste5(taste5)
                 .build();
     }
 

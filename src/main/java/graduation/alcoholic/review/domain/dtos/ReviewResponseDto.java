@@ -22,11 +22,11 @@ public class ReviewResponseDto {
 
     private Integer star;
 
-    private Taste taste_1;
-    private Taste taste_2;
-    private Taste taste_3;
-    private Taste taste_4;
-    private Taste taste_5;
+    private Taste taste1;
+    private Taste taste2;
+    private Taste taste3;
+    private Taste taste4;
+    private Taste taste5;
 
     private LocalDateTime modified_date;
 
@@ -38,11 +38,11 @@ public class ReviewResponseDto {
         this.content = entity.getContent();
         this.image = StringTofileNameList(entity.getImage());
         this.star = entity.getStar();
-        this.taste_1 = entity.getTaste_1();
-        this.taste_2 = entity.getTaste_2();
-        this.taste_3 = entity.getTaste_3();
-        this.taste_4 = entity.getTaste_4();
-        this.taste_5 = entity.getTaste_5();
+        this.taste1 = entity.getTaste1();
+        this.taste2 = entity.getTaste2();
+        this.taste3 = entity.getTaste3();
+        this.taste4 = entity.getTaste4();
+        this.taste5 = entity.getTaste5();
         this.modified_date = entity.getModifiedDate();
     }
 
