@@ -26,10 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**","/webjars/**","/bar/**","/auth/login",
                 "/board/search/**", "/board/**", "/review/**", "/collectioninfo/**", "/collectioncontent/**", "/recommend/**", "/recommendation/**");
-<<<<<<< HEAD
-=======
 
->>>>>>> bbffd286d0d5336d3736580a47a25dead496f185
         //swagger로 요청이 들어 올 땐 헤더에 access token이 없으므로 jwt filter를 타지 않도록 처리함
     }
 
