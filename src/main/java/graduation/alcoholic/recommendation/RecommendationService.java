@@ -59,7 +59,7 @@ public class RecommendationService {
             recommendScoreList.sort(Comparator.comparing(RecommendScore::getTotal_score));
 
             for (int i=0; i<5; i++) {
-                if (i > recommendScoreList.size())
+                if (i >= recommendScoreList.size())
                     break;
                 else {
                     RecommendScore recommendScore = recommendScoreList.get(i);
