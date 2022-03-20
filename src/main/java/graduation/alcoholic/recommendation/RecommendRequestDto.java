@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 public class RecommendRequestDto {
 
     private Type type;
-    private Double degree;
+
+    private String degree;
 
     private Taste taste1;
     private Taste taste2;
@@ -21,7 +22,7 @@ public class RecommendRequestDto {
 
 
     @Builder
-    public RecommendRequestDto(Type type, Double degree, Taste taste1, Taste taste2, Taste taste3, Taste taste4, Taste taste5) {
+    public RecommendRequestDto(Type type, String degree, Taste taste1, Taste taste2, Taste taste3, Taste taste4, Taste taste5) {
         this.type = type;
         this.degree = degree;
         this.taste1 = taste1;

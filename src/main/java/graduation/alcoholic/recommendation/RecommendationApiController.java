@@ -7,12 +7,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class recommendationApiController {
+public class RecommendationApiController {
 
     private final RecommendationService recommendationService;
 
     @GetMapping("/recommendation")
-    public List<RecommendScore> getRecommendation(@RequestBody RecommendRequestDto requestDto) {
+    public List<AlcoholResponseDto> getRecommendation(@RequestBody RecommendRequestDto requestDto) {
 
         return recommendationService.getRecommendation(requestDto);
     }
