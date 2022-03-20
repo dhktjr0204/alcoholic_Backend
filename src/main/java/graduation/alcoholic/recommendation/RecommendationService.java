@@ -36,13 +36,13 @@ public class RecommendationService {
 
     public int[] dtoToArray(AlcoholTasteResponseDto responseDto) {
 
-        int taste_1 = tasteToInt(responseDto.getTaste_1());
-        int taste_2 = tasteToInt(responseDto.getTaste_2());
-        int taste_3 = tasteToInt(responseDto.getTaste_3());
-        int taste_4 = tasteToInt(responseDto.getTaste_4());
-        int taste_5 = tasteToInt(responseDto.getTaste_5());
+        int taste1 = tasteToInt(responseDto.getTaste1());
+        int taste2 = tasteToInt(responseDto.getTaste2());
+        int taste3 = tasteToInt(responseDto.getTaste3());
+        int taste4 = tasteToInt(responseDto.getTaste4());
+        int taste5 = tasteToInt(responseDto.getTaste5());
 
-        int[] array = {taste_1, taste_2, taste_3, taste_4, taste_5};
+        int[] array = {taste1, taste2, taste3, taste4, taste5};
         return array;
 
     }
@@ -56,20 +56,20 @@ public class RecommendationService {
 
             AlcoholTasteResponseDto tastes = iterator.next();
 
-            int score_1 = Math.abs(tasteToInt(requestDto.getTaste_1()) - tasteToInt(tastes.getTaste_1()));
-            int score_2 = Math.abs(tasteToInt(requestDto.getTaste_2()) - tasteToInt(tastes.getTaste_2()));
-            int score_3 = Math.abs(tasteToInt(requestDto.getTaste_3()) - tasteToInt(tastes.getTaste_3()));
-            int score_4 = Math.abs(tasteToInt(requestDto.getTaste_4()) - tasteToInt(tastes.getTaste_4()));
-            int score_5 = Math.abs(tasteToInt(requestDto.getTaste_5()) - tasteToInt(tastes.getTaste_5()));
-            int total_score = score_1 + score_2 + score_3 + score_4 + score_5;
+            int score1 = Math.abs(tasteToInt(requestDto.getTaste1()) - tasteToInt(tastes.getTaste1()));
+            int score2 = Math.abs(tasteToInt(requestDto.getTaste2()) - tasteToInt(tastes.getTaste2()));
+            int score3 = Math.abs(tasteToInt(requestDto.getTaste3()) - tasteToInt(tastes.getTaste3()));
+            int score4 = Math.abs(tasteToInt(requestDto.getTaste4()) - tasteToInt(tastes.getTaste4()));
+            int score5 = Math.abs(tasteToInt(requestDto.getTaste5()) - tasteToInt(tastes.getTaste5()));
+            int total_score = score1 + score2 + score3 + score4 + score5;
 
             RecommendScore score = RecommendScore.builder()
                     .id(tastes.getId())
-                    .score_1(score_1)
-                    .score_2(score_2)
-                    .score_3(score_3)
-                    .score_4(score_4)
-                    .score_5(score_5)
+                    .score1(score1)
+                    .score2(score2)
+                    .score3(score3)
+                    .score4(score4)
+                    .score5(score5)
                     .total_score(total_score)
                     .build();
             recommendScoreList.add(score);
@@ -85,7 +85,7 @@ public class RecommendationService {
         List<AlcoholTasteResponseDto> alcoholTasteList = alcoholTasteRepository.findByType(requestDto.getType()).stream()
                 .map(AlcoholTasteResponseDto::new)
                 .collect(Collectors.toList());
-
+        
 
         List<RecommendScore> recommendScoreList = getScore(requestDto, alcoholTasteList);
         recommendScoreList.sort(Comparator.comparing(RecommendScore::getTotal_score).thenComparing(RecommendScore::getStd));
