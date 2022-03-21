@@ -48,6 +48,10 @@ public class User {
         this.capacity= capacity;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname=nickname;
+    }
+
     public void setDelete(String nickname,String del_cd){
         this.nickname=nickname;
         this.del_cd=del_cd;
