@@ -207,6 +207,7 @@ public class KakaoAPI {
         System.out.println(userInfo.getNickname()+","+userInfo.getDel_cd());
     }
 
+    //탈퇴하면 데이터베이스 업데이트
     @Transactional
     public void recover(User userInfo){
         if(userInfo.getDel_cd()!=null) {
@@ -215,8 +216,14 @@ public class KakaoAPI {
         }
     }
 
+    //닉네임 업데이트
     @Transactional
     public void update_Nickname(User userInfo, UserUpdateDto userUpdateDto){
         userInfo.signInUpdate(userUpdateDto.getNickname(),userUpdateDto.getCapacity());
+    }
+
+    @Transactional
+    public void update_UserInfo(User userInfo, UserDto userUpdateDto){
+        userInfo.updateUserInfo(userUpdateDto.getAge_range());
     }
 }
