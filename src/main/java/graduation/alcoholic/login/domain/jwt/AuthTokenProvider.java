@@ -1,7 +1,7 @@
-package graduation.alcoholic.login.domain.auth.jwt;
+package graduation.alcoholic.login.domain.jwt;
 
-import graduation.alcoholic.login.domain.auth.enumerate.RoleType;
-import graduation.alcoholic.login.domain.auth.exception.TokenValidFailedException;
+import graduation.alcoholic.login.domain.enumerate.RoleType;
+import graduation.alcoholic.login.domain.exception.TokenValidFailedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;

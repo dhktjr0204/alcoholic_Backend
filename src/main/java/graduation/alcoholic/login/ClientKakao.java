@@ -1,7 +1,7 @@
-package graduation.alcoholic.login.web.login;
+package graduation.alcoholic.login;
 
 import graduation.alcoholic.domain.User;
-import graduation.alcoholic.login.domain.member.UserDto;
+import graduation.alcoholic.login.UserDto;
 import org.springframework.stereotype.Component;
 
 @Component

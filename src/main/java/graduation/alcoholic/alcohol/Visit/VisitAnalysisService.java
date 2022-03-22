@@ -4,7 +4,7 @@ import graduation.alcoholic.alcohol.AlcoholRepository;
 import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.domain.Visit;
-import graduation.alcoholic.login.domain.member.UserRepository;
+import graduation.alcoholic.login.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

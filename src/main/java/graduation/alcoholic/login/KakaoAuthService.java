@@ -1,13 +1,8 @@
-package graduation.alcoholic.login.domain.auth.service;
+package graduation.alcoholic.login;
 
 import graduation.alcoholic.domain.User;
-import graduation.alcoholic.login.domain.auth.dto.AuthResponse;
-import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
-import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
-import graduation.alcoholic.login.domain.member.UserDto;
-import graduation.alcoholic.login.domain.member.UserRepository;
-import graduation.alcoholic.login.web.login.ClientKakao;
-import graduation.alcoholic.login.web.login.KakaoAPI;
+import graduation.alcoholic.login.domain.jwt.AuthToken;
+import graduation.alcoholic.login.domain.jwt.AuthTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class KakaoAuthService {
     @Autowired
-    private final KakaoAPI kakaoAPI;
+    private final KakaoAPIService kakaoAPI;
     private final UserRepository userRepository;
     private final AuthTokenProvider authTokenProvider;
     private final ClientKakao clientKakao;
 
     @Transactional
-    public AuthResponse loginToken(String token) {
+    public AuthResponseDto loginToken(String token) {
         //client 정보 가져오기
         UserDto userInfo = kakaoAPI.getUserInfo(token);
         User kakaoMember=clientKakao.getUserData(userInfo);
@@ -38,13 +33,13 @@ public class KakaoAuthService {
         if (member == null) {
             userRepository.save(kakaoMember);
             //토큰 발급
-            return AuthResponse.builder()
+            return AuthResponseDto.builder()
                     .JwtToken(appToken.getToken())
                     .isNewMember(Boolean.TRUE)
                     .build();
         }
         //기존 유저 or 만료시간 완료된 유저라면 새로 토큰 발급
-        return AuthResponse.builder()
+        return AuthResponseDto.builder()
                 .JwtToken(appToken.getToken())
                 .isNewMember(Boolean.FALSE)
                 .build();

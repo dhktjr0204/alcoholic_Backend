@@ -1,7 +1,7 @@
-package graduation.alcoholic.login.domain.auth.jwt;
+package graduation.alcoholic.login.domain.jwt;
 
 
-import graduation.alcoholic.login.domain.auth.enumerate.RoleType;
+import graduation.alcoholic.login.domain.enumerate.RoleType;
 import io.jsonwebtoken.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
