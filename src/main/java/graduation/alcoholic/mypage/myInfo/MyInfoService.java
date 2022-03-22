@@ -12,18 +12,23 @@ import java.math.BigDecimal;
 public class MyInfoService {
     private final UserRepository userRepository;
 
-    public MyInfoResponseDto getUserInfo(String email){
+    public MyInfoResponseDto getUserInfoDto(String email){
         User entity = userRepository.findByEmail(email);
         return new MyInfoResponseDto(entity.getName(),entity.getEmail(),entity.getAge_range()
                 ,entity.getCapacity(), entity.getSex(), entity.getNickname()) ;
     }
 
-    public MyInfoResponseDto updateCapacity (String email, BigDecimal capacity) {
-        User entity = userRepository.findByEmail(email);
+    public MyInfoResponseDto updateCapacityAndNickname (User entity, BigDecimal capacity, String nickname) {
         entity.setCapacity(capacity);
+        entity.setNickname(nickname);
         userRepository.save(entity);
         return new MyInfoResponseDto(entity.getName(),entity.getEmail(),entity.getAge_range()
                 ,entity.getCapacity(), entity.getSex(), entity.getNickname()) ;
+    }
+
+
+    public User getUserInfoEntity (String email) {
+        return userRepository.findByEmail(email);
     }
 
 }

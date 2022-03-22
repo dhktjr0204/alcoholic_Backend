@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,10 +51,10 @@ public class ZzimService {
     }
 
     public boolean findZzim (Long u_id, Long a_id) {
-        List<Zzim> isZzimed = zzimRepository.findByUserIdAndAlcoholId(u_id, a_id);
-        if (isZzimed.isEmpty()) {
-            return false;
+         Optional<Zzim> isZzimed = zzimRepository.findByUserIdAndAlcoholId(u_id, a_id);
+        if (isZzimed.isPresent()) {
+            return true;
         }
-        else return true;
+        else return false;
     }
 }
