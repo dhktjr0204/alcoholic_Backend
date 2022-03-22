@@ -3,10 +3,10 @@ package graduation.alcoholic.recommendation;
 import graduation.alcoholic.domain.enums.Taste;
 import graduation.alcoholic.domain.enums.Type;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class RecommendRequestDto {
 

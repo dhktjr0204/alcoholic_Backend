@@ -2,11 +2,11 @@ package graduation.alcoholic.review.domain.dtos;
 
 import graduation.alcoholic.domain.enums.Taste;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@Getter
+@Data
 @NoArgsConstructor
 public class ReviewUpdateRequestDto {
 
@@ -34,7 +34,4 @@ public class ReviewUpdateRequestDto {
         this.taste5 = taste5;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
 }

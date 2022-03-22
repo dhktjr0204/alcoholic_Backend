@@ -25,7 +25,6 @@ import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
-
 public class AlcoholController {
 
 

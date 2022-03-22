@@ -3,6 +3,7 @@ package graduation.alcoholic.review.domain.dtos;
 import graduation.alcoholic.domain.Review;
 
 import graduation.alcoholic.domain.enums.Taste;
+import lombok.Data;
 import lombok.Getter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Getter
+@Data
 public class ReviewResponseDto {
 
     private Long id;

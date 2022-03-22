@@ -6,10 +6,10 @@ import graduation.alcoholic.domain.Review;
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.domain.enums.Taste;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class ReviewSaveRequestDto {
 
@@ -42,12 +42,6 @@ public class ReviewSaveRequestDto {
         this.taste4 = taste4;
         this.taste5 = taste5;
     }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public void setUser(User user) { this.user = user;}
 
     public Review toEntity() {
         return Review.builder()
