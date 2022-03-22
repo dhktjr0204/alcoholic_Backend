@@ -3,10 +3,10 @@ package graduation.alcoholic.recommendation;
 import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.enums.Taste;
 import graduation.alcoholic.domain.enums.Type;
-import lombok.Getter;
+import lombok.Data;
 
 
-@Getter
+@Data
 public class AlcoholResponseDto {
 
     private Long id;

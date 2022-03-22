@@ -1,8 +1,8 @@
 package graduation.alcoholic.recommendation;
-
-import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.enums.Taste;
+import lombok.Data;
 import lombok.Getter;
+
 
 @Getter
 public class AlcoholTasteResponseDto {
@@ -14,7 +14,6 @@ public class AlcoholTasteResponseDto {
     private Taste taste3;
     private Taste taste4;
     private Taste taste5;
-
 
 
     public AlcoholTasteResponseDto(AlcoholTaste entity) {
