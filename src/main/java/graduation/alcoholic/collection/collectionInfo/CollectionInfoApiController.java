@@ -1,7 +1,7 @@
 package graduation.alcoholic.collection.collectionInfo;
 
-import graduation.alcoholic.login.domain.jwt.JwtHeaderUtil;
-import graduation.alcoholic.login.AuthService;
+import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
+import graduation.alcoholic.login.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

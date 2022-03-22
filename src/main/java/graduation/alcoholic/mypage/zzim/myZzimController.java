@@ -1,10 +1,10 @@
 package graduation.alcoholic.mypage.zzim;
 
 import graduation.alcoholic.domain.Alcohol;
-import graduation.alcoholic.login.domain.jwt.AuthToken;
-import graduation.alcoholic.login.domain.jwt.AuthTokenProvider;
-import graduation.alcoholic.login.domain.jwt.JwtHeaderUtil;
-import graduation.alcoholic.login.UserRepository;
+import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
+import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
+import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
+import graduation.alcoholic.login.domain.member.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
