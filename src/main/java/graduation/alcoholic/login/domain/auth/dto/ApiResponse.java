@@ -1,11 +1,11 @@
-package graduation.alcoholic.login;
+package graduation.alcoholic.login.domain.auth.dto;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Getter
-public class ApiResponseDto<T> {
+public class ApiResponse<T> {
 
     public static <T> ResponseEntity<T> success(T body) {
         return ResponseEntity.status(HttpStatus.OK).body(body);

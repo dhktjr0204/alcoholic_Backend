@@ -2,12 +2,13 @@ package graduation.alcoholic.mypage.myInfo;
 
 
 import graduation.alcoholic.domain.User;
-import graduation.alcoholic.login.domain.jwt.AuthToken;
-import graduation.alcoholic.login.domain.jwt.AuthTokenProvider;
-import graduation.alcoholic.login.domain.jwt.JwtHeaderUtil;
+import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
+import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
+import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;

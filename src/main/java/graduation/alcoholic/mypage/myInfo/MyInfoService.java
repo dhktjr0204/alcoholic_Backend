@@ -1,7 +1,7 @@
 package graduation.alcoholic.mypage.myInfo;
 
 import graduation.alcoholic.domain.User;
-import graduation.alcoholic.login.UserRepository;
+import graduation.alcoholic.login.domain.member.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

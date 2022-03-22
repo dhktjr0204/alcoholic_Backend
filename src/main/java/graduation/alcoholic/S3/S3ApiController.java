@@ -1,6 +1,6 @@
 package graduation.alcoholic.S3;
 
-import graduation.alcoholic.login.ApiResponseDto;
+import graduation.alcoholic.login.domain.auth.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +16,12 @@ public class S3ApiController {
 
     @PostMapping("/image")
     public ResponseEntity<List<String>> uploadImage(@RequestParam List<MultipartFile> multipartfileList) {
-        return ApiResponseDto.success(s3Service.uploadImage(multipartfileList));
+        return ApiResponse.success(s3Service.uploadImage(multipartfileList));
     }
 
     @DeleteMapping("/image")
     public ResponseEntity<Void> deleteImage(@RequestParam String fileName) {
-        return ApiResponseDto.success(null);
+        return ApiResponse.success(null);
     }
 
 }

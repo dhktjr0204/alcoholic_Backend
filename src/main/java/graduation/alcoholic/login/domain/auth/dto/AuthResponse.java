@@ -1,4 +1,4 @@
-package graduation.alcoholic.login;
+package graduation.alcoholic.login.domain.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AuthResponseDto {
+public class AuthResponse {
     private String name;
     private String email;
     private String age_range;

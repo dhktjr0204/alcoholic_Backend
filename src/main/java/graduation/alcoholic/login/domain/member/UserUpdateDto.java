@@ -1,4 +1,4 @@
-package graduation.alcoholic.login;
+package graduation.alcoholic.login.domain.member;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package graduation.alcoholic.login.domain.exception;
+package graduation.alcoholic.login.domain.auth.exception;
 
 
 public class TokenValidFailedException extends RuntimeException {

@@ -1,7 +1,9 @@
 package graduation.alcoholic.review;
 
-import graduation.alcoholic.login.domain.jwt.JwtHeaderUtil;
-import graduation.alcoholic.login.AuthService;
+import graduation.alcoholic.domain.Review;
+import graduation.alcoholic.domain.enums.Taste;
+import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
+import graduation.alcoholic.login.domain.auth.service.AuthService;
 import graduation.alcoholic.review.domain.dtos.ReviewResponseDto;
 import graduation.alcoholic.review.domain.dtos.ReviewSaveRequestDto;
 import graduation.alcoholic.review.domain.dtos.ReviewUpdateRequestDto;

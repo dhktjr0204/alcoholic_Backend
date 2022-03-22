@@ -3,7 +3,7 @@ package graduation.alcoholic.collection.collectionInfo;
 import graduation.alcoholic.domain.CollectionInfo;
 
 import graduation.alcoholic.domain.User;
-import graduation.alcoholic.login.UserRepository;
+import graduation.alcoholic.login.domain.member.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
