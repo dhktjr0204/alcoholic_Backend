@@ -1,19 +1,12 @@
-package graduation.alcoholic.login.web.login;
+package graduation.alcoholic.login;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import graduation.alcoholic.domain.User;
-import graduation.alcoholic.login.domain.auth.dto.ApiResponse;
-import graduation.alcoholic.login.domain.auth.dto.AuthResponse;
-import graduation.alcoholic.login.domain.auth.jwt.AuthToken;
-import graduation.alcoholic.login.domain.auth.jwt.AuthTokenProvider;
-import graduation.alcoholic.login.domain.auth.jwt.JwtHeaderUtil;
-import graduation.alcoholic.login.domain.auth.service.AuthService;
-import graduation.alcoholic.login.domain.auth.service.KakaoAuthService;
-import graduation.alcoholic.login.domain.member.UserDto;
-import graduation.alcoholic.login.domain.member.UserRepository;
-import graduation.alcoholic.login.domain.member.UserUpdateDto;
+import graduation.alcoholic.login.domain.jwt.AuthToken;
+import graduation.alcoholic.login.domain.jwt.AuthTokenProvider;
+import graduation.alcoholic.login.domain.jwt.JwtHeaderUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,15 +23,15 @@ public class LoginController {
     private final AuthService authService;
     private final UserRepository userRepository;
     @Autowired
-    private KakaoAPI kakaoService;
+    private KakaoAPIService kakaoService;
 
     private int counter=0;
-    private AuthResponse FrontInfo=null;
+    private AuthResponseDto FrontInfo=null;
 
 
     @ResponseBody
     @GetMapping("/login")
-    public ResponseEntity<AuthResponse> login(HttpServletRequest request, HttpSession session) {
+    public ResponseEntity<AuthResponseDto> login(HttpServletRequest request, HttpSession session) {
         ++counter;
         if(counter==1) {
             String code = request.getParameter("code");
@@ -63,7 +56,7 @@ public class LoginController {
             session.setAttribute("access_Token", access_Token);
             //JWT 토큰 만듬
             }
-            ResponseEntity<AuthResponse> responseEntity = ApiResponse.success(FrontInfo);
+            ResponseEntity<AuthResponseDto> responseEntity = ApiResponseDto.success(FrontInfo);
             System.out.println("JWT토큰 만듬->" + FrontInfo.getJwtToken());
 
             //JWT토큰 헤더에 담아 전달
@@ -104,16 +97,16 @@ public class LoginController {
      * @return ResponseEntity<AuthResponse>
      */
     @GetMapping("/refresh")
-    public @ResponseBody  ResponseEntity<AuthResponse> refreshToken (HttpServletRequest request) {
+    public @ResponseBody  ResponseEntity<AuthResponseDto> refreshToken (HttpServletRequest request) {
         String jwtToken=JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
         if (!authToken.validate()) { // 형식에 맞지 않는 token
-            return ApiResponse.forbidden(null);
+            return ApiResponseDto.forbidden(null);
         }
-        AuthResponse authResponse = authService.updateToken(authToken);
+        AuthResponseDto authResponse = authService.updateToken(authToken);
         if (authResponse == null) { // token 만료
-            return ApiResponse.forbidden(null);
+            return ApiResponseDto.forbidden(null);
         }
-        return ApiResponse.success(authResponse);
+        return ApiResponseDto.success(authResponse);
     }
 }

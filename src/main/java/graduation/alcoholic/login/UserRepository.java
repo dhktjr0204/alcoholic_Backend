@@ -1,4 +1,4 @@
-package graduation.alcoholic.login.domain.member;
+package graduation.alcoholic.login;
 
 import graduation.alcoholic.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

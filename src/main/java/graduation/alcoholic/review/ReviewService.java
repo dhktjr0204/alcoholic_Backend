@@ -6,7 +6,7 @@ import graduation.alcoholic.domain.Alcohol;
 import graduation.alcoholic.domain.Review;
 import graduation.alcoholic.domain.User;
 import graduation.alcoholic.domain.enums.Taste;
-import graduation.alcoholic.login.domain.member.UserRepository;
+import graduation.alcoholic.login.UserRepository;
 import graduation.alcoholic.review.domain.*;
 import graduation.alcoholic.review.domain.dtos.ReviewResponseDto;
 import graduation.alcoholic.review.domain.dtos.ReviewSaveRequestDto;

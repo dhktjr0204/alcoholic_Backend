@@ -1,4 +1,4 @@
-package graduation.alcoholic.login.domain.auth.jwt;
+package graduation.alcoholic.login.domain.jwt;
 
 import javax.servlet.http.HttpServletRequest;
 

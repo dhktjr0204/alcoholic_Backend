@@ -1,4 +1,4 @@
-package graduation.alcoholic.login.web.login;
+package graduation.alcoholic.login;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,9 +10,7 @@ import java.net.URL;
 
 
 import graduation.alcoholic.domain.User;
-import graduation.alcoholic.login.domain.auth.enumerate.RoleType;
-import graduation.alcoholic.login.domain.member.UserDto;
-import graduation.alcoholic.login.domain.member.UserUpdateDto;
+import graduation.alcoholic.login.domain.enumerate.RoleType;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +25,7 @@ import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class KakaoAPI {
+public class KakaoAPIService {
     @Value("${kakao.login.client_id}")
     private String client_id;
     //토큰 가져오기

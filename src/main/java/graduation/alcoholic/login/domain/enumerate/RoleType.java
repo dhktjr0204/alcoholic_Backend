@@ -1,4 +1,4 @@
-package graduation.alcoholic.login.domain.auth.enumerate;
+package graduation.alcoholic.login.domain.enumerate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

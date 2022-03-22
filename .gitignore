@@ -44,3 +44,4 @@ src/main/resources/aws.yml
 
 /logs/**
 .log
+
