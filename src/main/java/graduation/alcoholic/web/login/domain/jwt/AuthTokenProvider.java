@@ -66,7 +66,7 @@ public class AuthTokenProvider {
                             .collect(Collectors.toList());
 
             User principal = new User(claims.getSubject(), "", authorities);
-
+            System.out.println("AuthTokenProvider에서 principal잘 들어갔는지 확인"+principal.getUsername());
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
         } else {
             throw new TokenValidFailedException();
