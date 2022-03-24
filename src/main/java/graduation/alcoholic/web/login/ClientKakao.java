@@ -9,6 +9,7 @@ public class ClientKakao {
     public User getUserData(UserDto userInfo) {
         return User.builder()
                 .name(userInfo.getName())
+                .nickname(userInfo.getNickname())
                 .email(userInfo.getEmail())
                 .sex(userInfo.getSex())
                 .age_range(userInfo.getAge_range())

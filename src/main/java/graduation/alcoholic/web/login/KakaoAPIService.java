@@ -133,11 +133,6 @@ public class KakaoAPIService {
                     .age_range(age_range)
                     .roletype(RoleType.ROLE_USER)
                     .build();
-//            userInfo.setName(username);
-//            userInfo.setEmail(email);
-//            userInfo.setSex(sex);
-//            userInfo.setAge_range(age_range);
-//            userInfo.setRoletype(RoleType.ROLE_USER);
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -223,7 +218,7 @@ public class KakaoAPIService {
     }
 
     @Transactional
-    public void update_UserInfo(User userInfo, UserDto userUpdateDto){
+    public void update_UserAge(User userInfo, UserDto userUpdateDto){
         userInfo.updateUserInfo(userUpdateDto.getAge_range());
     }
 }

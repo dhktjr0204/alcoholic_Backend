@@ -24,13 +24,14 @@ public class AuthService {
         if (claims == null) {
             return null;
         }
-
         String socialId = claims.getSubject();
         AuthToken newAppToken = authTokenProvider.createUserAppToken(socialId);
         User UserInfo = userRepository.findByEmail(socialId);
 
         return AuthResponseDto.builder()
+                .id(UserInfo.getId())
                 .name(UserInfo.getName())
+                .nickname(UserInfo.getNickname())
                 .email(UserInfo.getEmail())
                 .sex(UserInfo.getSex())
                 .age_range(UserInfo.getAge_range())
