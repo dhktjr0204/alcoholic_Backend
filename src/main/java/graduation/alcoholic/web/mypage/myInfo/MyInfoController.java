@@ -6,9 +6,7 @@ import graduation.alcoholic.web.login.domain.jwt.AuthToken;
 import graduation.alcoholic.web.login.domain.jwt.AuthTokenProvider;
 import graduation.alcoholic.web.login.domain.jwt.JwtHeaderUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -28,21 +26,24 @@ public class MyInfoController {
         String userEmail =authToken.findTokentoEmail();
         //현재 로그인한 유저의 이메일
 
-        return myInfoService.getUserInfoDto(userEmail);
+        MyInfoResponseDto userInfoDto = myInfoService.getUserInfoDto(userEmail);
+        System.out.println("capacity = " + userInfoDto.getCapacity());
+        return userInfoDto;
 
 
     }
 
     @PostMapping("/myInfo")
     public MyInfoResponseDto modifyMyInfo (HttpServletRequest request,
-                                           BigDecimal capacity,
-                                           String nickname) {
+                                           @RequestBody MyInfoUpdateDto updateDto) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
         String userEmail =authToken.findTokentoEmail();
 
         User userInfoEntity = myInfoService.getUserInfoEntity(userEmail);
-        return myInfoService.updateCapacityAndNickname(userInfoEntity,capacity,nickname);
+        System.out.println("capacity = " + updateDto.getCapacity());
+        System.out.println("nickname = " + updateDto.getNickname());
+        return myInfoService.updateCapacityAndNickname(userInfoEntity,updateDto.getCapacity(), updateDto.getNickname());
     }
 
 }
