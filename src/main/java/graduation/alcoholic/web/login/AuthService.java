@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,22 +27,22 @@ public class AuthService {
             return null;
         }
         String socialId = claims.getSubject();
-        AuthToken newAppToken = authTokenProvider.createUserAppToken(socialId);
-        User UserInfo = userRepository.findByEmail(socialId);
+        AuthToken newAppToken = authTokenProvider.createUserAppToken(Long.parseLong(socialId));
+        Optional<User> UserInfo = userRepository.findById(Long.parseLong(socialId));
 
         return AuthResponseDto.builder()
-                .id(UserInfo.getId())
-                .name(UserInfo.getName())
-                .nickname(UserInfo.getNickname())
-                .email(UserInfo.getEmail())
-                .sex(UserInfo.getSex())
-                .age_range(UserInfo.getAge_range())
+                .id(UserInfo.get().getId())
+                .name(UserInfo.get().getName())
+                .nickname(UserInfo.get().getNickname())
+                .email(UserInfo.get().getEmail())
+                .sex(UserInfo.get().getSex())
+                .age_range(UserInfo.get().getAge_range())
                 .JwtToken(newAppToken.getToken())
                 .isNewMember(Boolean.FALSE)
                 .build();
     }
 
-    public String getMemberId(String token) {
+    public Long getMemberId(String token) {
         AuthToken authToken = authTokenProvider.convertAuthToken(token);
 
         Claims claims = authToken.getTokenClaims();
@@ -49,8 +51,7 @@ public class AuthService {
         }
 
         try {
-            User member =  userRepository.findByEmail(claims.getSubject());
-            return member.getEmail();
+            return Long.parseLong(claims.getSubject());
 
         } catch (NullPointerException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자가 존재하지 않습니다.");

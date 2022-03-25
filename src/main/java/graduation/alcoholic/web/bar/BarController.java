@@ -57,7 +57,7 @@ public class BarController {
     }
 
     //지역별 찾기
-    @GetMapping("/bar/search")
+    @GetMapping("/bar/location")
     public Optional<Page<BarResponseDto>> searchByLocation(@RequestParam("location") String location, @PageableDefault(size = 10) Pageable pageable){
         return Optional.of(barService.searchByLocation(location,pageable));
     }

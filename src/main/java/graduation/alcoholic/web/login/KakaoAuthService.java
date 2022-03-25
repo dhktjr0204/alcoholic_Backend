@@ -26,32 +26,40 @@ public class KakaoAuthService {
         //client 정보 가져오기
         UserDto userInfo = kakaoAPI.getUserInfo(token);
 
-        //유저 객체 만들기
-        User kakaoMember=clientKakao.getUserData(userInfo);
-        String email = kakaoMember.getEmail();
+
 
         //기존 회원에서 찾기
-        User member = userRepository.findByEmail(email);
+        User member = userRepository.findByEmail(userInfo.getEmail());
+
+        //User 객체 만들기
+        User kakaoMember=clientKakao.getUserData(userInfo);
 
         //user_id로 jwt token 생성
-        AuthToken appToken = authTokenProvider.createUserAppToken(kakaoMember.getEmail());
+        AuthToken appToken = null;
 
         //만약에 새로운 유저라면 db에 저장 후 토큰 발급
         if (member == null) {
             userRepository.save(kakaoMember);
+            User newMember = userRepository.findByEmail(userInfo.getEmail());
+
+            appToken = authTokenProvider.createUserAppToken(newMember.getId());
+
             //토큰 발급
             return AuthResponseDto.builder()
-                    .id(kakaoMember.getId())
-                    .name(kakaoMember.getName())
-                    .nickname(kakaoMember.getNickname())
-                    .email(kakaoMember.getEmail())
-                    .sex(kakaoMember.getSex())
-                    .age_range(kakaoMember.getAge_range())
+                    .id(newMember.getId())
+                    .name(newMember.getName())
+                    .nickname(newMember.getNickname())
+                    .email(newMember.getEmail())
+                    .sex(newMember.getSex())
+                    .age_range(newMember.getAge_range())
                     .JwtToken(appToken.getToken())
                     .isNewMember(Boolean.TRUE)
                     .build();
         }
         //기존 유저 or 만료시간 완료된 유저라면 새로 토큰 발급
+
+        appToken = authTokenProvider.createUserAppToken(member.getId());
+
         return AuthResponseDto.builder()
                 .id(member.getId())
                 .name(member.getName())
