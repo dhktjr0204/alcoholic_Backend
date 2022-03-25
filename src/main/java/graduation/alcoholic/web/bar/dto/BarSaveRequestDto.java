@@ -4,7 +4,7 @@ import graduation.alcoholic.domain.entity.Bar;
 import graduation.alcoholic.domain.entity.User;
 import lombok.Builder;
 
-public class BarSaveDto {
+public class BarSaveRequestDto {
     private User user;
     private String title;
     private String content;
@@ -12,7 +12,7 @@ public class BarSaveDto {
     private String image;
 
     @Builder
-    public BarSaveDto(User user, String title, String content, String location, String image) {
+    public BarSaveRequestDto(User user, String title, String content, String location, String image) {
         this.user = user;
         this.title = title;
         this.content = content;

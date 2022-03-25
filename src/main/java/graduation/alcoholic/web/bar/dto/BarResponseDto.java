@@ -26,13 +26,4 @@ public class BarResponseDto {
         this.modified_date = entity.getModifiedDate();
     }
 
-    public BarResponseDto(Long id, String nickname, String title, String content, String location, String image, LocalDateTime modified_date) {
-        this.id = id;
-        this.nickname = nickname;
-        this.title = title;
-        this.content = content;
-        this.location = location;
-        this.image = image;
-        this.modified_date = modified_date;
-    }
 }

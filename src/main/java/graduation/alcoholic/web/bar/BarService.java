@@ -5,7 +5,7 @@ import graduation.alcoholic.domain.entity.Bar;
 import graduation.alcoholic.web.S3.S3Service;
 import graduation.alcoholic.domain.repository.BarRepository;
 import graduation.alcoholic.web.bar.dto.BarResponseDto;
-import graduation.alcoholic.web.bar.dto.BarSaveDto;
+import graduation.alcoholic.web.bar.dto.BarSaveRequestDto;
 import graduation.alcoholic.web.bar.dto.BarUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -14,9 +14,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,7 +29,7 @@ public class BarService {
 
 
     @Transactional
-    public ResponseEntity<Map<String,Long>> createBar(BarSaveDto requestDto, List<MultipartFile> fileList){
+    public ResponseEntity<Map<String,Long>> saveBar(BarSaveRequestDto requestDto, List<MultipartFile> fileList){
         if (fileList != null) {
             List<String> fileNameList = s3Service.uploadImage(fileList);
             String fileNameString  = fileNameListToString(fileNameList);
@@ -53,27 +53,20 @@ public class BarService {
     }
 
 
-    @Transactional
-    public Page<BarResponseDto> listAllBars(Pageable pageable){
+    @Transactional(readOnly = true)
+    public Page<BarResponseDto> getBars(Pageable pageable){
         Page<Bar> page=barRepository.findAll(pageable);
 
         int totalElements=(int) page.getTotalElements();
 
         return  new PageImpl<BarResponseDto>(page.getContent()
                 .stream()
-                .map(bar -> new BarResponseDto(
-                        bar.getId(),
-                        bar.getUser().getNickname(),
-                        bar.getTitle(),
-                        bar.getContent(),
-                        bar.getLocation(),
-                        bar.getImage(),
-                        bar.getModifiedDate()))
+                .map(bar -> new BarResponseDto(bar))
                 .collect(Collectors.toList()),pageable,totalElements);
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BarResponseDto> getBarDetail(Long barId) {
         Bar bar = barRepository.findById(barId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다. id" +barId));
@@ -130,37 +123,23 @@ public class BarService {
         return ResponseEntity.ok(response);
     }
 
-    @Transactional
-    public Page<BarResponseDto> searchBar(String title, Pageable pageable){
+    @Transactional(readOnly = true)
+    public Page<BarResponseDto> searchByTitle(String title, Pageable pageable){
         Page<Bar> page=barRepository.findByTitleContains(title,pageable);
         int totalElements=(int) page.getTotalElements();
-        return  new PageImpl<BarResponseDto>(page.getContent()
+        return new PageImpl<BarResponseDto>(page.getContent()
                 .stream()
-                .map(bar -> new BarResponseDto(
-                        bar.getId(),
-                        bar.getUser().getNickname(),
-                        bar.getTitle(),
-                        bar.getContent(),
-                        bar.getLocation(),
-                        bar.getImage(),
-                        bar.getModifiedDate()))
+                .map(bar -> new BarResponseDto(bar))
                 .collect(Collectors.toList()),pageable,totalElements);
     }
 
-    @Transactional
-    public Page<BarResponseDto> localBar(String location, Pageable pageable){
+    @Transactional(readOnly = true)
+    public Page<BarResponseDto> searchByLocation(String location, Pageable pageable){
         Page<Bar> page=barRepository.findByLocationContains(location, pageable);
         int totalElements=(int) page.getTotalElements();
         return  new PageImpl<BarResponseDto>(page.getContent()
                 .stream()
-                .map(bar -> new BarResponseDto(
-                        bar.getId(),
-                        bar.getUser().getNickname(),
-                        bar.getTitle(),
-                        bar.getContent(),
-                        bar.getLocation(),
-                        bar.getImage(),
-                        bar.getModifiedDate()))
+                .map(bar -> new BarResponseDto(bar))
                 .collect(Collectors.toList()),pageable,totalElements);
     }
 
