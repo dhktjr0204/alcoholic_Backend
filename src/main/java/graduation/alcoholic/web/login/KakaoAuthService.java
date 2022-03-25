@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class KakaoAuthService {
     @Autowired
-    private final KakaoAPIService kakaoAPI;
+    private final KakaoAPIService kakaoAPIService;
     private final UserRepository userRepository;
     private final AuthTokenProvider authTokenProvider;
     private final ClientKakao clientKakao;
@@ -24,9 +24,7 @@ public class KakaoAuthService {
     @Transactional
     public AuthResponseDto loginToken(String token) {
         //client 정보 가져오기
-        UserDto userInfo = kakaoAPI.getUserInfo(token);
-
-
+        UserDto userInfo = kakaoAPIService.getUserInfo(token);
 
         //기존 회원에서 찾기
         User member = userRepository.findByEmail(userInfo.getEmail());
@@ -36,39 +34,27 @@ public class KakaoAuthService {
 
         //user_id로 jwt token 생성
         AuthToken appToken = null;
+        if(member.getDel_cd()!=null){
+            //만약 탈퇴한 회원이였다면 닉네임을 이름으로 바꾸고 D를 없앰
+            kakaoAPIService.recover(member);
+            appToken = authTokenProvider.createUserAppToken(member.getId());
+            return clientKakao.getAuthResponseDto(member,appToken,Boolean.TRUE);
+        }
 
-        //만약에 새로운 유저라면 db에 저장 후 토큰 발급
-        if (member == null) {
+            //만약에 새로운 유저라면 db에 저장 후 토큰 발급
+        if (member == null ) {
             userRepository.save(kakaoMember);
             User newMember = userRepository.findByEmail(userInfo.getEmail());
 
             appToken = authTokenProvider.createUserAppToken(newMember.getId());
 
             //토큰 발급
-            return AuthResponseDto.builder()
-                    .id(newMember.getId())
-                    .name(newMember.getName())
-                    .nickname(newMember.getNickname())
-                    .email(newMember.getEmail())
-                    .sex(newMember.getSex())
-                    .age_range(newMember.getAge_range())
-                    .JwtToken(appToken.getToken())
-                    .isNewMember(Boolean.TRUE)
-                    .build();
+            return clientKakao.getAuthResponseDto(newMember,appToken,Boolean.TRUE);
         }
         //기존 유저 or 만료시간 완료된 유저라면 새로 토큰 발급
 
         appToken = authTokenProvider.createUserAppToken(member.getId());
 
-        return AuthResponseDto.builder()
-                .id(member.getId())
-                .name(member.getName())
-                .nickname(member.getNickname())
-                .email(member.getEmail())
-                .sex(member.getSex())
-                .age_range(member.getAge_range())
-                .JwtToken(appToken.getToken())
-                .isNewMember(Boolean.FALSE)
-                .build();
+        return clientKakao.getAuthResponseDto(member,appToken,Boolean.FALSE);
     }
 }

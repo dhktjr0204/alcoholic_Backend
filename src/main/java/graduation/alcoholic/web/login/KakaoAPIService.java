@@ -207,18 +207,13 @@ public class KakaoAPIService {
     @Transactional
     public void delete(User userInfo) {
         String del_cd="D";
-        userInfo.setDelete("탈퇴한 회원입니다.",del_cd);
-
-        System.out.println(userInfo.getNickname()+","+userInfo.getDel_cd());
+        userInfo.setDelete(del_cd);
     }
 
     //탈퇴하면 데이터베이스 업데이트
     @Transactional
     public void recover(User userInfo){
-        if(userInfo.getDel_cd()!=null) {
-            userInfo.setDelete(userInfo.getName(), null);
-            System.out.println(userInfo.getNickname() + "," + userInfo.getDel_cd());
-        }
+            userInfo.setDelete(null);
     }
 
     //닉네임 업데이트

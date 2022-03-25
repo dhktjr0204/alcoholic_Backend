@@ -20,6 +20,7 @@ import java.util.Optional;
 public class AuthService {
     private final AuthTokenProvider authTokenProvider;
     private final UserRepository userRepository;
+    private final ClientKakao clientKakao;
 
     public AuthResponseDto updateToken(AuthToken authToken) {
         Claims claims = authToken.getTokenClaims();
@@ -28,18 +29,10 @@ public class AuthService {
         }
         String socialId = claims.getSubject();
         AuthToken newAppToken = authTokenProvider.createUserAppToken(Long.parseLong(socialId));
-        Optional<User> UserInfo = userRepository.findById(Long.parseLong(socialId));
+        User UserInfo = userRepository.findById(Long.parseLong(socialId))
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id" +socialId));;
 
-        return AuthResponseDto.builder()
-                .id(UserInfo.get().getId())
-                .name(UserInfo.get().getName())
-                .nickname(UserInfo.get().getNickname())
-                .email(UserInfo.get().getEmail())
-                .sex(UserInfo.get().getSex())
-                .age_range(UserInfo.get().getAge_range())
-                .JwtToken(newAppToken.getToken())
-                .isNewMember(Boolean.FALSE)
-                .build();
+        return clientKakao.getAuthResponseDto(UserInfo,newAppToken,Boolean.FALSE);
     }
 
     public Long getMemberId(String token) {
