@@ -48,9 +48,6 @@ public class LoginController {
             FrontInfo = kakaoAuthService.loginToken(access_Token);
             //db에 저장된 유저가져오기
             User user= userRepository.findByEmail(userInfo.getEmail());
-            //만약 탈퇴한 회원이였다면 닉네임을 이름으로 바꾸고 D를 없앰
-            kakaoService.recover(user);
-
             if(user.getAge_range()!=userInfo.getAge_range()){
                 System.out.println("유저 나이대 변경");
                 kakaoService.update_UserAge(user, userInfo);

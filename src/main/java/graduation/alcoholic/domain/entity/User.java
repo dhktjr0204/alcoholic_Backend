@@ -52,8 +52,7 @@ public class User {
         this.nickname=nickname;
     }
 
-    public void setDelete(String nickname,String del_cd){
-        this.nickname=nickname;
+    public void setDelete(String del_cd){
         this.del_cd=del_cd;
     }
 
