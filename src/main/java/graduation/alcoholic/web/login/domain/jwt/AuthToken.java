@@ -19,16 +19,16 @@ public class AuthToken {
     private final Key key;
 
     private static final String AUTHORITIES_KEY = "role";
-    AuthToken(String email, RoleType roleType, Date expiry, Key key) {
+    AuthToken(Long id, RoleType roleType, Date expiry, Key key) {
         String role=roleType.toString();
         this.key = key;
-        this.token = createAuthToken(email,role, expiry);
+        this.token = createAuthToken(id,role, expiry);
     }
 
-    private String createAuthToken(String email, String role,Date expiry) {
+    private String createAuthToken(Long id, String role,Date expiry) {
         //토큰 builder
         return Jwts.builder()
-                .setSubject(email)//토큰 용도
+                .setSubject(id.toString())//토큰 용도
                 .claim(AUTHORITIES_KEY,role)
                 .signWith(key, SignatureAlgorithm.HS256)//HS256과 key로 sign
                 .setExpiration(expiry)//토큰 만료 시간 설정
@@ -41,6 +41,11 @@ public class AuthToken {
 
     public Claims getTokenClaims() {
         try {
+            System.out.println("jwt 복호화:"+Jwts.parserBuilder()
+                    .setSigningKey(key)//set key
+                    .build()
+                    .parseClaimsJws(token)//파싱 및 검증, 실패 시 에러
+                    .getBody());
             return Jwts.parserBuilder()
                     .setSigningKey(key)//set key
                     .build()

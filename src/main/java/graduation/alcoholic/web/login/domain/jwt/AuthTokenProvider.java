@@ -34,14 +34,14 @@ public class AuthTokenProvider {
     }
 
 
-    public AuthToken createToken(String email, RoleType roleType,String expiry) {
+    public AuthToken createToken(Long id, RoleType roleType,String expiry) {
         Date expiryDate = getExpiryDate(expiry);
-        return new AuthToken(email,roleType, expiryDate, key);
+        return new AuthToken(id,roleType, expiryDate, key);
     }
 
     //USER에 대한 jwtToken생성
-    public AuthToken createUserAppToken(String email) {
-        return createToken(email,RoleType.ROLE_USER, expiry);
+    public AuthToken createUserAppToken(Long id) {
+        return createToken(id,RoleType.ROLE_USER, expiry);
     }
 
     //String to jwtToken
