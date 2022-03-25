@@ -122,8 +122,18 @@ public class KakaoAPIService {
 
             String username = properties.getAsJsonObject().get("nickname").getAsString();
             String email = kakao_account.getAsJsonObject().get("email").getAsString();
-            String age_range = kakao_account.getAsJsonObject().get("age_range").getAsString();
-            String sex = kakao_account.getAsJsonObject().get("gender").getAsString();
+            String age_range =null;
+            String sex=null;
+            try {
+                age_range = kakao_account.getAsJsonObject().get("age_range").getAsString();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            try {
+                sex = kakao_account.getAsJsonObject().get("gender").getAsString();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
             userInfo = UserDto.builder()
                     .name(username)
