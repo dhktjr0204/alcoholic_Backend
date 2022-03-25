@@ -26,9 +26,10 @@ public class CollectionInfoService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long save(String email, CollectionInfoSaveRequestDto requestDto) {
+    public Long save(Long id, CollectionInfoSaveRequestDto requestDto) {
 
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
         requestDto.setUser(user);
         checkCollectionDuplication(requestDto);
         return collectionInfoRepository.save(requestDto.toEntity()).getId();
@@ -58,9 +59,10 @@ public class CollectionInfoService {
 
 
     @Transactional(readOnly = true)
-    public List<CollectionInfoResponseDto> findByUser(String email) {
+    public List<CollectionInfoResponseDto> findByUser(Long id) {
 
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
         return collectionInfoRepository.findByUser(user);
     }
 

@@ -36,9 +36,10 @@ public class ReviewService {
 
 
     @Transactional
-    public Long save(String email, ReviewSaveRequestDto requestDto, List<MultipartFile> fileList) {
+    public Long save(Long id, ReviewSaveRequestDto requestDto, List<MultipartFile> fileList) {
 
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
         requestDto.setUser(user);
 
         checkReviewDuplication(requestDto);
@@ -99,9 +100,10 @@ public class ReviewService {
 
 
     @Transactional(readOnly = true)
-    public List<ReviewResponseDto> findByUser (String email) {
+    public List<ReviewResponseDto> findByUser (Long id) {
 
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
         return reviewRepository.findByUserOrderByModifiedDateDesc(user).stream()
                 .map(ReviewResponseDto::new)
                 .collect(Collectors.toList());
