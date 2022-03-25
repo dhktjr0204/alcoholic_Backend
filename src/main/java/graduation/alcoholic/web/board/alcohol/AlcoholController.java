@@ -2,6 +2,7 @@ package graduation.alcoholic.web.board.alcohol;
 
 import graduation.alcoholic.web.board.alcohol.dto.AlcoholDetailResponseDto;
 import graduation.alcoholic.web.board.alcohol.dto.AlcoholResponseDto;
+import graduation.alcoholic.web.login.AuthService;
 import graduation.alcoholic.web.mypage.zzim.ZzimService;
 import graduation.alcoholic.web.board.visit.VisitAnalysisService;
 import graduation.alcoholic.web.board.visit.dto.VisitDto;
@@ -35,6 +36,7 @@ public class AlcoholController {
     private final ZzimService zzimService;
     private final AuthTokenProvider authTokenProvider;
     private final VisitAnalysisService visitService;
+    private final AuthService authService;
     private final Double ALCOHOL_IN_SOJU = 16.9*360*0.8; //소주에 들어있는 알코올량 (g)
 
     @ResponseBody
@@ -72,9 +74,8 @@ public class AlcoholController {
         boolean isZzimed = false; //찜한 술인지 아닌지 판별하기 위한 변수
 
         if (jwtToken!= null) { //로그인한 유저라면
-            AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
-            String userEmail = authToken.findTokentoEmail();
-            Long u_id = userRepository.findByEmail(userEmail).getId();
+            Long u_id = authService.getMemberId(jwtToken);
+
 
             isZzimed = zzimService.findZzim(u_id, a_id); //찜한 술인지
 
@@ -100,12 +101,14 @@ public class AlcoholController {
     @PostMapping("/board/{a_id}") //찜하기 기능
     public HttpStatus saveZzim (@PathVariable Long a_id, HttpServletRequest request) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
-        System.out.println("Jwt token:"+jwtToken);
-        AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
-        String userEmail =authToken.findTokentoEmail();
+        Long u_id = authService.getMemberId(jwtToken);
+
+//        System.out.println("Jwt token:"+jwtToken);
+//        AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
+//        String userEmail =authToken.findTokentoEmail();
         //현재 로그인한 유저의 이메일
 
-        User user = userRepository.findByEmail(userEmail);
+        User user = userRepository.findById(u_id).orElseThrow();
         HttpStatus httpStatus = zzimService.addZzim(user, a_id);
 
         return httpStatus; // OK or ALREADY_REPORTED
@@ -115,12 +118,7 @@ public class AlcoholController {
     @DeleteMapping("/board/{a_id}") //찜삭제
     public HttpStatus deleteZzim (@PathVariable Long a_id, HttpServletRequest request) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
-        System.out.println("Jwt token:"+jwtToken);
-        AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
-        String userEmail =authToken.findTokentoEmail();
-        //현재 로그인한 유저의 이메일
-
-        Long u_id = userRepository.findByEmail(userEmail).getId();
+        Long u_id = authService.getMemberId(jwtToken);
 
         return zzimService.deleteMyZzim(u_id,a_id);
 

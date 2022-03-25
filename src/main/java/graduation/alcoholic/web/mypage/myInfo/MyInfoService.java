@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 public class MyInfoService {
     private final UserRepository userRepository;
 
-    public MyInfoResponseDto getUserInfoDto(String email){
-        User entity = userRepository.findByEmail(email);
+    public MyInfoResponseDto getUserInfoDto(Long u_id){
+        User entity = userRepository.findById(u_id).orElseThrow();
         return new MyInfoResponseDto(entity.getName(),entity.getEmail(),entity.getAge_range()
                 ,entity.getCapacity(), entity.getSex(), entity.getNickname()) ;
     }
@@ -27,8 +27,8 @@ public class MyInfoService {
     }
 
 
-    public User getUserInfoEntity (String email) {
-        return userRepository.findByEmail(email);
+    public User getUserInfoEntity ( Long u_id) {
+        return userRepository.findById(u_id).orElseThrow();
     }
 
 }
