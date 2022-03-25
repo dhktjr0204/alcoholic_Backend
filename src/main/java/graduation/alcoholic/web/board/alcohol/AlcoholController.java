@@ -35,67 +35,70 @@ public class AlcoholController {
     private final ZzimService zzimService;
     private final AuthTokenProvider authTokenProvider;
     private final VisitAnalysisService visitService;
+    private final Double ALCOHOL_IN_SOJU = 16.9*360*0.8; //소주에 들어있는 알코올량 (g)
 
     @ResponseBody
     @GetMapping("/board")
-    public Page<AlcoholResponseDto> getBoard (String type,
-                                              Double degreeFrom, Double degreeTo,
-                                              Integer priceFrom, Integer priceTo,
-                                              @PageableDefault(size = 12) Pageable p
-                                             ) {
-        Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name"));
+    public Page<AlcoholResponseDto> getBoard (String type, Double degreeFrom, Double degreeTo,
+                                              Integer priceFrom, Integer priceTo, @PageableDefault(size = 12) Pageable p) {
+        Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name")); // 가나다순 정렬
 
         if (type.equals("전체")) {
           return alcoholService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo,pageable);
         }
 
-        //주종, 가격대, 도수에 의한 검색
         else {
-            return alcoholService.findByTypeAndPriceAndDegree(
-                    type, priceFrom, priceTo, degreeFrom, degreeTo,pageable);
+            return alcoholService.findByTypeAndPriceAndDegree(type, priceFrom, priceTo, degreeFrom, degreeTo,pageable);
         }
     }
 
     @ResponseBody
     @GetMapping("/board/search")
     public Page<AlcoholResponseDto> searchByName (@RequestParam String name, Pageable p) {
-        Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name"));
+
+        Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name")); //가나다 순 정렬
 
         return  alcoholService.searchByName(name, pageable);
 
     }
 
-    //상세페이지
+    //술 상세페이지
     @ResponseBody
     @GetMapping("/board/{a_id}")
     public Map<String,Object> getBoardDetail (@PathVariable Long a_id, HttpServletRequest request, Pageable pageable) {
-        Map<String, Object> res = new HashMap<>();
+        Map<String, Object> res = new HashMap<>(); //response를 위한 map
 
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
-        boolean isZzimed = false;
-        if (jwtToken!= null) {
+        boolean isZzimed = false; //찜한 술인지 아닌지 판별하기 위한 변수
+
+        if (jwtToken!= null) { //로그인한 유저라면
             AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
             String userEmail = authToken.findTokentoEmail();
             Long u_id = userRepository.findByEmail(userEmail).getId();
 
-            isZzimed = zzimService.findZzim(u_id, a_id);
+            isZzimed = zzimService.findZzim(u_id, a_id); //찜한 술인지
 
-            alcoholService.printLog(u_id, a_id);
+            alcoholService.printLog(u_id, a_id); //술 상세페이지를 방문했으므로 로그를 찍음
 
         }
 
-        VisitDto visitInfo = visitService.getVisitInfo(a_id);
+        Optional<VisitDto> visitInfo = visitService.getVisitInfo(a_id); // 방문자 통계정보 가져오기
         AlcoholDetailResponseDto alcoholDetail = alcoholService.getAlcoholDetail(a_id);//술 객체 가져오기
-        res.put("alcoholDetail", alcoholDetail);
-        res.put("zzim",isZzimed ); //사용자의 찜여부
-        res.put("visit",visitInfo);
 
+        double alcoholWeight = alcoholDetail.getDegree() * alcoholDetail.getCapacity() * 0.8; //이 술에 들어있는 알코올 중량(g)
+        double alcoholPerSoju = Math.round((alcoholWeight/ALCOHOL_IN_SOJU*100)/100.0); //소주 한병으로 환산한 알코올 량(반올림)
+        //System.out.println(alcoholPerSoju);
+
+        res.put("alcoholDetail", alcoholDetail); //술 객체정보
+        res.put("zzim",isZzimed ); //사용자의 찜여부
+        res.put("visit",visitInfo); //방문자 통계 정보
+        res.put("alcoholPerSoju", alcoholPerSoju); //소주 한병으로 환산한 알코올 량
         return res;
     }
 
     @ResponseBody
     @PostMapping("/board/{a_id}") //찜하기 기능
-    public HttpStatus addZzim (@PathVariable Long a_id, HttpServletRequest request) {
+    public HttpStatus saveZzim (@PathVariable Long a_id, HttpServletRequest request) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
         System.out.println("Jwt token:"+jwtToken);
         AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);

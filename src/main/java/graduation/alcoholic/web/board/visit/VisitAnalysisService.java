@@ -109,10 +109,10 @@ public class VisitAnalysisService {
         visitRepository.save(visitEntity);
     }
 
-    public VisitDto getVisitInfo (Long a_id) {
-        Visit visitEntity = visitRepository.findById(a_id).get();
-        VisitDto visitDto = new VisitDto(visitEntity);
+    public Optional<VisitDto> getVisitInfo (Long a_id) {
+        Optional<Visit> visitEntity = visitRepository.findById(a_id);
+        VisitDto visitDto = new VisitDto(visitEntity.get());
 
-        return visitDto;
+        return Optional.of(visitDto);
     }
 }
