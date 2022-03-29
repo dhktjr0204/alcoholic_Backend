@@ -1,6 +1,8 @@
 package graduation.alcoholic.web.mypage.zzim;
 
 import graduation.alcoholic.domain.entity.Alcohol;
+import graduation.alcoholic.domain.entity.User;
+import graduation.alcoholic.web.login.AuthService;
 import graduation.alcoholic.web.login.domain.jwt.AuthToken;
 import graduation.alcoholic.web.login.domain.jwt.AuthTokenProvider;
 import graduation.alcoholic.web.login.domain.jwt.JwtHeaderUtil;
@@ -24,19 +26,15 @@ public class ZzimController {
 
 
     private final ZzimService zzimService;
-    private final UserRepository userRepository;
-    private final AuthTokenProvider authTokenProvider;
+    private final AuthService authService;
 
 
 
     @GetMapping("/myZzim")
     public List<ZzimResponseDto> getMyZzimList (HttpServletRequest request) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
-        AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
-        String userEmail =authToken.findTokentoEmail();
-        //현재 로그인한 유저의 이메일
+        Long u_id = authService.getMemberId(jwtToken);
 
-        Long u_id =  userRepository.findByEmail(userEmail).getId();
 
         List<Alcohol> myZzim = zzimService.getMyZzim(u_id);
         List<ZzimResponseDto> res = new ArrayList<>();
@@ -51,11 +49,10 @@ public class ZzimController {
     @DeleteMapping("/myZzim/{a_id}")
     public HttpStatus deleteMyZzim (@PathVariable Long a_id, HttpServletRequest request) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
-        AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
-        Map<String,String> res=new HashMap<>();
-        String userEmail =authToken.findTokentoEmail();
-        //현재 로그인한 유저의 이메일
-        Long u_id=  userRepository.findByEmail(userEmail).getId();
+       // AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
+        Long u_id = authService.getMemberId(jwtToken);
+
+
         return zzimService.deleteMyZzim(u_id,a_id);
     }
 
