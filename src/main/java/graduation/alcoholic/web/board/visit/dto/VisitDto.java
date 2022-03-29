@@ -1,6 +1,7 @@
 package graduation.alcoholic.web.board.visit.dto;
 
 import graduation.alcoholic.domain.entity.Visit;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -14,6 +15,7 @@ public class VisitDto {
     private Long fiftys;
 
 
+    @Builder
     public VisitDto(Visit v) {
         this.a_id=v.getA_id();
         this.female=v.getFemale();

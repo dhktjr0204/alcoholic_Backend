@@ -42,7 +42,7 @@ public class ZzimService {
 
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public HttpStatus deleteMyZzim (Long u_id,Long a_id) {
         if (this.findZzim(u_id, a_id)==true) {
             zzimRepository.deleteByUserIdAndAlcoholId(u_id, a_id);
