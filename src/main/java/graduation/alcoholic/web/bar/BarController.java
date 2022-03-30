@@ -26,7 +26,7 @@ public class BarController {
 
     //추가하기
     @PostMapping("/bar")
-    public ResponseEntity<Map<String,Long>> saveBar(@RequestPart("barSaveDto") BarSaveRequestDto barSaveDTO, @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList){
+    public ResponseEntity<Map<String,Long>> saveBar(@RequestPart("barSaveDto") BarSaveRequestDto barSaveDTO, @RequestPart(value = "fileList") List<MultipartFile> fileList){
         return barService.saveBar(barSaveDTO, fileList);
     }
 
@@ -39,7 +39,7 @@ public class BarController {
 
     //업데이트
     @PutMapping("/bar/{id}")
-    public ResponseEntity<Map<String, Boolean>> updateBar(@PathVariable Long id, @RequestPart("barUpdateDto") BarUpdateRequestDto requestDto, @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList){
+    public ResponseEntity<Map<String, Boolean>> updateBar(@PathVariable Long id, @RequestPart("barUpdateDto") BarUpdateRequestDto requestDto, @RequestPart(value = "fileList") List<MultipartFile> fileList){
         return barService.updateBar(id, requestDto, fileList);
     }
 
