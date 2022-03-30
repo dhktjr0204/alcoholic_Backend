@@ -43,20 +43,18 @@ public class VisitAnalysisService {
 
         for(String line: lines) {
             Map<String, Long> userIdAndAlcoholId = getUserIdAndAlcoholId(line);
-            //Alcohol alcohol = boardRepository.findById(userIdAndAlcoholId.get("a_id")).orElseThrow();
+            //로그에서 술 번호와 유저 아이디를 추출
+
             Long a_id = userIdAndAlcoholId.get("a_id");
             Long u_id = userIdAndAlcoholId.get("u_id");
 
             Map<String, Object> ageRangeAndSex = getUserAgeRangeAndSex(u_id);
+            //유저 아이디를 기반으로 나이대와 성별 추출
             String ageRange = ageRangeAndSex.get("ageRange").toString();
             String sex = ageRangeAndSex.get("sex").toString();
 
             save(a_id,ageRange,sex);
 
-//            System.out.println("u_id= "+userIdAndAlcoholId.get("u_id"));
-//            System.out.println("a_id= "+userIdAndAlcoholId.get("a_id"));
-//            System.out.println("ageRange= "+ageRangeAndSex.get("ageRange"));
-//            System.out.println("sex= "+ageRangeAndSex.get("sex"));
         }
 
     }
@@ -82,9 +80,9 @@ public class VisitAnalysisService {
     }
 
     public void save (Long a_id, String ageRange, String sex) {
-        //VisitSaveDto saveDto = new VisitSaveDto(a_id);
         Alcohol a = alcoholRepository.findById(a_id).orElseThrow();
-        Visit visitEntity = visitRepository.findById(a_id).orElse(new Visit(a,0L,0L,0L,0L,0L,0L));
+        Visit visitEntity = visitRepository.findById(a_id).orElseThrow();
+        //visit테이블에서 술아이디로 찾음
 
         if (sex.equals("female")) {
             visitEntity.updateFemale();
@@ -109,10 +107,10 @@ public class VisitAnalysisService {
         visitRepository.save(visitEntity);
     }
 
-    public Optional<VisitDto> getVisitInfo (Long a_id) {
+    public VisitDto getVisitInfo (Long a_id) {
         Optional<Visit> visitEntity = visitRepository.findById(a_id);
         VisitDto visitDto = new VisitDto(visitEntity.get());
 
-        return Optional.of(visitDto);
+        return visitDto;
     }
 }

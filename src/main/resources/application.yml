@@ -23,6 +23,11 @@ kakao:
   login:
     client_id: a17cc515ea9ec5c1ef5046107cbbcca2
 
+servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize : 20MB
+
 #app:
 #  auth:
 #    tokenSecret: 9neIoGYVg2leq4V5KBjbE2jt2LiQykAMqJHfjuQKJnfahjKHFWHBjb2hjbfahj37kjncskjnJQKIjrhryg76ejn236t2nBSHTQOPcbjhb

@@ -1,6 +1,7 @@
 package graduation.alcoholic.web.review.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import graduation.alcoholic.domain.entity.Alcohol;
 import graduation.alcoholic.domain.entity.Review;
 import graduation.alcoholic.domain.entity.User;
@@ -15,6 +16,7 @@ public class ReviewSaveRequestDto {
 
 
     private User user;
+
     private Alcohol alcohol;
 
     private String content;
