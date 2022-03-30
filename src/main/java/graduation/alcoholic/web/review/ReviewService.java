@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -34,7 +35,6 @@ public class ReviewService {
 
 
 
-
     @Transactional
     public Long save(Long id, ReviewSaveRequestDto requestDto, List<MultipartFile> fileList) {
 
@@ -42,14 +42,19 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
         requestDto.setUser(user);
 
-        checkReviewDuplication(requestDto);
+ //       checkReviewDuplication(requestDto);
 
-        if (fileList != null) {
+        if (fileList == null)
+            System.out.println("fileList객체가 없어");
+        if (requestDto == null)
+            System.out.println("requestDto 가 없어");
+        if (!CollectionUtils.isEmpty(fileList)) {
             List<String> fileNameList = s3Service.uploadImage(fileList);
             String fileNameString  = fileNameListToString(fileNameList);
             requestDto.setImage(fileNameString);
         }
         else {
+            System.out.println("입력된 사진 없음");
             requestDto.setImage("");
         }
 
