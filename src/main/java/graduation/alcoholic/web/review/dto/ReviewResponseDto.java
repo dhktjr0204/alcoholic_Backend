@@ -3,6 +3,7 @@ package graduation.alcoholic.web.review.dto;
 import graduation.alcoholic.domain.entity.Review;
 
 import graduation.alcoholic.domain.enums.Taste;
+import graduation.alcoholic.domain.enums.Type;
 import lombok.Data;
 
 import java.time.format.DateTimeFormatter;
@@ -17,6 +18,7 @@ public class ReviewResponseDto {
 
     private Long user_id;
     private Long alcohol_id;
+    private Type type;
 
     private String nickname;
 
@@ -38,6 +40,7 @@ public class ReviewResponseDto {
         this.id = entity.getId();
         this.user_id = entity.getUser().getId();
         this.alcohol_id = entity.getAlcohol().getId();
+        this.type = entity.getAlcohol().getType();
         this.nickname = entity.getUser().getNickname();
         this.content = entity.getContent();
         this.image = StringTofileNameList(entity.getImage());
@@ -52,7 +55,7 @@ public class ReviewResponseDto {
 
     public List<String> StringTofileNameList(String fileNameString) {
 
-        if (fileNameString == "") {
+        if (fileNameString == ",") {
             return new ArrayList<String>();
         }
         else {

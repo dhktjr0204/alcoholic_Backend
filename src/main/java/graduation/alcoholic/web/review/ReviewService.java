@@ -44,19 +44,8 @@ public class ReviewService {
 
  //       checkReviewDuplication(requestDto);
 
-        if (fileList == null)
-            System.out.println("fileList객체가 없어");
-        if (requestDto == null)
-            System.out.println("requestDto 가 없어");
-        if (!CollectionUtils.isEmpty(fileList)) {
-            List<String> fileNameList = s3Service.uploadImage(fileList);
-            String fileNameString  = fileNameListToString(fileNameList);
-            requestDto.setImage(fileNameString);
-        }
-        else {
-            System.out.println("입력된 사진 없음");
-            requestDto.setImage("");
-        }
+        requestDto.setImage(saveFileList(fileList));
+
 
         return reviewRepository.save(requestDto.toEntity()).getId();
     }
@@ -68,18 +57,21 @@ public class ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다. id" + id));
 
-        if (review.getImage() != null) {
+        if (review.getImage() != ",") {
             List<String> fileNameList = StringTofileNameList(review.getImage());
             for (int i=0; i<fileNameList.size(); i++) {
                 s3Service.deleteImage(fileNameList.get(i));
             }
         }
 
-        if (fileList != null) {
-
+        if (!CollectionUtils.isEmpty(fileList)) {
             List<String> fileNameList = s3Service.uploadImage(fileList);
             String fileNameString  = fileNameListToString(fileNameList);
             requestDto.setImage(fileNameString);
+        }
+        else {
+            System.out.println("입력된 사진 없음");
+            requestDto.setImage(",");
         }
 
         review.update(requestDto.getContent(), requestDto.getImage(), requestDto.getStar(),
@@ -121,13 +113,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다. id" +id));
 
-        if (review.getImage() != null) {
-            List<String> fileNameList = StringTofileNameList(review.getImage());
-            for (int i=0; i<fileNameList.size(); i++) {
-                s3Service.deleteImage(fileNameList.get(i));
-            }
-        }
-
+        deleteFileList(review);
         reviewRepository.delete(review);
     }
 
@@ -160,7 +146,7 @@ public class ReviewService {
         ReviewTopTaste reviewTopTaste = getTopTaste(reviewResponseDtoList);
 
 
-        if (reviewResponseDtoList == null) {
+        if (reviewResponseDtoList.isEmpty()) {
 
             return ReviewTotalResponseDto.builder()
                     .total_star((double) 0)
@@ -338,6 +324,29 @@ public class ReviewService {
                 .top_taste5_percent(percent[4])
                 .build();
 
+    }
+
+    public String saveFileList(List<MultipartFile> fileList) {
+
+        if (!CollectionUtils.isEmpty(fileList)) {
+            List<String> fileNameList = s3Service.uploadImage(fileList);
+            String fileNameString  = fileNameListToString(fileNameList);
+            return fileNameString;
+        }
+        else {
+            System.out.println("입력된 사진 없음");
+            return ",";
+        }
+    }
+
+    public void deleteFileList(Review review) {
+
+        if (review.getImage() != ",") {
+            List<String> fileNameList = StringTofileNameList(review.getImage());
+            for (int i=0; i<fileNameList.size(); i++) {
+                s3Service.deleteImage(fileNameList.get(i));
+            }
+        }
     }
 
 }

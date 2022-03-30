@@ -25,8 +25,10 @@ kakao:
 
 servlet:
     multipart:
-      maxFileSize: 10MB
-      maxRequestSize : 20MB
+
+      maxFileSize: 20MB
+      maxRequestSize : 60MB
+
 
 #app:
 #  auth:
