@@ -79,6 +79,7 @@ public class LoginController {
     @PutMapping(value = "/delete")
     public @ResponseBody String delete(HttpSession session) {
         counter=0;
+        System.out.println("탈퇴 확인:"+(String)session.getAttribute("access_Token")+(String) session.getAttribute("email"));
         kakaoService.kakaoDelete((String)session.getAttribute("access_Token"));
         User userInfo= userRepository.findByEmail((String) session.getAttribute("email"));
         kakaoService.delete(userInfo);

@@ -45,5 +45,9 @@ public class Bar extends BaseTimeEntity {
         this.location=location;
         this.image=image;
     }
+
+    public void setDel(){
+        this.user=null;
+    }
 }
 
