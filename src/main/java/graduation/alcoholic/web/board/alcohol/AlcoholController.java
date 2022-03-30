@@ -34,10 +34,9 @@ public class AlcoholController {
     private final AlcoholService alcoholService;
     private final UserRepository userRepository;
     private final ZzimService zzimService;
-    private final AuthTokenProvider authTokenProvider;
     private final VisitAnalysisService visitService;
     private final AuthService authService;
-    private final Double ALCOHOL_IN_SOJU = 16.9*360*0.8; //소주에 들어있는 알코올량 (g)
+
 
     @ResponseBody
     @GetMapping("/board")
@@ -76,24 +75,21 @@ public class AlcoholController {
         if (jwtToken!= null) { //로그인한 유저라면
             Long u_id = authService.getMemberId(jwtToken);
 
-
             isZzimed = zzimService.findZzim(u_id, a_id); //찜한 술인지
 
             alcoholService.printLog(u_id, a_id); //술 상세페이지를 방문했으므로 로그를 찍음
 
         }
 
-        Optional<VisitDto> visitInfo = visitService.getVisitInfo(a_id); // 방문자 통계정보 가져오기
+        VisitDto visitInfo = visitService.getVisitInfo(a_id); // 방문자 통계정보 가져오기
         AlcoholDetailResponseDto alcoholDetail = alcoholService.getAlcoholDetail(a_id);//술 객체 가져오기
-
-        double alcoholWeight = alcoholDetail.getDegree() * alcoholDetail.getCapacity() * 0.8; //이 술에 들어있는 알코올 중량(g)
-        double alcoholPerSoju = Math.round((alcoholWeight/ALCOHOL_IN_SOJU*100)/100.0); //소주 한병으로 환산한 알코올 량(반올림)
-        //System.out.println(alcoholPerSoju);
+        Long alcoholPerSoju = alcoholService.getAlcoholPerSoju(alcoholDetail); //소주한병으로 환산한 알코올량 가져오기
 
         res.put("alcoholDetail", alcoholDetail); //술 객체정보
         res.put("zzim",isZzimed ); //사용자의 찜여부
         res.put("visit",visitInfo); //방문자 통계 정보
         res.put("alcoholPerSoju", alcoholPerSoju); //소주 한병으로 환산한 알코올 량
+
         return res;
     }
 
@@ -102,11 +98,6 @@ public class AlcoholController {
     public HttpStatus saveZzim (@PathVariable Long a_id, HttpServletRequest request) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
         Long u_id = authService.getMemberId(jwtToken);
-
-//        System.out.println("Jwt token:"+jwtToken);
-//        AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
-//        String userEmail =authToken.findTokentoEmail();
-        //현재 로그인한 유저의 이메일
 
         User user = userRepository.findById(u_id).orElseThrow();
         HttpStatus httpStatus = zzimService.addZzim(user, a_id);
