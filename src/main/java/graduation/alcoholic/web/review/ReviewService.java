@@ -43,7 +43,9 @@ public class ReviewService {
         requestDto.setUser(user);
 
  //       checkReviewDuplication(requestDto);
+
         requestDto.setImage(saveFileList(fileList));
+
 
         return reviewRepository.save(requestDto.toEntity()).getId();
     }
