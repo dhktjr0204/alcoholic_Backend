@@ -5,10 +5,8 @@ import graduation.alcoholic.web.board.alcohol.dto.AlcoholResponseDto;
 import graduation.alcoholic.web.login.AuthService;
 import graduation.alcoholic.web.mypage.zzim.ZzimService;
 import graduation.alcoholic.web.board.visit.VisitAnalysisService;
-import graduation.alcoholic.web.board.visit.dto.VisitDto;
+import graduation.alcoholic.web.board.visit.dto.VisitResponseDto;
 import graduation.alcoholic.domain.entity.User;
-import graduation.alcoholic.web.login.domain.jwt.AuthToken;
-import graduation.alcoholic.web.login.domain.jwt.AuthTokenProvider;
 import graduation.alcoholic.web.login.domain.jwt.JwtHeaderUtil;
 import graduation.alcoholic.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -81,9 +79,9 @@ public class AlcoholController {
 
         }
 
-        VisitDto visitInfo = visitService.getVisitInfo(a_id); // 방문자 통계정보 가져오기
+        VisitResponseDto visitInfo = visitService.getVisitInfo(a_id); // 방문자 통계정보 가져오기
         AlcoholDetailResponseDto alcoholDetail = alcoholService.getAlcoholDetail(a_id);//술 객체 가져오기
-        Long alcoholPerSoju = alcoholService.getAlcoholPerSoju(alcoholDetail); //소주한병으로 환산한 알코올량 가져오기
+        Double alcoholPerSoju = alcoholService.getAlcoholPerSoju(alcoholDetail); //소주한병으로 환산한 알코올량 가져오기
 
         res.put("alcoholDetail", alcoholDetail); //술 객체정보
         res.put("zzim",isZzimed ); //사용자의 찜여부
