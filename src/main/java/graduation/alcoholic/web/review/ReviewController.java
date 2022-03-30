@@ -7,6 +7,7 @@ import graduation.alcoholic.web.review.dto.ReviewSaveRequestDto;
 import graduation.alcoholic.web.review.dto.ReviewTotalResponseDto;
 import graduation.alcoholic.web.review.dto.ReviewUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,8 @@ public class ReviewController {
     public Long save(HttpServletRequest httpRequest,
                      @RequestPart(value = "requestDto") ReviewSaveRequestDto requestDto, @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList) {
 
+        if (fileList == null)
+            System.out.println("fileList controller에서도 null");
         String jwtToken = JwtHeaderUtil.getAccessToken(httpRequest);
         return reviewService.save(authService.getMemberId(jwtToken), requestDto, fileList);
 
