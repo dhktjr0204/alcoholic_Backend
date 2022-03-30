@@ -53,12 +53,20 @@ public class BarService {
     }
 
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Page<BarResponseDto> getBars(Pageable pageable){
         Page<Bar> page=barRepository.findAll(pageable);
-
         int totalElements=(int) page.getTotalElements();
 
+        //탈퇴유저확인
+        for(int i=0;i<page.getContent().size();i++) {
+            Bar barInfo=page.getContent().get(i);
+            if(barInfo.getUser()!=null) {
+                if (barInfo.getUser().getDel_cd() != null) {
+                    barInfo.setDel();
+                }
+            }
+        }
         return  new PageImpl<BarResponseDto>(page.getContent()
                 .stream()
                 .map(bar -> new BarResponseDto(bar))
