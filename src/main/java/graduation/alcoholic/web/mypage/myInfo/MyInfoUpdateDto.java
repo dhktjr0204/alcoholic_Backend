@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 @Setter
 public class MyInfoUpdateDto {
     private String nickname;
-    private BigDecimal capacity;
+    private Double capacity;
 
-    public MyInfoUpdateDto(String nickname, BigDecimal capacity) {
+    public MyInfoUpdateDto(String nickname, Double capacity) {
         this.capacity=capacity;
         this.nickname=nickname;
     }

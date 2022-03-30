@@ -6,7 +6,7 @@ import graduation.alcoholic.domain.entity.User;
 import graduation.alcoholic.domain.entity.Visit;
 import graduation.alcoholic.domain.repository.UserRepository;
 import graduation.alcoholic.domain.repository.VisitRepository;
-import graduation.alcoholic.web.board.visit.dto.VisitDto;
+import graduation.alcoholic.web.board.visit.dto.VisitResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -107,10 +107,10 @@ public class VisitAnalysisService {
         visitRepository.save(visitEntity);
     }
 
-    public VisitDto getVisitInfo (Long a_id) {
+    public VisitResponseDto getVisitInfo (Long a_id) {
         Optional<Visit> visitEntity = visitRepository.findById(a_id);
-        VisitDto visitDto = new VisitDto(visitEntity.get());
+        VisitResponseDto visitResponseDto = new VisitResponseDto(visitEntity.orElseThrow());
 
-        return visitDto;
+        return visitResponseDto;
     }
 }

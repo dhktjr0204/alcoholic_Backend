@@ -13,7 +13,7 @@ public class MyInfoResponseDto {
     private String email;
     private String sex;
     private String age_range;
-    private BigDecimal capacity;
+    private Double capacity;
     private String nickname;
 
     @Builder
@@ -22,7 +22,7 @@ public class MyInfoResponseDto {
         this.email = email;
         this.sex = sex;
         this.age_range = age_range;
-        this.capacity = capacity;
+        this.capacity = capacity.doubleValue();
         this.nickname = nickname;
     }
 }
