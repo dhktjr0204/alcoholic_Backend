@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class VisitDto {
+public class VisitResponseDto {
     private Long a_id;
     private Long female;
     private Long male;
@@ -16,7 +16,7 @@ public class VisitDto {
 
 
     @Builder
-    public VisitDto(Visit v) {
+    public VisitResponseDto(Visit v) {
         this.a_id=v.getA_id();
         this.female=v.getFemale();
         this.male=v.getMale();

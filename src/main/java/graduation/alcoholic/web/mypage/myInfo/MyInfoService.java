@@ -18,8 +18,8 @@ public class MyInfoService {
                 ,entity.getCapacity(), entity.getSex(), entity.getNickname()) ;
     }
 
-    public MyInfoResponseDto updateCapacityAndNickname (User entity, BigDecimal capacity, String nickname) {
-        entity.setCapacity(capacity);
+    public MyInfoResponseDto updateCapacityAndNickname (User entity, Double capacity, String nickname) {
+        entity.setCapacity(BigDecimal.valueOf(capacity));
         entity.setNickname(nickname);
         userRepository.save(entity);
         return new MyInfoResponseDto(entity.getName(),entity.getEmail(),entity.getAge_range()
