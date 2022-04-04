@@ -23,6 +23,8 @@ public class User {
 
     private String nickname;
 
+    private String roletype;
+
     private String email;
 
     private String sex;
@@ -35,13 +37,15 @@ public class User {
 
 
     @Builder
-    public User(String name,String nickname, String email, String sex, String age_range, BigDecimal capacity) {
+    public User(String name,String nickname,String roletype, String email, String sex, String age_range, BigDecimal capacity,String del_cd) {
         this.name = name;
         this.nickname=nickname;
+        this.roletype=roletype;
         this.email = email;
         this.sex = sex;
         this.age_range = age_range;
         this.capacity = capacity;
+        this.del_cd=del_cd;
     }
 
     public void setCapacity(BigDecimal capacity) {

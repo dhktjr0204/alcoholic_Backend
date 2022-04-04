@@ -19,11 +19,15 @@ public class BarResponseDto {
     public BarResponseDto(Bar entity) {
 
         this.id = entity.getId();
+
+
         if(entity.getUser()==null){
             this.nickname="탈퇴한 유저입니다.";
         }else {
             this.nickname = entity.getUser().getNickname();
         }
+
+
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.location = entity.getLocation();

@@ -13,6 +13,7 @@ public class AuthResponseDto {
     private Long id;
     private String name;
     private String nickname;
+    private String roletype;
     private String email;
     private String age_range;
     private String sex;

@@ -142,6 +142,7 @@ public class KakaoAPIService {
                     .sex(sex)
                     .age_range(age_range)
                     .roletype(RoleType.ROLE_USER)
+                    .del_cd(null)
                     .build();
 
         } catch (IOException e) {
