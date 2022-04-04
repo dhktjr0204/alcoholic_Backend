@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
@@ -39,14 +40,14 @@ public class BarController {
 
     //업데이트
     @PutMapping("/bar/{id}")
-    public ResponseEntity<Map<String, Boolean>> updateBar(@PathVariable Long id, @RequestPart("barUpdateDto") BarUpdateRequestDto requestDto, @RequestPart(value = "fileList") List<MultipartFile> fileList){
-        return barService.updateBar(id, requestDto, fileList);
+    public ResponseEntity<Map<String, Boolean>> updateBar(HttpServletRequest request, @PathVariable Long id, @RequestPart("barUpdateDto") BarUpdateRequestDto requestDto, @RequestPart(value = "fileList") List<MultipartFile> fileList){
+        return barService.updateBar(request, id, requestDto, fileList);
     }
 
     //삭제하기
     @DeleteMapping("/bar/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteBar(@PathVariable Long id){
-        return barService.deleteBar(id);
+    public ResponseEntity<Map<String, Boolean>> deleteBar(HttpServletRequest request,@PathVariable Long id){
+        return barService.deleteBar(request,id);
     }
 
 
