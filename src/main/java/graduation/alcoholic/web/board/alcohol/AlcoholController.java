@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class AlcoholController {
 
@@ -36,24 +36,25 @@ public class AlcoholController {
     private final AuthService authService;
 
 
-    @ResponseBody
     @GetMapping("/board")
     public Page<AlcoholResponseDto> getBoard (String type, Double degreeFrom, Double degreeTo,
                                               Integer priceFrom, Integer priceTo, @PageableDefault(size = 12) Pageable p) {
         Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name")); // 가나다순 정렬
-
         if (type.equals("전체")) {
-          return alcoholService.findByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo,pageable);
+            if (degreeFrom==0 && degreeTo==30 && priceFrom==0 && priceTo==100000) {
+                return alcoholService.getAllAlcohols(pageable);
+            }
+            else
+                return alcoholService.findAlcoholByPriceAndDegree(priceFrom, priceTo, degreeFrom, degreeTo,pageable);
         }
 
         else {
-            return alcoholService.findByTypeAndPriceAndDegree(type, priceFrom, priceTo, degreeFrom, degreeTo,pageable);
+            return alcoholService.findAlcoholByTypeAndPriceAndDegree(type, priceFrom, priceTo, degreeFrom, degreeTo,pageable);
         }
     }
 
-    @ResponseBody
     @GetMapping("/board/search")
-    public Page<AlcoholResponseDto> searchByName (@RequestParam String name, Pageable p) {
+    public Page<AlcoholResponseDto> searchAlcoholByName (@RequestParam String name, Pageable p) {
 
         Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name")); //가나다 순 정렬
 
@@ -62,7 +63,6 @@ public class AlcoholController {
     }
 
     //술 상세페이지
-    @ResponseBody
     @GetMapping("/board/{a_id}")
     public Map<String,Object> getBoardDetail (@PathVariable Long a_id, HttpServletRequest request, Pageable pageable) {
         Map<String, Object> res = new HashMap<>(); //response를 위한 map
@@ -91,7 +91,6 @@ public class AlcoholController {
         return res;
     }
 
-    @ResponseBody
     @PostMapping("/board/{a_id}") //찜하기 기능
     public HttpStatus saveZzim (@PathVariable Long a_id, HttpServletRequest request) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
@@ -103,7 +102,6 @@ public class AlcoholController {
         return httpStatus; // OK or ALREADY_REPORTED
     }
 
-    @ResponseBody
     @DeleteMapping("/board/{a_id}") //찜삭제
     public HttpStatus deleteZzim (@PathVariable Long a_id, HttpServletRequest request) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
