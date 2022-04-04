@@ -12,10 +12,12 @@ public class ClientKakao {
         return User.builder()
                 .name(userInfo.getName())
                 .nickname(userInfo.getNickname())
+                .roletype(userInfo.getRoletype().getCode())
                 .email(userInfo.getEmail())
                 .sex(userInfo.getSex())
                 .age_range(userInfo.getAge_range())
                 .capacity(null)
+                .del_cd(null)
                 .build();
     }
     public AuthResponseDto getAuthResponseDto(User userInfo, AuthToken appToken, Boolean isNewMember){
@@ -23,6 +25,7 @@ public class ClientKakao {
                 .id(userInfo.getId())
                 .name(userInfo.getName())
                 .nickname(userInfo.getNickname())
+                .roletype(userInfo.getRoletype())
                 .email(userInfo.getEmail())
                 .sex(userInfo.getSex())
                 .age_range(userInfo.getAge_range())

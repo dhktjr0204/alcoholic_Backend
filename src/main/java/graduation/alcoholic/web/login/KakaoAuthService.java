@@ -34,12 +34,6 @@ public class KakaoAuthService {
 
         //user_id로 jwt token 생성
         AuthToken appToken = null;
-        if(member.getDel_cd()!=null){
-            //만약 탈퇴한 회원이였다면 닉네임을 이름으로 바꾸고 D를 없앰
-            kakaoAPIService.recover(member);
-            appToken = authTokenProvider.createUserAppToken(member.getId());
-            return clientKakao.getAuthResponseDto(member,appToken,Boolean.TRUE);
-        }
 
             //만약에 새로운 유저라면 db에 저장 후 토큰 발급
         if (member == null ) {
@@ -50,6 +44,13 @@ public class KakaoAuthService {
 
             //토큰 발급
             return clientKakao.getAuthResponseDto(newMember,appToken,Boolean.TRUE);
+        }else {
+            if(member.getDel_cd()!=null){
+                //만약 탈퇴한 회원이였다면 닉네임을 이름으로 바꾸고 D를 없앰
+                kakaoAPIService.recover(member);
+                appToken = authTokenProvider.createUserAppToken(member.getId());
+                return clientKakao.getAuthResponseDto(member,appToken,Boolean.TRUE);
+            }
         }
         //기존 유저 or 만료시간 완료된 유저라면 새로 토큰 발급
 
