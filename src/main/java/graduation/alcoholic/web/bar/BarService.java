@@ -7,6 +7,8 @@ import graduation.alcoholic.domain.repository.BarRepository;
 import graduation.alcoholic.web.bar.dto.BarResponseDto;
 import graduation.alcoholic.web.bar.dto.BarSaveRequestDto;
 import graduation.alcoholic.web.bar.dto.BarUpdateRequestDto;
+import graduation.alcoholic.web.login.AuthService;
+import graduation.alcoholic.web.login.domain.jwt.JwtHeaderUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +29,7 @@ public class BarService {
 
     private final BarRepository barRepository;
     private final S3Service s3Service;
+    private final AuthService authService;
 
 
     @Transactional
@@ -67,7 +71,7 @@ public class BarService {
                 }
             }
         }
-        return  new PageImpl<BarResponseDto>(page.getContent()
+        return new PageImpl<BarResponseDto>(page.getContent()
                 .stream()
                 .map(bar -> new BarResponseDto(bar))
                 .collect(Collectors.toList()),pageable,totalElements);
@@ -86,9 +90,11 @@ public class BarService {
 
 
     @Transactional
-    public ResponseEntity<Map<String, Boolean>> updateBar(Long barId, BarUpdateRequestDto requestDto, List<MultipartFile> fileList) {
+    public ResponseEntity<Map<String, Boolean>> updateBar(HttpServletRequest request, Long barId, BarUpdateRequestDto requestDto, List<MultipartFile> fileList) {
         Bar bar = barRepository.findById(barId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다. id" + barId));
+
+        String jwtToken = JwtHeaderUtil.getAccessToken(request);
 
         if (bar.getImage() != null) {
             List<String> fileNameList = StringTofileNameList(bar.getImage());
@@ -103,19 +109,25 @@ public class BarService {
             requestDto.setImage(fileNameString);
         }
 
-        bar.update(requestDto.getTitle(),requestDto.getContent(),requestDto.getLocation(), requestDto.getImage());
-
-
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("update", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+        //관리자거나 작성자임을 확인
+        if(bar.getUser().getRoletype()=="ADMIN" || bar.getUser().getId()==authService.getMemberId(jwtToken)) {
+            bar.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getLocation(), requestDto.getImage());
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("update", Boolean.TRUE);
+            return ResponseEntity.ok(response);
+        }else {
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("작성자가 아님",Boolean.FALSE);
+            return ResponseEntity.ok(response);
+        }
     }
 
 
     @Transactional
-    public ResponseEntity<Map<String, Boolean>> deleteBar(Long barId) {
+    public ResponseEntity<Map<String, Boolean>> deleteBar(HttpServletRequest request,Long barId) {
         Bar bar = barRepository.findById(barId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다. id" +barId));
+        String jwtToken = JwtHeaderUtil.getAccessToken(request);
 
         if (bar.getImage() != null) {
             List<String> fileNameList = StringTofileNameList(bar.getImage());
@@ -123,12 +135,17 @@ public class BarService {
                 s3Service.deleteImage(fileNameList.get(i));
             }
         }
+        if(bar.getUser().getRoletype()=="ADMIN" || bar.getUser().getId()==authService.getMemberId(jwtToken)) {
+            barRepository.delete(bar);
 
-        barRepository.delete(bar);
-
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("deleted", Boolean.TRUE);
+            return ResponseEntity.ok(response);
+        }else {
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("작성자가 아님",Boolean.FALSE);
+            return ResponseEntity.ok(response);
+        }
     }
 
     @Transactional(readOnly = true)
