@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,7 +41,7 @@ public class AlcoholService {
     }
 
 
-    public  Page<AlcoholResponseDto> findByPriceAndDegree (Integer priceFrom, Integer priceTo,
+    public  Page<AlcoholResponseDto> findAlcoholByPriceAndDegree (Integer priceFrom, Integer priceTo,
             Double degreeFrom, Double degreeTo, Pageable pageable) {
 
         Page<Alcohol> resultEntity ; //결과를 담기 위한 객체
@@ -62,7 +63,7 @@ public class AlcoholService {
         return resultEntity.map(alcohol -> new AlcoholResponseDto(alcohol));
     }
 
-    public Page<AlcoholResponseDto> findByTypeAndPriceAndDegree (
+    public Page<AlcoholResponseDto> findAlcoholByTypeAndPriceAndDegree (
             String type, Integer priceFrom, Integer priceTo,
             Double degreeFrom, Double degreeTo, Pageable pageable) {
 
@@ -94,6 +95,11 @@ public class AlcoholService {
         System.out.println(ALCOHOL_IN_SOJU);
         System.out.println(alcoholWeight);
         return Math.round((alcoholWeight/ALCOHOL_IN_SOJU*100)/100.0); //소주 한병으로 환산한 알코올 량(반올림)
+    }
+
+    public Page<AlcoholResponseDto> getAllAlcohols (Pageable pageable) {
+        Page<Alcohol> alcohol = alcoholRepository.findAll(pageable);
+        return alcohol.map(a -> new AlcoholResponseDto(a));
     }
 
 

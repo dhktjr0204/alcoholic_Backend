@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -141,7 +142,9 @@ public class KakaoAPIService {
                     .email(email)
                     .sex(sex)
                     .age_range(age_range)
+                    .capacity(new BigDecimal(0))
                     .roletype(RoleType.ROLE_USER)
+                    .del_cd(null)
                     .build();
 
         } catch (IOException e) {

@@ -6,7 +6,10 @@ import io.jsonwebtoken.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Key;
 import java.util.Date;
 
@@ -58,13 +61,5 @@ public class AuthToken {
             log.info("JWT token compact of handler are invalid.");
         }
         return null;
-    }
-
-    public String findTokentoEmail(){
-        return Jwts.parserBuilder()
-                .setSigningKey(key)//set key
-                .build()
-                .parseClaimsJws(token)//파싱 및 검증, 실패 시 에러
-                .getBody().getSubject();
     }
 }

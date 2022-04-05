@@ -8,8 +8,8 @@ import java.util.Arrays;
 @Getter
 @AllArgsConstructor
 public enum RoleType {
-    ROLE_USER("ROLE_USER", "일반 사용자 권한"),
-    ROLE_ADMIN("ROLE_ADMIN", "관리자 권한"),
+    ROLE_USER("USER", "일반 사용자 권한"),
+    ROLE_ADMIN("ADMIN", "관리자 권한"),
     NONE("NONE", "권한 없음");
 
     private final String code;
