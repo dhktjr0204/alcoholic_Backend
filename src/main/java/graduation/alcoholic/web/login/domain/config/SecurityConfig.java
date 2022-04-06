@@ -38,7 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()//프론트랑 포트번호가 다를때 오류 무시
                 .csrf().disable()//해킹방지
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)//jwt토큰은 기본적으로 session을 사용하지 않기때문에 STATELESS유지
                 .and()
                 .addFilterBefore(jwtAuthFilter,UsernamePasswordAuthenticationFilter.class);
 //        http.httpBasic().disable();

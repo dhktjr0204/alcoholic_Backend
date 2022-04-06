@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class LoginController {
@@ -31,17 +31,12 @@ public class LoginController {
     @Autowired
     private KakaoAPIService kakaoService;
 
-    private int counter=0;
+    @Autowired HttpSession session;
+
     private AuthResponseDto FrontInfo=null;
 
-
-
-
-    @ResponseBody
     @GetMapping("/login")
-    public ResponseEntity<AuthResponseDto> login(HttpServletRequest request, HttpSession session) {
-        ++counter;
-        if(counter==1) {
+    public ResponseEntity<AuthResponseDto> login(HttpServletRequest request) {
             String code = request.getParameter("code");
             //카카오 토큰 얻기
             String access_Token = kakaoService.getAccessToken(code);
@@ -56,10 +51,10 @@ public class LoginController {
                 kakaoService.update_UserAge(user, userInfo);
             }
 
-            session.setAttribute("email", userInfo.getEmail());
-            session.setAttribute("access_Token", access_Token);
+            request.getSession().setAttribute("email", userInfo.getEmail());
+            request.getSession().setAttribute("access_Token", access_Token);
+            System.out.println("로그인 세션 저장 확인용: "+request.getSession().getAttribute("email")+" "+request.getSession().getAttribute("access_Token"));
             //JWT 토큰 만듬
-            }
             ResponseEntity<AuthResponseDto> responseEntity = ApiResponseDto.success(FrontInfo);
             System.out.println("JWT토큰 만듬->" + FrontInfo.getJwtToken());
 
@@ -68,8 +63,7 @@ public class LoginController {
     }
 
     @GetMapping(value = "/logout")
-    public @ResponseBody String logout(HttpSession session) {
-        counter=0;
+    public String logout() {
         kakaoService.kakaoLogout((String)session.getAttribute("access_Token"));
         session.removeAttribute("access_Token");
         session.removeAttribute("email");
@@ -77,9 +71,8 @@ public class LoginController {
     }
 
     @PutMapping(value = "/delete")
-    public @ResponseBody String delete(HttpSession session) {
-        counter=0;
-        System.out.println("탈퇴 확인:"+(String)session.getAttribute("access_Token")+(String) session.getAttribute("email"));
+    public String delete() {
+        System.out.println("탈퇴 세션 저장 확인용: "+session.getAttribute("email")+" "+session.getAttribute("access_Token"));
         kakaoService.kakaoDelete((String)session.getAttribute("access_Token"));
         User userInfo= userRepository.findByEmail((String) session.getAttribute("email"));
         kakaoService.delete(userInfo);
@@ -90,7 +83,7 @@ public class LoginController {
 
 
     @PutMapping("/rename")
-    public @ResponseBody String rename(@RequestPart("userUpdateDto")UserUpdateDto userUpdateDto,HttpSession httpSession){
+    public String rename(@RequestPart("userUpdateDto")UserUpdateDto userUpdateDto,HttpSession httpSession){
         User userInfo= userRepository.findByEmail((String) httpSession.getAttribute("email"));
         kakaoService.update_Nickname(userInfo,userUpdateDto);
         return "닉네임 생성 완료";
@@ -102,7 +95,7 @@ public class LoginController {
      * @return ResponseEntity<AuthResponse>
      */
     @GetMapping("/refresh")
-    public @ResponseBody  ResponseEntity<AuthResponseDto> refreshToken (HttpServletRequest request) {
+    public ResponseEntity<AuthResponseDto> refreshToken (HttpServletRequest request) {
         String jwtToken=JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
         if (!authToken.validate()) { // 형식에 맞지 않는 token
