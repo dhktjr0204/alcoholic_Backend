@@ -9,14 +9,16 @@ import java.math.BigDecimal;
 @Setter
 public class MyInfoUpdateDto {
     private String nickname;
-    private Double capacity;
+    private BigDecimal capacity;
 
-    public MyInfoUpdateDto(String nickname, Double capacity) {
-        this.capacity=capacity;
+    public MyInfoUpdateDto () {
+    }
+
+    public MyInfoUpdateDto (String nickname) {
         this.nickname=nickname;
     }
 
-    public MyInfoUpdateDto () {
-
+    public MyInfoUpdateDto (BigDecimal capacity) {
+        this.capacity=capacity;
     }
 }

@@ -1,5 +1,6 @@
 package graduation.alcoholic.web.mypage.myInfo;
 
+import graduation.alcoholic.domain.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,16 +14,16 @@ public class MyInfoResponseDto {
     private String email;
     private String sex;
     private String age_range;
-    private Double capacity;
+    private BigDecimal capacity;
     private String nickname;
 
     @Builder
-    public MyInfoResponseDto(String name, String email, String age_range, BigDecimal capacity, String sex, String nickname) {
-        this.name = name;
-        this.email = email;
-        this.sex = sex;
-        this.age_range = age_range;
-        this.capacity = capacity.doubleValue();
-        this.nickname = nickname;
+    public MyInfoResponseDto(User user) {
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.sex = user.getSex();
+        this.age_range = user.getAge_range();
+        this.capacity = user.getCapacity();
+        this.nickname = user.getNickname();
     }
 }
