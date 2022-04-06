@@ -22,7 +22,7 @@ import java.util.Optional;
 public class AlcoholService {
     private final AlcoholRepository alcoholRepository;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final Double ALCOHOL_IN_SOJU = 16.9*360*0.8; //소주에 들어있는 알코올량 (g) 4867.2 5440
+    private final Double ALCOHOL_IN_SOJU = 16.9*360*0.8; //소주에 들어있는 알코올량 (g) 4867.2
 
     //술 이름으로 검색
     public Page<AlcoholResponseDto> searchByName (String name, Pageable pageable) {
@@ -94,7 +94,7 @@ public class AlcoholService {
         double alcoholWeight = alcohol.getDegree() * alcohol.getCapacity() * 0.8; //이 술에 들어있는 알코올 중량(g)
         System.out.println(ALCOHOL_IN_SOJU);
         System.out.println(alcoholWeight);
-        return Math.round((alcoholWeight/ALCOHOL_IN_SOJU*100)/100.0); //소주 한병으로 환산한 알코올 량(반올림)
+        return Math.round(alcoholWeight/ALCOHOL_IN_SOJU*100)/100.0; //소주 한병으로 환산한 알코올 량(반올림)
     }
 
     public Page<AlcoholResponseDto> getAllAlcohols (Pageable pageable) {
