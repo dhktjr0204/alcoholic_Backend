@@ -21,28 +21,36 @@ public class MyInfoController {
     private final AuthService authService;
 
 
-    @GetMapping("/myInfo")
+    @GetMapping("/myInfo")//회원정보 조회
     public MyInfoResponseDto getMyInfo(HttpServletRequest request) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
         Long u_id = authService.getMemberId(jwtToken);
 
         MyInfoResponseDto userInfoDto = myInfoService.getUserInfoDto(u_id);
-        System.out.println("capacity = " + userInfoDto.getCapacity());
-        return userInfoDto;
 
+        return userInfoDto;
 
     }
 
-    @PostMapping("/myInfo")
-    public MyInfoResponseDto modifyMyInfo (HttpServletRequest request,
+    @PostMapping("/myInfo/nickname") //닉네임 수정
+    public MyInfoResponseDto modifyNickname (HttpServletRequest request,
                                            @RequestBody MyInfoUpdateDto updateDto) {
+        String jwtToken = JwtHeaderUtil.getAccessToken(request);
+        Long u_id = authService.getMemberId(jwtToken);
+       // System.out.println(nickname);
+
+        User userInfoEntity = myInfoService.getUserInfoEntity(u_id);
+        return myInfoService.updateNickname(userInfoEntity,updateDto);
+    }
+
+    @PostMapping("/myInfo/capacity") //주량 수정
+    public MyInfoResponseDto modifyCapacity (HttpServletRequest request,
+                                             @RequestBody MyInfoUpdateDto updateDto) {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
         Long u_id = authService.getMemberId(jwtToken);
 
         User userInfoEntity = myInfoService.getUserInfoEntity(u_id);
-        System.out.println("capacity = " + updateDto.getCapacity());
-        System.out.println("nickname = " + updateDto.getNickname());
-        return myInfoService.updateCapacityAndNickname(userInfoEntity,updateDto.getCapacity(), updateDto.getNickname());
+        return myInfoService.updateCapacity(userInfoEntity,updateDto);
     }
 
 }

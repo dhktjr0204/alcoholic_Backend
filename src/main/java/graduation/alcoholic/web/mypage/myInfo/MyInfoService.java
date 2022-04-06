@@ -14,16 +14,19 @@ public class MyInfoService {
 
     public MyInfoResponseDto getUserInfoDto(Long u_id){
         User entity = userRepository.findById(u_id).orElseThrow();
-        return new MyInfoResponseDto(entity.getName(),entity.getEmail(),entity.getAge_range()
-                ,entity.getCapacity(), entity.getSex(), entity.getNickname()) ;
+        return new MyInfoResponseDto(entity) ;
     }
 
-    public MyInfoResponseDto updateCapacityAndNickname (User entity, Double capacity, String nickname) {
-        entity.setCapacity(BigDecimal.valueOf(capacity));
-        entity.setNickname(nickname);
+    public MyInfoResponseDto updateCapacity (User entity, MyInfoUpdateDto updateDto) {
+        entity.setCapacity(updateDto.getCapacity());
         userRepository.save(entity);
-        return new MyInfoResponseDto(entity.getName(),entity.getEmail(),entity.getAge_range()
-                ,entity.getCapacity(), entity.getSex(), entity.getNickname()) ;
+        return new MyInfoResponseDto(entity) ;
+    }
+
+    public MyInfoResponseDto updateNickname (User entity, MyInfoUpdateDto updateDto) {
+        entity.setNickname(updateDto.getNickname());
+        userRepository.save(entity);
+        return new MyInfoResponseDto(entity) ;
     }
 
 
