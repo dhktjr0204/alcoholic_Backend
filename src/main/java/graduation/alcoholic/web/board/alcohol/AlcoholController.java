@@ -70,13 +70,11 @@ public class AlcoholController {
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
         boolean isZzimed = false; //찜한 술인지 아닌지 판별하기 위한 변수
 
-        if (jwtToken!= null) { //로그인한 유저라면
-            Long u_id = authService.getMemberId(jwtToken);
+        Long u_id = authService.getMemberId(jwtToken);
 
+        if (u_id!= null) { //로그인한 유저라면
             isZzimed = zzimService.findZzim(u_id, a_id); //찜한 술인지
-
             alcoholService.printLog(u_id, a_id); //술 상세페이지를 방문했으므로 로그를 찍음
-
         }
 
         VisitResponseDto visitInfo = visitService.getVisitInfo(a_id); // 방문자 통계정보 가져오기
@@ -87,6 +85,7 @@ public class AlcoholController {
         res.put("zzim",isZzimed ); //사용자의 찜여부
         res.put("visit",visitInfo); //방문자 통계 정보
         res.put("alcoholPerSoju", alcoholPerSoju); //소주 한병으로 환산한 알코올 량
+        System.out.println(alcoholPerSoju);
 
         return res;
     }
