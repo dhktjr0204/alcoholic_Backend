@@ -110,7 +110,7 @@ public class BarService {
         }
 
         //관리자거나 작성자임을 확인
-        if(bar.getUser().getRoletype()=="ADMIN" || bar.getUser().getId()==authService.getMemberId(jwtToken)) {
+        if(bar.getUser().getRoletype().toString().equals("ADMIN")|| bar.getUser().getId()==authService.getMemberId(jwtToken)) {
             bar.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getLocation(), requestDto.getImage());
             Map<String, Boolean> response = new HashMap<>();
             response.put("update", Boolean.TRUE);
@@ -135,7 +135,7 @@ public class BarService {
                 s3Service.deleteImage(fileNameList.get(i));
             }
         }
-        if(bar.getUser().getRoletype()=="ADMIN" || bar.getUser().getId()==authService.getMemberId(jwtToken)) {
+        if(bar.getUser().getRoletype().toString().equals("ADMIN") || bar.getUser().getId()==authService.getMemberId(jwtToken)) {
             barRepository.delete(bar);
 
             Map<String, Boolean> response = new HashMap<>();

@@ -1,6 +1,6 @@
 package graduation.alcoholic.web.login.dto;
 
-import graduation.alcoholic.web.login.domain.enumerate.RoleType;
+import graduation.alcoholic.domain.enums.RoleType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

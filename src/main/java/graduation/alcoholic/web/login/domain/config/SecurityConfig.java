@@ -19,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthTokenProvider authTokenProvider;
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**","/webjars/**","/bar/**","/auth/login",
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**","/webjars/**","/bar/**","/auth/login","auth/delete",
                 "/board/search/**", "/board/**", "/review/**", "/collectioninfo/**", "/collectioncontent/**", "/recommend/**", "/recommendation/**");
 
         //swagger로 요청이 들어 올 땐 헤더에 access token이 없으므로 jwt filter를 타지 않도록 처리함
@@ -38,9 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()//프론트랑 포트번호가 다를때 오류 무시
                 .csrf().disable()//해킹방지
                 .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(jwtAuthFilter,UsernamePasswordAuthenticationFilter.class);
-//        http.httpBasic().disable();
-
     }
 }
