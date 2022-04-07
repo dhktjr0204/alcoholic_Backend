@@ -1,14 +1,13 @@
 package graduation.alcoholic.domain.entity;
 
 
+import graduation.alcoholic.domain.enums.RoleType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -23,7 +22,8 @@ public class User {
 
     private String nickname;
 
-    private String roletype;
+    @Enumerated(value = EnumType.STRING)
+    private RoleType roletype;
 
     private String email;
 
@@ -37,7 +37,7 @@ public class User {
 
 
     @Builder
-    public User(String name,String nickname,String roletype, String email, String sex, String age_range, BigDecimal capacity,String del_cd) {
+    public User(String name,String nickname,RoleType roletype, String email, String sex, String age_range, BigDecimal capacity,String del_cd) {
         this.name = name;
         this.nickname=nickname;
         this.roletype=roletype;

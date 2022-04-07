@@ -14,7 +14,7 @@ public class ClientKakao {
         return User.builder()
                 .name(userInfo.getName())
                 .nickname(userInfo.getNickname())
-                .roletype(userInfo.getRoletype().getCode())
+                .roletype(userInfo.getRoletype())
                 .email(userInfo.getEmail())
                 .sex(userInfo.getSex())
                 .age_range(userInfo.getAge_range())

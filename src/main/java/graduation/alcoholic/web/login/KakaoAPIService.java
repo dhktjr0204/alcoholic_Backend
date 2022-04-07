@@ -11,7 +11,7 @@ import java.net.URL;
 
 
 import graduation.alcoholic.domain.entity.User;
-import graduation.alcoholic.web.login.domain.enumerate.RoleType;
+import graduation.alcoholic.domain.enums.RoleType;
 import graduation.alcoholic.web.login.dto.UserDto;
 import graduation.alcoholic.web.login.dto.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
@@ -143,7 +143,7 @@ public class KakaoAPIService {
                     .sex(sex)
                     .age_range(age_range)
                     .capacity(new BigDecimal(0))
-                    .roletype(RoleType.ROLE_USER)
+                    .roletype(RoleType.USER)
                     .del_cd(null)
                     .build();
 

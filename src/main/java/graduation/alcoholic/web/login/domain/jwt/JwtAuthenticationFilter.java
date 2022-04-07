@@ -1,7 +1,13 @@
 package graduation.alcoholic.web.login.domain.jwt;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import graduation.alcoholic.web.login.domain.exception.TokenValidFailedException;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -11,11 +17,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //얘가 프론트에서 받은 jwt토큰을 검증하는 역할을 함
     private final AuthTokenProvider tokenProvider;
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
@@ -33,11 +43,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String tokenStr = JwtHeaderUtil.getAccessToken(request);
             AuthToken token = tokenProvider.convertAuthToken(tokenStr);
-
-            if (token.validate()) {
-                Authentication authentication = tokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+                if (token.validate(tokenStr)) {
+                    Authentication authentication = tokenProvider.getAuthentication(tokenStr,token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }catch (ExpiredJwtException expiredJwtException){
+                log.info("Expired JWT token!!");
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding("UTF-8");
+                Map<String ,String> errorDetails=new HashMap<>();
+                errorDetails.put("jwtToken","expiredJwtException");
+                objectMapper.writeValue(response.getWriter(),errorDetails);
             }
+            catch (TokenValidFailedException expiredJwtException){
+                log.info("TokenValidFailedException token!!");
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding("UTF-8");
+                Map<String ,String> errorDetails=new HashMap<>();
+                errorDetails.put("jwtToken","invalidAccessTokenException");
+                objectMapper.writeValue(response.getWriter(),errorDetails);
+            }
+
         }
         filterChain.doFilter(request, response);
     }

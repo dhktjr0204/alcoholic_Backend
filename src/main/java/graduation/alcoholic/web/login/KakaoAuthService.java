@@ -36,7 +36,8 @@ public class KakaoAuthService {
         AuthToken appToken = null;
 
             //만약에 새로운 유저라면 db에 저장 후 토큰 발급
-        if (member == null ) {
+        if (member == null) {
+            System.out.println("저장완료");
             userRepository.save(kakaoMember);
             User newMember = userRepository.findByEmail(userInfo.getEmail());
 

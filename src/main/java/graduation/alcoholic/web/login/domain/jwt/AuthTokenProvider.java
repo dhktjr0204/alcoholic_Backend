@@ -1,6 +1,6 @@
 package graduation.alcoholic.web.login.domain.jwt;
 
-import graduation.alcoholic.web.login.domain.enumerate.RoleType;
+import graduation.alcoholic.domain.enums.RoleType;
 import graduation.alcoholic.web.login.domain.exception.TokenValidFailedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
@@ -41,7 +41,7 @@ public class AuthTokenProvider {
 
     //USER에 대한 jwtToken생성
     public AuthToken createUserAppToken(Long id) {
-        return createToken(id,RoleType.ROLE_USER, expiry);
+        return createToken(id,RoleType.USER, expiry);
     }
 
     //String to jwtToken
@@ -55,9 +55,9 @@ public class AuthTokenProvider {
         return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
     }
 
-    public Authentication getAuthentication(AuthToken authToken) {
+    public Authentication getAuthentication(String jwtToken,AuthToken authToken) {
         //권한 인증되면
-        if(authToken.validate()) {
+        if(authToken.validate(jwtToken)) {
             Claims claims = authToken.getTokenClaims();
             //권한 부여
             Collection<? extends GrantedAuthority> authorities =

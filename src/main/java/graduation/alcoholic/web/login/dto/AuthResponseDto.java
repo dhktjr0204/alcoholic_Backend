@@ -1,5 +1,6 @@
 package graduation.alcoholic.web.login.dto;
 
+import graduation.alcoholic.domain.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ public class AuthResponseDto {
     private Long id;
     private String name;
     private String nickname;
-    private String roletype;
+    private RoleType roletype;
     private String email;
     private String age_range;
     private String sex;
