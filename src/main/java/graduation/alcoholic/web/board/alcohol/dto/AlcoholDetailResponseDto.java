@@ -9,6 +9,7 @@ import lombok.Data;
 
 @Data
 public class AlcoholDetailResponseDto {
+
     private Long id;
 
     private Type type;

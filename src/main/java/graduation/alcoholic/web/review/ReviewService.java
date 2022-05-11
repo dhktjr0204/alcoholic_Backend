@@ -42,7 +42,7 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
         requestDto.setUser(user);
 
- //       checkReviewDuplication(requestDto);
+        checkReviewDuplication(requestDto);
 
         requestDto.setImage(saveFileList(fileList));
 
@@ -57,24 +57,24 @@ public class ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다. id" + id));
 
-        if (review.getImage() != ",") {
-            List<String> fileNameList = StringTofileNameList(review.getImage());
-            for (int i=0; i<fileNameList.size(); i++) {
-                s3Service.deleteImage(fileNameList.get(i));
+        List<String> imageList = StringTofileNameList(review.getImage());
+
+        if (requestDto.getImage() != null) {
+            List<String> deleteImageList = requestDto.getImage();
+            for (int i=0; i<deleteImageList.size(); i++) {
+                s3Service.deleteImage(deleteImageList.get(i));
+                imageList.remove(deleteImageList.get(i));
             }
         }
 
         if (!CollectionUtils.isEmpty(fileList)) {
-            List<String> fileNameList = s3Service.uploadImage(fileList);
-            String fileNameString  = fileNameListToString(fileNameList);
-            requestDto.setImage(fileNameString);
-        }
-        else {
-            System.out.println("입력된 사진 없음");
-            requestDto.setImage(",");
+            List<String> saveImageList = s3Service.uploadImage(fileList);
+            for (int i=0; i < saveImageList.size(); i++) {
+                imageList.add(saveImageList.get(i));
+            }
         }
 
-        review.update(requestDto.getContent(), requestDto.getImage(), requestDto.getStar(),
+        review.update(requestDto.getContent(), fileNameListToString(imageList), requestDto.getStar(),
                 requestDto.getTaste1(), requestDto.getTaste2(), requestDto.getTaste3(), requestDto.getTaste4(), requestDto.getTaste5());
 
         return id;
