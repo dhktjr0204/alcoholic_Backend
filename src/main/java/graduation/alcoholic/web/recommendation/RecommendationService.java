@@ -4,7 +4,7 @@ import graduation.alcoholic.domain.repository.AlcoholRepository;
 import graduation.alcoholic.domain.entity.Alcohol;
 import graduation.alcoholic.domain.enums.Taste;
 import graduation.alcoholic.domain.repository.AlcoholTasteRepository;
-import graduation.alcoholic.web.recommendation.dto.AlcoholResponseDto;
+import graduation.alcoholic.web.board.alcohol.dto.AlcoholDetailResponseDto;
 import graduation.alcoholic.web.recommendation.dto.AlcoholTasteResponseDto;
 import graduation.alcoholic.web.recommendation.dto.RecommendRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +27,9 @@ public class RecommendationService {
 
 
     @Transactional(readOnly = true)
-    public List<AlcoholResponseDto> getRecommendation(RecommendRequestDto requestDto) {
+    public List<AlcoholDetailResponseDto> getRecommendation(RecommendRequestDto requestDto) {
 
-        List<AlcoholResponseDto> alcoholList = new ArrayList<>();
+        List<AlcoholDetailResponseDto> alcoholList = new ArrayList<>();
         List<AlcoholTasteResponseDto> alcoholTasteList;
 
         if (requestDto.getType() == 증류주) {
@@ -80,7 +80,7 @@ public class RecommendationService {
             else {
                 RecommendScore recommendScore = recommendScoreList.get(i);
                 Alcohol alcohol = alcoholRepository.findById(recommendScore.getId()).orElseThrow();
-                alcoholList.add(new AlcoholResponseDto(alcohol));
+                alcoholList.add(new AlcoholDetailResponseDto(alcohol));
             }
         }
         printScoreList(recommendScoreList);

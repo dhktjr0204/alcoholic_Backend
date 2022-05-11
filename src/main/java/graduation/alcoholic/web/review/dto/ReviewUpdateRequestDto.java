@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Data
 @NoArgsConstructor
 public class ReviewUpdateRequestDto {
 
     private String content;
-    private String image;
+    private List<String> image;
 
     private Integer star;
 
@@ -22,7 +24,7 @@ public class ReviewUpdateRequestDto {
     private Taste taste5;
 
     @Builder
-    public ReviewUpdateRequestDto(String content, String image, Integer star,
+    public ReviewUpdateRequestDto(String content, List<String> image, Integer star,
                                   Taste taste1, Taste taste2, Taste taste3, Taste taste4, Taste taste5) {
         this.content = content;
         this.image = image;

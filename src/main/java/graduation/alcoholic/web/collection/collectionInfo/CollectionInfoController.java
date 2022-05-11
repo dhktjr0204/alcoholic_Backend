@@ -40,7 +40,8 @@ public class CollectionInfoController {
 
 
     @DeleteMapping("/collectioninfo/{id}")
-    public void delete(@PathVariable Long id) {
+    public Long delete(@PathVariable Long id) {
         collectionInfoService.delete(id);
+        return id;
     }
 }

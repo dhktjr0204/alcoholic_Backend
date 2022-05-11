@@ -45,7 +45,7 @@ public class S3Service {
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드 실패");
             }
 
-            fileNameList.add(fileName);
+            fileNameList.add("https://alcoholic-review.s3.ap-northeast-2.amazonaws.com/" + fileName);
 
         });
 
@@ -53,7 +53,8 @@ public class S3Service {
     }
 
     public void deleteImage(String fileName) {
-        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName.substring(57)));
     }
 
     private String createFileName(String fileName) {
