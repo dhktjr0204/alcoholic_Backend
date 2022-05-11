@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +26,13 @@ public class AlcoholService {
     private final Double ALCOHOL_IN_SOJU = 16.9*360*0.8; //소주에 들어있는 알코올량 (g) 4867.2
 
     //술 이름으로 검색
-    public Page<AlcoholResponseDto> searchByName (String name, Pageable pageable) {
-        return alcoholRepository.findByNameContains(name,pageable).map(alcohol -> new AlcoholResponseDto(alcohol));
+    public List<AlcoholResponseDto> searchByName (String name) {
+        List<Alcohol> byNameContains = alcoholRepository.findByNameContains(name);
+        List<AlcoholResponseDto> result= new ArrayList<>();
+        for (Alcohol a : byNameContains) {
+            result.add(new AlcoholResponseDto(a));
+        }
+        return result;
     }
 
     //술 상세페이지 리턴
