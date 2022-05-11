@@ -14,10 +14,10 @@ public class CollectionContentController {
 
     private final CollectionContentService collectionContentService;
 
-    @PostMapping("/collectioncontent")
-    public CollectionContentId save(CollectionContentSaveRequestDto requestDto) {
-        return collectionContentService.save(requestDto);
-    }
+//    @PostMapping("/collectioncontent")
+//    public CollectionContentId save(CollectionContentSaveRequestDto requestDto) {
+//        return collectionContentService.save(requestDto);
+//    }
 
     @GetMapping("/collectioncontent/{collectioninfo_id}")
     public List<CollectionContentResponseDto> findByCollectionInfo(@PathVariable Long collectioninfo_id) {

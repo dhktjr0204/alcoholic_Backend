@@ -24,7 +24,10 @@ public class CollectionContentService {
 //    public CollectionContentId save(CollectionContentSaveRequestDto collectionContentSaveRequestDto) {
 //
 //        List<CollectionContent> collectionContentList = collectionContentSaveRequestDto.toEntity();
-//       // collectionContentRepository.save().getId();
+//        for (int i=0; i<collectionContentList.size(); i++) {
+//            collectionContentRepository.save()
+//        }
+//        collectionContentRepository.save().getId();
 //
 //    }
 
