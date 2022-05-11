@@ -54,12 +54,9 @@ public class AlcoholController {
     }
 
     @GetMapping("/board/search")
-    public Page<AlcoholResponseDto> searchAlcoholByName (@RequestParam String name, Pageable p) {
-
-        Pageable pageable = PageRequest.of(p.getPageNumber(),p.getPageSize(), Sort.by("name")); //가나다 순 정렬
-
-        return  alcoholService.searchByName(name, pageable);
-
+    public List<AlcoholResponseDto> searchAlcoholByName (@RequestParam String name) {
+    //no pagination
+        return  alcoholService.searchByName(name);
     }
 
     //술 상세페이지

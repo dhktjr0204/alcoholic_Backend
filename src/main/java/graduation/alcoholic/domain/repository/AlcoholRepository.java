@@ -18,7 +18,7 @@ public interface AlcoholRepository extends JpaRepository<Alcohol, Long> {
 //                " LEFT JOIN Review r on a.id = r.id" +
 //            " WHERE name LIKE %?1%" +
 //            " ORDER BY COUNT(r.id)")
-    Page<Alcohol> findByNameContains (String name, Pageable pageable); //이름 검색
+    List<Alcohol> findByNameContains (String name); //이름 검색
 
 //    //필터 검색 안할떄
 //    Page<Alcohol> findAll (Pageable pageable);
