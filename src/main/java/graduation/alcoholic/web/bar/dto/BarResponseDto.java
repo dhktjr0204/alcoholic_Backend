@@ -4,6 +4,7 @@ import graduation.alcoholic.domain.entity.Bar;
 import graduation.alcoholic.web.S3.S3Service;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.Pattern;
@@ -17,6 +18,7 @@ import java.util.List;
 
 
 @Getter
+@Setter
 public class BarResponseDto {
 
     private Long id;
