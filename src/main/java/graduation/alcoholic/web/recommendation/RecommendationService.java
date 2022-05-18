@@ -4,7 +4,7 @@ import graduation.alcoholic.domain.repository.AlcoholRepository;
 import graduation.alcoholic.domain.entity.Alcohol;
 import graduation.alcoholic.domain.enums.Taste;
 import graduation.alcoholic.domain.repository.AlcoholTasteRepository;
-import graduation.alcoholic.web.board.alcohol.dto.AlcoholDetailResponseDto;
+import graduation.alcoholic.domain.repository.board.alcohol.dto.AlcoholDetailResponseDto;
 import graduation.alcoholic.web.recommendation.dto.AlcoholTasteResponseDto;
 import graduation.alcoholic.web.recommendation.dto.RecommendRequestDto;
 import lombok.RequiredArgsConstructor;

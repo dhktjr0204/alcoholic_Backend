@@ -53,15 +53,10 @@ public class BarController {
 
     //검색기능
     @GetMapping("/bar/search")
-    public Optional<Page<BarResponseDto>> searchByTitle(@RequestParam("title") String title, @PageableDefault(size = 10) Pageable pageable){
-        return Optional.of(barService.searchByTitle(title,pageable));
+    public Optional<Page<BarResponseDto>> searchByContents(@RequestParam(value = "location",required = false) String location,
+                                                           @RequestParam(value = "contents",required = false) String contents,
+                                                           @PageableDefault(size = 10) Pageable pageable){
+        return Optional.of(barService.searchByContents(location,contents,pageable));
     }
-
-    //지역별 찾기
-    @GetMapping("/bar/location")
-    public Optional<Page<BarResponseDto>> searchByLocation(@RequestParam("location") String location, @PageableDefault(size = 10) Pageable pageable){
-        return Optional.of(barService.searchByLocation(location,pageable));
-    }
-
 }
 
