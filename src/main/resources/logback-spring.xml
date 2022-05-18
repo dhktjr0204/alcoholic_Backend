@@ -25,6 +25,8 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily -->
             <fileNamePattern>./logs/logback-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 7일까지 보관 -->
+            <maxHistory>7</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- or whenever the file size reaches 100MB -->
                 <maxFileSize>100MB</maxFileSize>
@@ -40,24 +42,6 @@
         </layout>
     </appender>
 
-    <!-- Loggers -->
-    <!-- <logger name="org.apache.catalina" level="ERROR">
-    </logger>
-
-    <logger name="org.apache.commons" level="ERROR">
-    </logger>
-
-    <logger name="org.springframework" level="DEBUG" >
-    </logger>
-
-    <logger name="egovframework.*" level="DEBUG">
-    </logger>
-
-    <logger name="java.sql" level="DEBUG">
-    </logger>
-
-    <logger name="org.mybatis.spring" level="DEBUG">
-    </logger> -->
 
 
 
