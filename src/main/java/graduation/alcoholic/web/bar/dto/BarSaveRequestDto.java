@@ -1,8 +1,11 @@
 package graduation.alcoholic.web.bar.dto;
 
 import graduation.alcoholic.domain.entity.Bar;
+
 import graduation.alcoholic.domain.entity.User;
 import lombok.Builder;
+
+import java.util.List;
 
 public class BarSaveRequestDto {
     private User user;

@@ -1,4 +1,4 @@
-package graduation.alcoholic.web.board.visit.dto;
+package graduation.alcoholic.domain.repository.board.visit.dto;
 
 import graduation.alcoholic.domain.entity.Visit;
 import lombok.Builder;

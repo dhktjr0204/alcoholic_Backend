@@ -1,6 +1,6 @@
 package graduation.alcoholic.web.recommendation;
 
-import graduation.alcoholic.web.board.alcohol.dto.AlcoholDetailResponseDto;
+import graduation.alcoholic.domain.repository.board.alcohol.dto.AlcoholDetailResponseDto;
 import graduation.alcoholic.web.recommendation.dto.RecommendRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

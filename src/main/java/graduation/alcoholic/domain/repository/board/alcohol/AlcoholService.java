@@ -1,10 +1,10 @@
-package graduation.alcoholic.web.board.alcohol;
+package graduation.alcoholic.domain.repository.board.alcohol;
 
 import graduation.alcoholic.domain.entity.Alcohol;
 import graduation.alcoholic.domain.enums.Type;
 import graduation.alcoholic.domain.repository.AlcoholRepository;
-import graduation.alcoholic.web.board.alcohol.dto.AlcoholDetailResponseDto;
-import graduation.alcoholic.web.board.alcohol.dto.AlcoholResponseDto;
+import graduation.alcoholic.domain.repository.board.alcohol.dto.AlcoholDetailResponseDto;
+import graduation.alcoholic.domain.repository.board.alcohol.dto.AlcoholResponseDto;
 import lombok.RequiredArgsConstructor;
 
 import org.slf4j.Logger;

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -27,22 +28,28 @@ public class Bar extends BaseTimeEntity {
     @Column(name = "location")
     private String location;
 
+
+    @Column(name = "location_detail")
+    private String location_detail;
+
     @Column(name = "image")
     private String image;
 
     @Builder
-    public Bar(User user, String title, String content, String location, String image) {
+    public Bar(User user, String title, String content, String location, String location_detail,String image) {
         this.user = user;
         this.title = title;
         this.content = content;
         this.location = location;
+        this.location_detail=location_detail;
         this.image = image;
     }
 
-    public void update(String title, String content, String location, String image){
+    public void update(String title, String content, String location, String location_detail,String image){
         this.title=title;
         this.content=content;
         this.location=location;
+        this.location_detail=location_detail;
         this.image=image;
     }
 

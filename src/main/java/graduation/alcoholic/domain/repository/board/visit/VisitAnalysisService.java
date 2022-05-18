@@ -1,4 +1,4 @@
-package graduation.alcoholic.web.board.visit;
+package graduation.alcoholic.domain.repository.board.visit;
 
 import graduation.alcoholic.domain.repository.AlcoholRepository;
 import graduation.alcoholic.domain.entity.Alcohol;
@@ -6,7 +6,7 @@ import graduation.alcoholic.domain.entity.User;
 import graduation.alcoholic.domain.entity.Visit;
 import graduation.alcoholic.domain.repository.UserRepository;
 import graduation.alcoholic.domain.repository.VisitRepository;
-import graduation.alcoholic.web.board.visit.dto.VisitResponseDto;
+import graduation.alcoholic.domain.repository.board.visit.dto.VisitResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

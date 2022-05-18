@@ -1,11 +1,11 @@
-package graduation.alcoholic.web.board.alcohol;
+package graduation.alcoholic.domain.repository.board.alcohol;
 
-import graduation.alcoholic.web.board.alcohol.dto.AlcoholDetailResponseDto;
-import graduation.alcoholic.web.board.alcohol.dto.AlcoholResponseDto;
+import graduation.alcoholic.domain.repository.board.alcohol.dto.AlcoholDetailResponseDto;
+import graduation.alcoholic.domain.repository.board.alcohol.dto.AlcoholResponseDto;
 import graduation.alcoholic.web.login.AuthService;
 import graduation.alcoholic.web.mypage.zzim.ZzimService;
-import graduation.alcoholic.web.board.visit.VisitAnalysisService;
-import graduation.alcoholic.web.board.visit.dto.VisitResponseDto;
+import graduation.alcoholic.domain.repository.board.visit.VisitAnalysisService;
+import graduation.alcoholic.domain.repository.board.visit.dto.VisitResponseDto;
 import graduation.alcoholic.domain.entity.User;
 import graduation.alcoholic.web.login.domain.jwt.JwtHeaderUtil;
 import graduation.alcoholic.domain.repository.UserRepository;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
