@@ -20,16 +20,11 @@ public class CollectionContentService {
     private final CollectionContentRepository collectionContentRepository;
     private final CollectionInfoRepository collectionInfoRepository;
 
-//    @Transactional
-//    public CollectionContentId save(CollectionContentSaveRequestDto collectionContentSaveRequestDto) {
-//
-//        List<CollectionContent> collectionContentList = collectionContentSaveRequestDto.toEntity();
-//        for (int i=0; i<collectionContentList.size(); i++) {
-//            collectionContentRepository.save()
-//        }
-//        collectionContentRepository.save().getId();
-//
-//    }
+    @Transactional
+    public void save(CollectionContentSaveRequestDto collectionContentSaveRequestDto) {
+
+        collectionContentRepository.saveAll(collectionContentSaveRequestDto.toEntity());
+    }
 
     @Transactional(readOnly = true)
     public List<CollectionContentResponseDto> findByCollectionInfo(Long collection_id) {

@@ -4,11 +4,12 @@ import graduation.alcoholic.domain.entity.Alcohol;
 import graduation.alcoholic.domain.entity.CollectionContent;
 import graduation.alcoholic.domain.entity.CollectionInfo;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Getter
 public class CollectionContentSaveRequestDto {
 
     private CollectionInfo collection;
@@ -24,15 +25,12 @@ public class CollectionContentSaveRequestDto {
     public List<CollectionContent> toEntity() {
 
         List<CollectionContent> collectionContentList = new ArrayList<>();
-        CollectionContent collectionContent;
-        for (int i=0 ; i < alcohol.size(); i++) {
-            collectionContent = CollectionContent.builder()
+        for (int i =0; i< alcohol.size(); i++) {
+            collectionContentList.add(CollectionContent.builder()
                     .collection(collection)
                     .alcohol(alcohol.get(i))
-                    .build();
-            collectionContentList.add(collectionContent);
+                    .build());
         }
         return collectionContentList;
-
     }
 }
