@@ -50,6 +50,26 @@ public class BarResponseDto {
         this.modified_date = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(entity.getModifiedDate());
     }
 
+
+    public BarResponseDto(String image,Bar entity) {
+
+        this.id = entity.getId();
+
+
+        if(entity.getUser()==null){
+            this.nickname="탈퇴한 유저입니다.";
+        }else {
+            this.nickname = entity.getUser().getNickname();
+        }
+
+        this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.location = entity.getLocation();
+        this.location_detail=entity.getLocation_detail();
+        this.image = StringTofileNameList(image);
+        this.modified_date = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(entity.getModifiedDate());
+    }
+
     public List<String> StringTofileNameList(String fileNameString) {
         return new ArrayList<String>(Arrays.asList(fileNameString.split(",")));
     }
