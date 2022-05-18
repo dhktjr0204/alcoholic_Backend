@@ -2,6 +2,8 @@ package graduation.alcoholic.web.bar;
 
 
 import graduation.alcoholic.domain.entity.Bar;
+import graduation.alcoholic.domain.entity.User;
+import graduation.alcoholic.domain.repository.UserRepository;
 import graduation.alcoholic.web.S3.S3Service;
 import graduation.alcoholic.domain.repository.BarRepository;
 import graduation.alcoholic.web.bar.dto.BarResponseDto;
@@ -9,6 +11,7 @@ import graduation.alcoholic.web.bar.dto.BarSaveRequestDto;
 import graduation.alcoholic.web.bar.dto.BarUpdateRequestDto;
 import graduation.alcoholic.web.login.AuthService;
 import graduation.alcoholic.web.login.domain.jwt.JwtHeaderUtil;
+import graduation.alcoholic.web.review.dto.ReviewSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -30,16 +33,18 @@ public class BarService {
     private final BarRepository barRepository;
     private final S3Service s3Service;
     private final AuthService authService;
+    private final UserRepository userRepository;
 
 
     @Transactional
-    public ResponseEntity<Map<String,Long>> saveBar(BarSaveRequestDto requestDto, List<MultipartFile> fileList){
+    public ResponseEntity<Map<String,Long>> saveBar(Long id,BarSaveRequestDto requestDto, List<MultipartFile> fileList){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
+        requestDto.setUser(user);
+
         if (fileList != null) {
             List<String> fileNameList = s3Service.uploadImage(fileList);
-            List<String> fileUrlList=s3Service.getFile(fileNameList);
             String fileNameString  = fileNameListToString(fileUrlList);
-            System.out.println("테스트용");
-            System.out.println(fileNameString);
             requestDto.setImage(fileNameString);
         }
         Long Id=barRepository.save(requestDto.toEntity()).getId();
@@ -62,7 +67,10 @@ public class BarService {
     public Page<BarResponseDto> getBars(Pageable pageable){
         Page<Bar> page=barRepository.findAll(pageable);
         int totalElements=(int) page.getTotalElements();
-
+//        List<String> fileList=new ArrayList<>();
+//        for(int i=0;i<page.getContent().size();i++){
+//            fileList.add(StringTofileNameList(page.getContent().get(i).getImage()).get(i));
+//        }
         //탈퇴유저확인
         for(int i=0;i<page.getContent().size();i++) {
             Bar barInfo=page.getContent().get(i);

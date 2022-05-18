@@ -4,9 +4,11 @@ import graduation.alcoholic.domain.entity.Bar;
 
 import graduation.alcoholic.domain.entity.User;
 import lombok.Builder;
+import lombok.Setter;
 
 import java.util.List;
 
+@Setter
 public class BarSaveRequestDto {
     private User user;
     private String title;

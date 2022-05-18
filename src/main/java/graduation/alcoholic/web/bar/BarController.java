@@ -3,6 +3,8 @@ package graduation.alcoholic.web.bar;
 import graduation.alcoholic.web.bar.dto.BarResponseDto;
 import graduation.alcoholic.web.bar.dto.BarSaveRequestDto;
 import graduation.alcoholic.web.bar.dto.BarUpdateRequestDto;
+import graduation.alcoholic.web.login.AuthService;
+import graduation.alcoholic.web.login.domain.jwt.JwtHeaderUtil;
 import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +20,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class BarController {
     private final BarService barService;
-
+    private final AuthService authService;
     //모든 정보 가져오기
     @GetMapping("/bar")
     public Page<BarResponseDto> getBar(@PageableDefault(size = 10) Pageable pageable){
@@ -27,8 +29,10 @@ public class BarController {
 
     //추가하기
     @PostMapping("/bar")
-    public ResponseEntity<Map<String,Long>> saveBar(@RequestPart("barSaveDto") BarSaveRequestDto barSaveDTO, @RequestPart(value = "fileList") List<MultipartFile> fileList){
-        return barService.saveBar(barSaveDTO, fileList);
+    public ResponseEntity<Map<String,Long>> saveBar(HttpServletRequest httpServletRequest, @RequestPart("barSaveDto") BarSaveRequestDto barSaveDTO, @RequestPart(value = "fileList") List<MultipartFile> fileList){
+        String jwtToken = JwtHeaderUtil.getAccessToken(httpServletRequest);
+
+        return barService.saveBar(authService.getMemberId(jwtToken),barSaveDTO, fileList);
     }
 
     //상세페이지
