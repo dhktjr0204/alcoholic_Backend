@@ -44,6 +44,7 @@ public class BarService {
 
         if (fileList != null) {
             List<String> fileNameList = s3Service.uploadImage(fileList);
+            List<String> fileUrlList=s3Service.getFiles(fileNameList);
             String fileNameString  = fileNameListToString(fileUrlList);
             requestDto.setImage(fileNameString);
         }
@@ -65,12 +66,17 @@ public class BarService {
 
     @Transactional
     public Page<BarResponseDto> getBars(Pageable pageable){
+
         Page<Bar> page=barRepository.findAll(pageable);
         int totalElements=(int) page.getTotalElements();
 //        List<String> fileList=new ArrayList<>();
+//
 //        for(int i=0;i<page.getContent().size();i++){
 //            fileList.add(StringTofileNameList(page.getContent().get(i).getImage()).get(i));
+//            String urlList=s3Service.getFile(fileList.get(i));
 //        }
+
+
         //탈퇴유저확인
         for(int i=0;i<page.getContent().size();i++) {
             Bar barInfo=page.getContent().get(i);
