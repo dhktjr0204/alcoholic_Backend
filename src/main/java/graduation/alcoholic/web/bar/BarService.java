@@ -36,7 +36,10 @@ public class BarService {
     public ResponseEntity<Map<String,Long>> saveBar(BarSaveRequestDto requestDto, List<MultipartFile> fileList){
         if (fileList != null) {
             List<String> fileNameList = s3Service.uploadImage(fileList);
-            String fileNameString  = fileNameListToString(fileNameList);
+            List<String> fileUrlList=s3Service.getFile(fileNameList);
+            String fileNameString  = fileNameListToString(fileUrlList);
+            System.out.println("테스트용");
+            System.out.println(fileNameString);
             requestDto.setImage(fileNameString);
         }
         Long Id=barRepository.save(requestDto.toEntity()).getId();

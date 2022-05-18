@@ -1,7 +1,10 @@
 package graduation.alcoholic.web.bar.dto;
 
 import graduation.alcoholic.domain.entity.Bar;
+import graduation.alcoholic.web.S3.S3Service;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.Pattern;
 import java.text.SimpleDateFormat;
@@ -15,6 +18,7 @@ import java.util.List;
 
 @Getter
 public class BarResponseDto {
+
     private Long id;
     private String nickname;
     private String title;
