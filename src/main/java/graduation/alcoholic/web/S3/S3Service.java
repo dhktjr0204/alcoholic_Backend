@@ -76,20 +76,4 @@ public class S3Service {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일 file: " + fileName);
         }
     }
-
-
-    public List<String> getFiles(List<String> fileName){
-        List<String> fileurl=new ArrayList<>();
-        for(int i=0;i<fileName.size();i++) {
-            fileurl.add(amazonS3Client.getUrl(bucket, fileName.get(i)).toString());
-        }
-        return fileurl;
-    }
-
-    public String getFile(String fileName){
-        String fileurl=amazonS3Client.getUrl(bucket, fileName).toString();
-        return fileurl;
-    }
-
-
 }

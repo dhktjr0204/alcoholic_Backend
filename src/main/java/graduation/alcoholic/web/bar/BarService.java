@@ -44,14 +44,13 @@ public class BarService {
 
         if (fileList != null) {
             List<String> fileNameList = s3Service.uploadImage(fileList);
-            List<String> fileUrlList=s3Service.getFiles(fileNameList);
-            String fileNameString  = fileNameListToString(fileUrlList);
+            String fileNameString  = fileNameListToString(fileNameList);
             requestDto.setImage(fileNameString);
         }
         Long Id=barRepository.save(requestDto.toEntity()).getId();
 
         Map<String, Long> response = new HashMap<>();
-        response.put("주점 글 아이디", Id);
+        response.put("bar_id:", Id);
         return ResponseEntity.ok(response);
     }
 
@@ -66,16 +65,8 @@ public class BarService {
 
     @Transactional
     public Page<BarResponseDto> getBars(Pageable pageable){
-
         Page<Bar> page=barRepository.findAll(pageable);
         int totalElements=(int) page.getTotalElements();
-//        List<String> fileList=new ArrayList<>();
-//
-//        for(int i=0;i<page.getContent().size();i++){
-//            fileList.add(StringTofileNameList(page.getContent().get(i).getImage()).get(i));
-//            String urlList=s3Service.getFile(fileList.get(i));
-//        }
-
 
         //탈퇴유저확인
         for(int i=0;i<page.getContent().size();i++) {
@@ -98,7 +89,7 @@ public class BarService {
     public List<BarResponseDto> getBarDetail(Long barId) {
         Bar bar = barRepository.findById(barId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다. id" +barId));
-        return  barRepository.findById(barId).stream()
+        return barRepository.findById(barId).stream()
                 .map(BarResponseDto::new)
                 .collect(Collectors.toList());
     }
@@ -127,14 +118,6 @@ public class BarService {
                 }
             }
 
-            //모든 사진 삭제
-//            if (bar.getImage() != null) {
-//                List<String> fileNameList = StringTofileNameList(bar.getImage());
-//                for (int i=0; i<fileNameList.size(); i++) {
-//                    s3Service.deleteImage(fileNameList.get(i));
-//                }
-//            }
-
             //받은 사진들 클라우드에 저장
             if (fileList != null) {
                 List<String> saveNewFile = s3Service.uploadImage(fileList);
@@ -142,14 +125,13 @@ public class BarService {
                     imageList.add(saveNewFile.get(i));
                 }
             }
-
             bar.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getLocation(), requestDto.getLocationDetail(),fileNameListToString(imageList));
             Map<String, Boolean> response = new HashMap<>();
             response.put("update", Boolean.TRUE);
             return ResponseEntity.ok(response);
             } else {
                 Map<String, Boolean> response = new HashMap<>();
-                response.put("작성자가 아님", Boolean.FALSE);
+                response.put("no permissions", Boolean.FALSE);
                 return ResponseEntity.ok(response);
             }
         }
@@ -176,7 +158,7 @@ public class BarService {
             return ResponseEntity.ok(response);
         }else {
             Map<String, Boolean> response = new HashMap<>();
-            response.put("작성자가 아님",Boolean.FALSE);
+            response.put("no permissions",Boolean.FALSE);
             return ResponseEntity.ok(response);
         }
     }
