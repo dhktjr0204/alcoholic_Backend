@@ -50,7 +50,7 @@ public class BarService {
         Long Id=barRepository.save(requestDto.toEntity()).getId();
 
         Map<String, Long> response = new HashMap<>();
-        response.put("bar_id:", Id);
+        response.put("bar_id", Id);
         return ResponseEntity.ok(response);
     }
 
