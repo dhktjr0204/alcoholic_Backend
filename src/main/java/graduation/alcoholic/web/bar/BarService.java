@@ -44,7 +44,7 @@ public class BarService {
 
         if (fileList != null) {
             List<String> fileNameList = s3Service.uploadImage(fileList);
-            String fileNameString  = fileNameListToString(fileNameList);
+            String fileNameString = fileNameListToString(fileNameList);
             requestDto.setImage(fileNameString);
         }
         Long Id=barRepository.save(requestDto.toEntity()).getId();
