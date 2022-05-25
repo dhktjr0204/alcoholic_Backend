@@ -4,31 +4,32 @@ import graduation.alcoholic.domain.entity.Alcohol;
 import graduation.alcoholic.domain.entity.CollectionContent;
 import graduation.alcoholic.domain.entity.CollectionInfo;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Data
 public class CollectionContentSaveRequestDto {
 
     private CollectionInfo collection;
 
-    private List<Alcohol> alcohol;
+    private List<Alcohol> alcoholList;
 
     @Builder
-    public CollectionContentSaveRequestDto(CollectionInfo collection, List<Alcohol> alcohol) {
+    public CollectionContentSaveRequestDto(CollectionInfo collection, List<Alcohol> alcoholList) {
         this.collection = collection;
-        this.alcohol = alcohol;
+        this.alcoholList = alcoholList;
     }
 
     public List<CollectionContent> toEntity() {
 
         List<CollectionContent> collectionContentList = new ArrayList<>();
-        for (int i =0; i< alcohol.size(); i++) {
+        for (int i =0; i< alcoholList.size(); i++) {
             collectionContentList.add(CollectionContent.builder()
                     .collection(collection)
-                    .alcohol(alcohol.get(i))
+                    .alcohol(alcoholList.get(i))
                     .build());
         }
         return collectionContentList;

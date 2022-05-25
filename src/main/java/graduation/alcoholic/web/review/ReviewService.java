@@ -58,9 +58,9 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다. id" + id));
 
         List<String> imageList = StringTofileNameList(review.getImage());
+        if (requestDto.getImageList() != null) {
+            List<String> deleteImageList = requestDto.getImageList();
 
-        if (requestDto.getImage() != null) {
-            List<String> deleteImageList = requestDto.getImage();
             for (int i=0; i<deleteImageList.size(); i++) {
                 s3Service.deleteImage(deleteImageList.get(i));
                 imageList.remove(deleteImageList.get(i));

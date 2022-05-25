@@ -13,7 +13,7 @@ import java.util.List;
 public class ReviewUpdateRequestDto {
 
     private String content;
-    private List<String> image;
+    private List<String> imageList;
 
     private Integer star;
 
@@ -24,10 +24,10 @@ public class ReviewUpdateRequestDto {
     private Taste taste5;
 
     @Builder
-    public ReviewUpdateRequestDto(String content, List<String> image, Integer star,
+    public ReviewUpdateRequestDto(String content, List<String> imageList, Integer star,
                                   Taste taste1, Taste taste2, Taste taste3, Taste taste4, Taste taste5) {
         this.content = content;
-        this.image = image;
+        this.imageList = imageList;
         this.star = star;
         this.taste1 = taste1;
         this.taste2 = taste2;

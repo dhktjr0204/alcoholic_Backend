@@ -15,8 +15,8 @@ public class CollectionContentController {
     private final CollectionContentService collectionContentService;
 
     @PostMapping("/collectioncontent")
-    public void save(CollectionContentSaveRequestDto requestDto) {
-        collectionContentService.save(requestDto);
+    public void save(@PathVariable  Long collection_id, @RequestBody CollectionContentSaveRequestDto requestDto) {
+        collectionContentService.save(collection_id, requestDto);
     }
 
     @GetMapping("/collectioncontent/{collectioninfo_id}")
