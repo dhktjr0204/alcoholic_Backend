@@ -19,14 +19,14 @@ public class CollectionInfoController {
     private final AuthService authService;
 
     @PostMapping("/collectioninfo")
-    public Long save(HttpServletRequest httpRequest, CollectionInfoSaveRequestDto requestDto) {
+    public Long save(HttpServletRequest httpRequest, @RequestBody CollectionInfoSaveRequestDto requestDto) {
 
         String jwtToken= JwtHeaderUtil.getAccessToken(httpRequest);
         return collectionInfoService.save(authService.getMemberId(jwtToken), requestDto);
     }
 
     @PutMapping("/collectioninfo/{id}")
-    public Long update(@PathVariable Long id, CollectionInfoUpdateRequestDto requestDto) {
+    public Long update(@PathVariable Long id, @RequestBody CollectionInfoUpdateRequestDto requestDto) {
         return collectionInfoService.update(id, requestDto);
     }
 

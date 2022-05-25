@@ -32,6 +32,7 @@ public class CollectionInfoService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
         requestDto.setUser(user);
         checkCollectionDuplication(requestDto);
+        System.out.println(requestDto.getTitle());
         return collectionInfoRepository.save(requestDto.toEntity()).getId();
     }
 

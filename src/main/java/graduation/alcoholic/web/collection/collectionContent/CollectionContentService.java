@@ -21,8 +21,12 @@ public class CollectionContentService {
     private final CollectionInfoRepository collectionInfoRepository;
 
     @Transactional
-    public void save(CollectionContentSaveRequestDto collectionContentSaveRequestDto) {
+    public void save(Long collection_id, CollectionContentSaveRequestDto collectionContentSaveRequestDto) {
 
+        CollectionInfo collectionInfo = collectionInfoRepository.findById(collection_id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 컬렉션이 없습니다. id: " + collection_id));
+
+        collectionContentSaveRequestDto.setCollection(collectionInfo);
         collectionContentRepository.saveAll(collectionContentSaveRequestDto.toEntity());
     }
 
