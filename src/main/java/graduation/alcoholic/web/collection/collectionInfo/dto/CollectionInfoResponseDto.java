@@ -2,7 +2,9 @@ package graduation.alcoholic.web.collection.collectionInfo.dto;
 
 import graduation.alcoholic.domain.entity.CollectionInfo;
 import graduation.alcoholic.domain.entity.User;
+import lombok.Data;
 
+@Data
 public class CollectionInfoResponseDto {
 
     private Long id;
