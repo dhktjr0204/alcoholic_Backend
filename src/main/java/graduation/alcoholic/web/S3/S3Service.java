@@ -51,7 +51,7 @@ public class S3Service {
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드 실패");
             }
 
-            fileNameList.add("https://alcoholic-review.s3.ap-northeast-2.amazonaws.com/" + fileName);
+            fileNameList.add("alcoholic.ckgbp8se0nfj.ap-northeast-2.rds.amazonaws.com/" + fileName);
 
         });
 

@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://alcoholic.c0tdmspkslrq.ap-northeast-2.rds.amazonaws.com:3306/alcoholic
+    url: jdbc:mariadb://alcoholic.ckgbp8se0nfj.ap-northeast-2.rds.amazonaws.com:3306/alcoholic
     username: admin
     password: alcoholic
 
