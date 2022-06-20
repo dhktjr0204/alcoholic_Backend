@@ -6,22 +6,23 @@ import graduation.alcoholic.domain.entity.CollectionInfo;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class CollectionContentSaveRequestDto {
 
     private CollectionInfo collection;
-
     private List<Alcohol> alcoholList;
 
     @Builder
-    public CollectionContentSaveRequestDto(CollectionInfo collection, List<Alcohol> alcoholList) {
-        this.collection = collection;
+    public CollectionContentSaveRequestDto(List<Alcohol> alcoholList) {
         this.alcoholList = alcoholList;
     }
+
 
     public List<CollectionContent> toEntity() {
 
