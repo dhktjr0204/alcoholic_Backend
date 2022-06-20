@@ -3,10 +3,11 @@ package graduation.alcoholic.web.collection.collectionInfo.dto;
 import graduation.alcoholic.domain.entity.CollectionInfo;
 import graduation.alcoholic.domain.entity.User;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
+@Data
 @NoArgsConstructor
 public class CollectionInfoSaveRequestDto {
 
