@@ -26,7 +26,6 @@ public class CollectionContentService {
         CollectionInfo collectionInfo = collectionInfoRepository.findById(collection_id)
                         .orElseThrow(()-> new IllegalArgumentException("해당 컬렉션이 없습니다. id: "+collection_id));
 
-        //git
         collectionContentSaveRequestDto.setCollection(collectionInfo);
         collectionContentRepository.saveAll(collectionContentSaveRequestDto.toEntity());
     }
