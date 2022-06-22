@@ -6,17 +6,20 @@ import graduation.alcoholic.domain.entity.CollectionContentId;
 import graduation.alcoholic.domain.entity.CollectionInfo;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CollectionContentResponseDto {
 
-    private CollectionContentId collectionContentId;
+    private Long id;
 
-    private CollectionInfo collection;
+    private String image;
 
-    private Alcohol alcohol;
+    private String name;
 
     public CollectionContentResponseDto(CollectionContent entity) {
-        this.collection = entity.getCollection();
-        this.alcohol = entity.getAlcohol();
+        this.id = entity.getAlcohol().getId();
+        this.image=entity.getAlcohol().getImage();
+        this.name = entity.getAlcohol().getName();
     }
 }
