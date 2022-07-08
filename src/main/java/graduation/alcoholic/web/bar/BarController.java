@@ -27,6 +27,13 @@ public class BarController {
         return barService.getBars(pageable);
     }
 
+    //마이페이지에서 조회
+    @GetMapping("/mypage/bar")
+    public Page<BarResponseDto> getMyBar(HttpServletRequest httpServletRequest,@PageableDefault(size = 10) Pageable pageable){
+        String jwtToken = JwtHeaderUtil.getAccessToken(httpServletRequest);
+        return barService.getMyBars(authService.getMemberId(jwtToken),pageable);
+    }
+
     //추가하기
     @PostMapping("/bar")
     public ResponseEntity<Map<String,Long>> saveBar(HttpServletRequest httpServletRequest, @RequestPart("barSaveDto") BarSaveRequestDto barSaveDTO, @RequestPart(value = "fileList") List<MultipartFile> fileList){

@@ -84,6 +84,17 @@ public class BarService {
                 .collect(Collectors.toList()),pageable,totalElements);
     }
 
+    @Transactional
+    public Page<BarResponseDto> getMyBars(Long id,Pageable pageable){
+        Page<Bar> page=barRepository.findByUser(id,pageable);
+        int totalElements=(int) page.getTotalElements();
+
+        return new PageImpl<BarResponseDto>(page.getContent()
+                .stream()
+                .map(bar -> new BarResponseDto(bar))
+                .collect(Collectors.toList()),pageable,totalElements);
+    }
+
 
     @Transactional(readOnly = true)
     public List<BarResponseDto> getBarDetail(Long barId) {
