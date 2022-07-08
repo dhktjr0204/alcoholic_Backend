@@ -18,8 +18,10 @@ public interface BarRepository extends JpaRepository<Bar,Long> {
     Page<Bar> Search(@Param("location") String location, @Param("contents")String contents, Pageable pageable);
     @Query(value = "SELECT * FROM bar a"+ " WHERE a.title like %:contents% OR a.content like %:contents% " +
             "OR a.location_detail like %:contents%",nativeQuery = true)
-    Page<Bar> findByContents(String contents,Pageable pageable);
 
+    Page<Bar> findByContents(String contents,Pageable pageable);
+    @Query(value = "SELECT * FROM bar a"+ " WHERE a.user_id = :id" ,nativeQuery = true)
+    Page<Bar> findByUser(@Param("id") Long id,Pageable pageable);
 
     Page<Bar> findAll(Pageable pageable);
 }
