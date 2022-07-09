@@ -51,7 +51,7 @@ public class BarController {
 
     //업데이트
     @PutMapping("/bar/{id}")
-    public ResponseEntity<Map<String, Boolean>> updateBar(HttpServletRequest request, @PathVariable Long id, @RequestPart("barUpdateDto") BarUpdateRequestDto requestDto, @RequestPart(value = "fileList") List<MultipartFile> fileList){
+    public ResponseEntity<Map<String, Boolean>> updateBar(HttpServletRequest request, @PathVariable Long id, @RequestPart("barUpdateDto") BarUpdateRequestDto requestDto, @RequestPart(value = "fileList",required = false) List<MultipartFile> fileList){
         return barService.updateBar(request, id, requestDto, fileList);
     }
 

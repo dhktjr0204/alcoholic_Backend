@@ -121,14 +121,15 @@ public class BarService {
             List<String> imageList = StringTofileNameList(bar.getImage());
 
             //삭제된 리스트에 포함되어 있는 사진 클라우드에서 삭제
-            if (requestDto.getImage() != null) {
+            if (requestDto.getDeleteImgList() != null) {
                 List<String> deleteImageList = requestDto.getDeleteImgList();
                 for (int i = 0; i < deleteImageList.size(); i++) {
                     s3Service.deleteImage(deleteImageList.get(i));
+                    System.out.println("확인용이야!!!!");
+                    System.out.println(deleteImageList.get(i));
                     imageList.remove(deleteImageList.get(i));
                 }
             }
-
             //받은 사진들 클라우드에 저장
             if (fileList != null) {
                 List<String> saveNewFile = s3Service.uploadImage(fileList);
