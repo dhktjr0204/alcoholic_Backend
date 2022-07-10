@@ -40,10 +40,15 @@ public class CollectionContentService {
     }
 
     @Transactional
-    public void delete(CollectionContentId id) {
+    public void delete(Long collectioninfo_id, Long alcohol_id) {
 
-        CollectionContent collectionContent = collectionContentRepository.findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("해당 컬렉션 컨텐츠가 없습니다. id: " + id));
+        CollectionContentId collectionContentId = CollectionContentId.builder()
+                .collection_id(collectioninfo_id)
+                .alcohol_id(alcohol_id)
+                .build();
+
+        CollectionContent collectionContent = collectionContentRepository.findById(collectionContentId)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 컬렉션 컨텐츠가 없습니다. id: " + collectionContentId));
 
         collectionContentRepository.delete(collectionContent);
     }

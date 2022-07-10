@@ -24,8 +24,8 @@ public class CollectionContentController {
         return collectionContentService.findByCollectionInfo(collectioninfo_id);
     }
 
-    @DeleteMapping("/collectioncontent/{id}")
-    public void delete(@PathVariable CollectionContentId id) {
-        collectionContentService.delete(id);
+    @DeleteMapping("/collectioncontent/{collectioninfo_id}")
+    public void delete(@PathVariable Long collectioninfo_id, @RequestParam Long alcohol_id) {
+        collectionContentService.delete(collectioninfo_id, alcohol_id);
     }
 }

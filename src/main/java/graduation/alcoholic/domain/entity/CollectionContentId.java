@@ -1,5 +1,6 @@
 package graduation.alcoholic.domain.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,5 +28,11 @@ public class CollectionContentId implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(collection_id, alcohol_id);
+    }
+
+    @Builder
+    public CollectionContentId(Long collection_id, Long alcohol_id) {
+        this.collection_id = collection_id;
+        this.alcohol_id = alcohol_id;
     }
 }
