@@ -25,7 +25,7 @@ public class CollectionContentController {
     }
 
     @DeleteMapping("/collectioncontent/{collectioninfo_id}")
-    public void delete(@PathVariable Long collectioninfo_id, @RequestParam(value = "alcohol_id") Integer alcohol_id) {
+    public void delete(@PathVariable Long collectioninfo_id, @RequestParam(value = "alcohol_id") String alcohol_id) {
         System.out.println(alcohol_id);
         collectionContentService.delete(collectioninfo_id, Long.valueOf(alcohol_id));
     }
