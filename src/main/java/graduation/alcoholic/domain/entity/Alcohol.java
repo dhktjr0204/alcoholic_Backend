@@ -1,7 +1,7 @@
 package graduation.alcoholic.domain.entity;
 
-import graduation.alcoholic.domain.repository.board.alcohol.dto.AlcoholDetailResponseDto;
-import graduation.alcoholic.domain.repository.board.alcohol.dto.AlcoholResponseDto;
+import graduation.alcoholic.web.board.alcohol.dto.AlcoholDetailResponseDto;
+import graduation.alcoholic.web.board.alcohol.dto.AlcoholResponseDto;
 import graduation.alcoholic.domain.enums.Taste;
 import graduation.alcoholic.domain.enums.Type;
 import lombok.Builder;

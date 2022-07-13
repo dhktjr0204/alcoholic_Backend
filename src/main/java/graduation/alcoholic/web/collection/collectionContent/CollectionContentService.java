@@ -1,5 +1,7 @@
 package graduation.alcoholic.web.collection.collectionContent;
 
+import graduation.alcoholic.domain.entity.Alcohol;
+import graduation.alcoholic.domain.repository.AlcoholRepository;
 import graduation.alcoholic.domain.repository.CollectionInfoRepository;
 import graduation.alcoholic.domain.entity.CollectionContent;
 import graduation.alcoholic.domain.entity.CollectionContentId;
@@ -19,6 +21,7 @@ public class CollectionContentService {
 
     private final CollectionContentRepository collectionContentRepository;
     private final CollectionInfoRepository collectionInfoRepository;
+    private final AlcoholRepository alcoholRepository;
 
     @Transactional
     public void save(Long collection_id, CollectionContentSaveRequestDto collectionContentSaveRequestDto) {
@@ -42,13 +45,13 @@ public class CollectionContentService {
     @Transactional
     public void delete(Long collectioninfo_id, Long alcohol_id) {
 
-        CollectionContentId collectionContentId = CollectionContentId.builder()
-                .collection_id(collectioninfo_id)
-                .alcohol_id(alcohol_id)
-                .build();
+        CollectionInfo collectionInfo = collectionInfoRepository.findById(collectioninfo_id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 컬렉션이 없습니다. id: " + collectioninfo_id));
+        Alcohol alcohol = alcoholRepository.findById(alcohol_id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 술이 없습니다. alcohol_id=" + alcohol_id));
 
-        CollectionContent collectionContent = collectionContentRepository.findById(collectionContentId)
-                        .orElseThrow(() -> new IllegalArgumentException("해당 컬렉션 컨텐츠가 없습니다. id: " + collectionContentId));
+        CollectionContent collectionContent = collectionContentRepository.findByCollectionInfoAndAlcohol(collectionInfo, alcohol)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 컬렉션 컨텐츠가 없습니다."));
 
         collectionContentRepository.delete(collectionContent);
     }

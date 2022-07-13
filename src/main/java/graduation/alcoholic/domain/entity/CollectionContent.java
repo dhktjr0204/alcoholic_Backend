@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class CollectionContent {
 
     @MapsId("collection_id")
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     private CollectionInfo collection;
 
     @MapsId("alcohol_id")
