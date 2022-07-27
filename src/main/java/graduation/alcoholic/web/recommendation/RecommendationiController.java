@@ -13,9 +13,11 @@ public class RecommendationiController {
 
     private final RecommendationService recommendationService;
 
-    @GetMapping("/recommendation")
+    @PostMapping("/recommendation")
     public List<AlcoholDetailResponseDto> getRecommendation(@RequestBody RecommendRequestDto requestDto) {
 
+        System.out.println("test");
+        System.out.println(requestDto.getTaste1());
         return recommendationService.getRecommendation(requestDto);
     }
 }
