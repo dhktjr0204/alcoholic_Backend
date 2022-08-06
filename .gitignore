@@ -41,6 +41,9 @@ out/
 resources/aws.yml
 src/main/resources/aws.yml
 
+resources/application.yml
+src/main/resources/application.yml
+
 
 /logs/**
 .log
