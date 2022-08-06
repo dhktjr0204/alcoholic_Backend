@@ -17,6 +17,7 @@ public class ZzimId implements Serializable {
     private Long user_id;
     private Long alcohol_id;
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
