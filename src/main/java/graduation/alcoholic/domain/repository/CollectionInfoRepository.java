@@ -18,4 +18,10 @@ public interface CollectionInfoRepository extends JpaRepository<CollectionInfo, 
 
     Optional<CollectionInfo> findByTitle(String title);
 
+    @Query("SELECT COUNT(c) FROM CollectionInfo c ")
+    int findCollectionSize ();
+
+    //메인페이지 랜덤 추출
+    @Query(value = "SELECT * FROM collection_info ORDER BY RAND() LIMIT 2", nativeQuery = true)
+    List<CollectionInfo> findRandomCollection ();
 }

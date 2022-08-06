@@ -11,7 +11,7 @@ spring:
 
     hikari:
       max-lifetime: 58000
-      connection-timeout: 10000
+      connection-timeout: 20000
 
   #JPA 설정
   jpa:
