@@ -64,11 +64,15 @@ public class AlcoholController {
         Map<String, Object> res = new HashMap<>(); //response를 위한 map
 
         String jwtToken = JwtHeaderUtil.getAccessToken(request);
+
         boolean isZzimed = false; //찜한 술인지 아닌지 판별하기 위한 변수
 
-        Long u_id = authService.getMemberId(jwtToken);
+        //Long u_id = authService.getMemberId(jwtToken);
 
-        if (u_id!= null) { //로그인한 유저라면
+        if (!jwtToken.equals("null")) { //로그인한 유저라면
+            //String jwtToken = JwtHeaderUtil.getAccessToken(request);
+
+            Long u_id = authService.getMemberId(jwtToken);
             isZzimed = zzimService.findZzim(u_id, a_id); //찜한 술인지
             alcoholService.printLog(u_id, a_id); //술 상세페이지를 방문했으므로 로그를 찍음
         }
