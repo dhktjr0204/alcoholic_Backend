@@ -19,7 +19,7 @@ public class MainController {
     @GetMapping("/main")
     public List<MainResponseDto> getRandomCollection () {
         //Random ran = new Random();
-        System.out.println("login: "+ SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        //System.out.println("login: "+ SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         return mainService.getRandomCollection();
     }
