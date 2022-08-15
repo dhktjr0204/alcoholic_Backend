@@ -21,11 +21,19 @@ public class MainService {
     public List<MainResponseDto> getRandomCollection () {
         List<MainResponseDto> result = new ArrayList<>();
 
-        List<CollectionInfo> randomCollection = collectionInfoRepository.findRandomCollection();
+        List<CollectionInfo> randomUserCollection = collectionInfoRepository.findUserRandomCollection(); //사용자꺼
+        List<CollectionInfo> randomCollection = collectionInfoRepository.findRandomCollection(); //관리자꺼
+
+        for (CollectionInfo info : randomUserCollection) {
+            List<CollectionContentResponseDto> content = collectionContentRepository.findByCollectionInfo(info);
+            if (content.size()>=4 && result.size()<2)
+                result.add(toResponseDto(info, content));
+        }
 
         for (CollectionInfo info : randomCollection) {
             List<CollectionContentResponseDto> content = collectionContentRepository.findByCollectionInfo(info);
-            result.add(toResponseDto(info, content));
+            if (content.size()>=4 && result.size()<4)
+                result.add(toResponseDto(info,content));
         }
 
         return result;
