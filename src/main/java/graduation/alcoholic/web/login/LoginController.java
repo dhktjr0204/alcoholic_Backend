@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
 public class LoginController {
     private final KakaoAuthService kakaoAuthService;
     private final AuthTokenProvider authTokenProvider;
@@ -31,7 +30,7 @@ public class LoginController {
 
     private AuthResponseDto FrontInfo=null;
 
-    @GetMapping("/login")
+    @GetMapping("/auth/login")
     public AuthResponseDto login(HttpServletRequest request) {
         String code = request.getParameter("code");
         //카카오 토큰 얻기
@@ -54,12 +53,13 @@ public class LoginController {
         //JWT 토큰 만듬
         AuthResponseDto responseEntity = FrontInfo;
         System.out.println("JWT토큰 만듬->" + FrontInfo.getJwtToken());
+        System.out.println("return할 데이터 잘 들어갔는지 확인용(email만 뽑았어요)" + responseEntity.getEmail());
 
         //JWT토큰 헤더에 담아 전달
         return responseEntity;
     }
 
-    @GetMapping(value = "/logout")
+    @GetMapping("/auth/logout")
     public String logout(HttpSession session) {
         kakaoService.kakaoLogout((String)session.getAttribute("access_Token"));
         session.removeAttribute("access_Token");
@@ -67,7 +67,7 @@ public class LoginController {
         return "logout 완료";
     }
 
-    @PutMapping(value = "/delete")
+    @PutMapping("/auth/delete")
     public String delete(HttpSession session) {
         System.out.println("탈퇴 세션 저장 확인용: "+session.getAttribute("email")+" "+session.getAttribute("access_Token"));
         kakaoService.kakaoDelete((String)session.getAttribute("access_Token"));
@@ -79,7 +79,7 @@ public class LoginController {
     }
 
 
-    @PutMapping("/rename")
+    @PutMapping("/auth/rename")
     public String rename(@RequestPart("userUpdateDto")UserUpdateDto userUpdateDto,HttpSession session){
         User userInfo= userRepository.findByEmail((String) session.getAttribute("email"));
         kakaoService.update_Nickname(userInfo,userUpdateDto);
@@ -90,7 +90,7 @@ public class LoginController {
      * appToken 갱신
      * @return ResponseEntity<AuthResponse>
      */
-    @GetMapping("/refresh")
+    @GetMapping("/auth/refresh")
     public ResponseEntity<AuthResponseDto> refreshToken (HttpServletRequest request) {
         String jwtToken=JwtHeaderUtil.getAccessToken(request);
         AuthToken authToken = authTokenProvider.convertAuthToken(jwtToken);
