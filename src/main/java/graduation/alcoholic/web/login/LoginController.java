@@ -32,7 +32,7 @@ public class LoginController {
     private AuthResponseDto FrontInfo=null;
 
     @GetMapping("/login")
-    public AuthResponseDto login(HttpServletRequest request) {
+    public ResponseEntity<AuthResponseDto> login(HttpServletRequest request) {
         String code = request.getParameter("code");
         //카카오 토큰 얻기
         String access_Token = kakaoService.getAccessToken(code);
@@ -52,7 +52,7 @@ public class LoginController {
         session.setAttribute("access_Token", access_Token);
         System.out.println("로그인 세션 저장 확인용: "+request.getSession().getAttribute("email")+" "+request.getSession().getAttribute("access_Token"));
         //JWT 토큰 만듬
-        AuthResponseDto responseEntity = FrontInfo;
+        ResponseEntity<AuthResponseDto> responseEntity = ApiResponseDto.success(FrontInfo);
         System.out.println("JWT토큰 만듬->" + FrontInfo.getJwtToken());
 
         //JWT토큰 헤더에 담아 전달
