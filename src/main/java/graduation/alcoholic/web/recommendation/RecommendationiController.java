@@ -9,6 +9,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class RecommendationiController {
 
     private final RecommendationService recommendationService;

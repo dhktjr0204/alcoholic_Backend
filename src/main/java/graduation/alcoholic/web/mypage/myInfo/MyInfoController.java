@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class MyInfoController {
 
     private final AuthTokenProvider authTokenProvider;

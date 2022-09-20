@@ -18,6 +18,7 @@ import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class BarController {
     private final BarService barService;
     private final AuthService authService;

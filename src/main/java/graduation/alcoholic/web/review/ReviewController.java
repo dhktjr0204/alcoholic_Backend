@@ -16,6 +16,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class ReviewController {
 
     private final ReviewService reviewService;

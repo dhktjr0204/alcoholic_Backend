@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/api")
 public class LoginController {
     private final KakaoAuthService kakaoAuthService;
     private final AuthTokenProvider authTokenProvider;
