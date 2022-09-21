@@ -25,7 +25,6 @@ import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class AlcoholController {
 
 

@@ -13,7 +13,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
 public class CollectionInfoController {
 
     private final CollectionInfoService collectionInfoService;
