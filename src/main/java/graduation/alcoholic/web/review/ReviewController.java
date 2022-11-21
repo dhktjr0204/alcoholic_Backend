@@ -22,8 +22,6 @@ public class ReviewController {
 
     private final AuthService authService;
 
-
-
     @PostMapping(value = "/review")
     public Long save(HttpServletRequest httpRequest,
                      @RequestPart(value = "requestDto") ReviewSaveRequestDto requestDto, @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList) {
