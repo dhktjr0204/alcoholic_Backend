@@ -8,32 +8,82 @@ import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Optional;
 
 
 import graduation.alcoholic.domain.entity.User;
 import graduation.alcoholic.domain.enums.RoleType;
-import graduation.alcoholic.web.login.dto.UserDto;
+import graduation.alcoholic.domain.repository.UserRepository;
+import graduation.alcoholic.web.login.domain.jwt.AuthTokenProvider;
+import graduation.alcoholic.web.login.dto.ApiResponseDto;
+import graduation.alcoholic.web.login.dto.AuthResponseDto;
 import graduation.alcoholic.web.login.dto.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 
 @RequiredArgsConstructor
 @Service
 public class KakaoAPIService {
+    private final UserRepository userRepository;
+    private final AuthTokenProvider authTokenProvider;
+    private final AuthService authService;
     @Value("${kakao.login.client_id}")
     private String client_id;
-    //토큰 가져오기
-    public String getAccessToken (String authorize_code) {
-        System.out.println(authorize_code);
+
+    @Transactional
+    public ResponseEntity<AuthResponseDto> login(HttpServletRequest request){
+        //카카오 access_Token 가져오기
+        String access_Token=getAccessToken(request);
+        //카카오 access_Token으로 유저 정보 가져옴
+        User userInfo = getUserInfo(access_Token);
+        //기존 회원이면 업데이트만, 새로운 회원이면 저장, jwt토큰 발급
+        AuthResponseDto responseUser = saveOrUpdate(userInfo);
+        //세션저장
+        HttpSession session=request.getSession();
+        session.setAttribute("email", responseUser.getEmail());
+        session.setAttribute("access_Token", access_Token);
+
+        ResponseEntity<AuthResponseDto> responseEntity = ApiResponseDto.success(responseUser);
+        //JWT토큰 헤더에 담아 전달
+        return responseEntity;
+    }
+
+    private AuthResponseDto saveOrUpdate(User userInfo) {
+        Optional<User> user = userRepository.findByEmail(userInfo.getEmail());
+        AuthResponseDto authResponseDto =null;
+        if (user.isPresent()) {
+            //연령대 업데이트
+            User oldUser =userRepository.findByEmail(userInfo.getEmail()).orElseThrow(()->new IllegalArgumentException());
+            //탈퇴한 회원이면 del_cd null로 바꿈
+            if (oldUser.getDel_cd()!=null){
+                oldUser.updateDelete(null);
+            }
+            authResponseDto = authService.createTokenAndResponse(user.get(),Boolean.FALSE); // 사용자가 이미 존재하는 경우
+        } else {
+            User saveUser = userRepository.save(userInfo);
+            //토큰 발급
+            authResponseDto = authService.createTokenAndResponse(saveUser,Boolean.TRUE);// 사용자가 존재하지 않는 경우
+        }
+        return authResponseDto;
+    }
+
+    //카카오 access_Token 토큰 가져오기
+    public String getAccessToken (HttpServletRequest request) {
+        String authorize_code=getCode(request);
         String access_Token = "";
         String refresh_Token = "";
         String reqURL = "https://kauth.kakao.com/oauth/token";
@@ -68,16 +118,12 @@ public class KakaoAPIService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
 
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
             access_Token = element.getAsJsonObject().get("access_token").getAsString();
-            refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
 
-            System.out.println("access_token : " + access_Token);
-            System.out.println("refresh_token : " + refresh_Token);
             br.close();
             bw.close();
         } catch (IOException e) {
@@ -88,8 +134,8 @@ public class KakaoAPIService {
     }
 
     //사용자 정보 가져오기
-    public UserDto getUserInfo (String access_Token) {
-        UserDto userInfo = null;
+    public User getUserInfo (String access_Token) {
+        User userInfo = null;
         //	요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
         String reqURL = "https://kapi.kakao.com/v2/user/me";
         try {
@@ -113,7 +159,6 @@ public class KakaoAPIService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
 
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
@@ -136,7 +181,7 @@ public class KakaoAPIService {
                 e.printStackTrace();
             }
 
-            userInfo = UserDto.builder()
+            userInfo = User.builder()
                     .name(username)
                     .nickname(username)
                     .email(email)
@@ -154,35 +199,23 @@ public class KakaoAPIService {
         return userInfo;
     }
 
-    public void kakaoLogout(String access_Token) {
+    public void kakaoLogout(HttpSession session) {
         String reqURL = "https://kapi.kakao.com/v1/user/logout";
-        try {
-            URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
-
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String result = "";
-            String line = "";
-
-            while ((line = br.readLine()) != null) {
-                result += line;
-            }
-            System.out.println(result);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        connectKaKao(reqURL,session);
     }
 
-
-    public void kakaoDelete(String access_Token) {
+    @Transactional
+    public void kakaoDelete(HttpSession session) {
         String reqURL = "https://kapi.kakao.com/v1/user/unlink";
+        //del_cd는 D로 바꿈(del_cd가 D라면 닉네임이 탈퇴한 유저입니다. 로 뜬다.)
+        User userInfo= userRepository.findByEmail((String) session.getAttribute("email"))
+                .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다"));
+        userInfo.updateDelete("D");
+        connectKaKao(reqURL,session);
+    }
+    public void connectKaKao(String reqURL,HttpSession session){
+        //세션에 저장된 카카오 access_token
+        String access_Token=(String)session.getAttribute("access_Token");
         try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -190,43 +223,33 @@ public class KakaoAPIService {
             conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
             int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
-
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
             String result = "";
             String line = "";
-
             while ((line = br.readLine()) != null) {
                 result += line;
             }
             System.out.println(result);
+
+            session.removeAttribute("access_Token");
+            session.removeAttribute("email");
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    @Transactional
-    public void delete(User userInfo) {
-        String del_cd="D";
-        userInfo.setDelete(del_cd);
-    }
-
-    //탈퇴하면 데이터베이스 업데이트
-    @Transactional
-    public void recover(User userInfo){
-            userInfo.setDelete(null);
     }
 
     //닉네임 업데이트
     @Transactional
-    public void update_Nickname(User userInfo, UserUpdateDto userUpdateDto){
+    public void update_Nickname(Long id, UserUpdateDto userUpdateDto){
+        User userInfo=userRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("해당 아이디가 없습니다"+id));
         userInfo.signInUpdate(userUpdateDto.getNickname(),userUpdateDto.getCapacity());
     }
 
-    @Transactional
-    public void update_UserAge(User userInfo, UserDto userUpdateDto){
-        userInfo.updateUserInfo(userUpdateDto.getAge_range());
+    public String getCode(HttpServletRequest request){
+        String code = request.getParameter("code");
+        return code;
     }
 }

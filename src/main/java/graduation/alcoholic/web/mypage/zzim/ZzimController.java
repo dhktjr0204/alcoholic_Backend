@@ -3,7 +3,6 @@ package graduation.alcoholic.web.mypage.zzim;
 import graduation.alcoholic.domain.entity.Alcohol;
 import graduation.alcoholic.domain.entity.User;
 import graduation.alcoholic.web.login.AuthService;
-import graduation.alcoholic.web.login.domain.jwt.AuthToken;
 import graduation.alcoholic.web.login.domain.jwt.AuthTokenProvider;
 import graduation.alcoholic.web.login.domain.jwt.JwtHeaderUtil;
 import graduation.alcoholic.domain.repository.UserRepository;

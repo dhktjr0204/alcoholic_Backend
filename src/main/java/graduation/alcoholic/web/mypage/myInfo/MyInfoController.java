@@ -3,7 +3,6 @@ package graduation.alcoholic.web.mypage.myInfo;
 
 import graduation.alcoholic.domain.entity.User;
 import graduation.alcoholic.web.login.AuthService;
-import graduation.alcoholic.web.login.domain.jwt.AuthToken;
 import graduation.alcoholic.web.login.domain.jwt.AuthTokenProvider;
 import graduation.alcoholic.web.login.domain.jwt.JwtHeaderUtil;
 import lombok.RequiredArgsConstructor;

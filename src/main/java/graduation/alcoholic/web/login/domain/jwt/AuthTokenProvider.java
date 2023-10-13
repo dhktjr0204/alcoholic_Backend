@@ -1,8 +1,7 @@
 package graduation.alcoholic.web.login.domain.jwt;
 
-import graduation.alcoholic.domain.enums.RoleType;
-import graduation.alcoholic.web.login.domain.exception.TokenValidFailedException;
-import io.jsonwebtoken.Claims;
+import graduation.alcoholic.web.login.CustomUserDetailService;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,8 +10,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,53 +24,81 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class AuthTokenProvider {
+    private static final String AUTHORITIES_KEY = "auth";
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1 hour
+    private final CustomUserDetailService userDetailService;
 
     @Value("${app.auth.tokenExpiry}")
     private String expiry;
 
     private final Key key;
-    private static final String AUTHORITIES_KEY = "role";
 
-    public AuthTokenProvider(@Value("${app.auth.tokenSecret}") String secretKey) {
-        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    public AuthTokenProvider(@Value("${app.auth.tokenSecret}") String secretKey, CustomUserDetailService userDetailService) {
+        byte[] secretByteKey = DatatypeConverter.parseBase64Binary(secretKey);
+        this.key = Keys.hmacShaKeyFor(secretByteKey);
+        this.userDetailService = userDetailService;
     }
 
+    public String generateToken(Authentication authentication,Long id) {
+        Date tokenAccessExpiresIn = getTokenExpiresIn(ACCESS_TOKEN_EXPIRE_TIME);
 
-    public AuthToken createToken(Long id, RoleType roleType,String expiry) {
-        Date expiryDate = getExpiryDate(expiry);
-        return new AuthToken(id,roleType, expiryDate, key);
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        //Access Token 생성
+        return Jwts.builder()
+                .setSubject(String.valueOf(id))
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(tokenAccessExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
     }
 
-    //USER에 대한 jwtToken생성
-    public AuthToken createUserAppToken(Long id) {
-        return createToken(id,RoleType.USER, expiry);
-    }
-
-    //String to jwtToken
-    public AuthToken convertAuthToken(String token) {
-        AuthToken call=new AuthToken(token, key);
-        return call;
-    }
-
-    //토큰 만료 시간 설정
-    public static Date getExpiryDate(String expiry) {
-        return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
-    }
-
-    public Authentication getAuthentication(String jwtToken,AuthToken authToken) {
-        //권한 인증되면
-        if(authToken.validate(jwtToken)) {
-            Claims claims = authToken.getTokenClaims();
-            //권한 부여
+    public Authentication getAuthentication(String accessToken) {
+        //토큰 복호화
+        Claims claims = parseClaims(accessToken);
+        String userId=claims.getSubject();
+        if(validateToken(accessToken)) {
             Collection<? extends GrantedAuthority> authorities =
-                    Arrays.stream(new String[]{claims.get(AUTHORITIES_KEY).toString()})
+                    Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
-
-            User principal = new User(claims.getSubject(), "", authorities);
-            return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
-        } else {
-            throw new TokenValidFailedException();
+            UserDetails principal = new User(claims.getSubject(), "", authorities);
+            return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        }else{
+            throw new JwtException(" ");
         }
+    }
+
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        }catch (MalformedJwtException e) {
+            log.info("Invalid JWT Token", e);
+        } catch (ExpiredJwtException expiredJwtException) {
+            log.info("Expired JWT Token", expiredJwtException);
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT Token", e);
+        } catch (IllegalArgumentException e) {
+            log.info("JWT claims string is empty.", e);
+        }
+        return false;
+    }
+
+    public Claims parseClaims(String accessToken) {
+        try {
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
+
+    private Date getTokenExpiresIn(long tokenExpireTime) {
+        long now = (new Date()).getTime();
+        return new Date(now + tokenExpireTime);
     }
 }

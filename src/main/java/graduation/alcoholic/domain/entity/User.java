@@ -56,7 +56,7 @@ public class User {
         this.nickname=nickname;
     }
 
-    public void setDelete(String del_cd){
+    public void updateDelete(String del_cd){
         this.del_cd=del_cd;
     }
 
@@ -65,8 +65,9 @@ public class User {
         this.capacity=capacity;
     }
 
-    public void updateUserInfo(String age_range){
+    public User update(String age_range){
         this.age_range=age_range;
+        return this;
     }
 }
 
